@@ -1,0 +1,144 @@
+body{
+    font-size: 14px;
+    font-family: 'Inner';
+    color: black;
+}
+
+#footer, #header {
+    background: black;
+    gap: 30px;
+    padding-left: 20px ;
+    padding-right: 40px;
+}
+
+.btn-subcribe {
+    background-color: rgba(231, 202, 105, 0.8); /* Màu #E7CA69 với độ trong suốt 80% */
+    color: white; /* Màu chữ không bị trong suốt */
+    border-radius: 5px;
+    width: 150px;
+    height: 40px;
+    border: none;
+    text-align: center;
+    line-height: 35px; /* Căn chữ giữa theo chiều dọc */
+    cursor: pointer; /* Thêm hiệu ứng trỏ chuột */
+}
+
+
+.search-container {
+    position: relative;
+    width: 50%; /* Đảm bảo thanh tìm kiếm chiếm toàn bộ chiều ngang */
+    max-width: 600px; /* Tùy chỉnh chiều rộng tối đa cho thanh tìm kiếm */
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    height: 40px;
+    padding-right: 40px; /* Dành chỗ cho biểu tượng */
+    font-size: 14px; /* Cân chỉnh font nếu cần */
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%); /* Căn giữa theo chiều dọc */
+    width: 24px;
+    height: 24px;
+    cursor: pointer; 
+}
+#btn-bell{
+    color: white;
+    font-size: 20px;
+}
+
+#img-account{
+    width: 40px;
+    height: 40px;
+}
+#brand-name{
+    color:#F6FB9E;
+    font-size: 45px;
+    font-weight: 900;
+    margin-bottom: 0px;
+}
+#brand-logo{
+    width: 80px;
+    height: 80px;
+}
+#brand-slogan{
+    color: white;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+.navbar-nav .nav-item {
+    position: relative;
+    margin-right: 50px;
+}
+.navbar-nav .nav-item:hover {
+    box-shadow: 0 2px 0 0 #007bff; 
+}
+.navbar-nav .nav-link {
+    font-size: 18px;
+    color: black; 
+}
+
+.navbar-nav .nav-link:hover {
+    color: #007bff; 
+}
+
+
+.dropdown-menu .dropdown-item {
+    font-size: 14px;
+    color: black; 
+}
+.dropdown-menu .dropdown-item:hover {
+    color: #007bff;
+}
+
+#nav-bar {
+    display: flex;
+    justify-content: center; /* Căn giữa nội dung theo chiều ngang */
+    align-items: center; 
+    width: 100%;
+}
+
+
+#footer{
+    color: white;
+}
+
+#footer h4{
+    color:#F6FB9E;
+    font-size: 25px;
+    font-weight: 900;
+}
+#footer h6{
+    font-size: 15px;
+}
+hr {
+    border: 1px solid #eae7e7; /* Đặt màu và độ dày của đường kẻ */
+    width: 50%; /* Đảm bảo đường kẻ chiếm 80% chiều rộng của container */
+    margin: 20px auto; /* Tạo khoảng cách trên và dưới và căn giữa theo chiều ngang */
+}
+
+
+
+#send-mail {
+    width: 100%; /* Đảm bảo phần tử có chiều rộng đủ lớn */
+    max-width: 1200px; /* Giới hạn chiều rộng tối đa nếu cần */
+    gap: 40px;
+}
+
+#txtbox-send-mail{
+    gap: 10px;
+}
+
+#footer-contact{
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+
+

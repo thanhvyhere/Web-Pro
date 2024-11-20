@@ -1,8 +1,7 @@
 {
   "type": "module",
-  "name": "project_webprogramming",
+  "name": "ecapp",
   "version": "1.0.0",
-  "description": "---",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,5 +9,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.1",
+    "express-handlebars": "^8.0.1",
+    "knex": "^3.1.0",
+    "mysql2": "^3.11.3",
+    "numeral": "^2.0.6"
+  }
 }
