@@ -17,7 +17,7 @@
     height: 100%;
     background-image: url('/imgs/Trump.jpg'); /* Đường dẫn đến ảnh */
     background-size: fit; /* Hoặc dùng contain tùy mục đích */
-    opacity: 0.8; /* Điều chỉnh độ trong suốt */
+    opacity: 0.8; 
     z-index: -1; /* Đưa pseudo-element ra phía sau nội dung */
   }
 .name-category-paper{
@@ -136,6 +136,8 @@
     border-radius: 5px;
     margin-bottom: 4px;
     background-image: url('/imgs/Trump.jpg');
+    opacity: 0.8;
+    padding: 10px 30px 0px 30px;
 }
 
 .container-fluid{
@@ -147,3 +149,12 @@ h1 {
     margin-top: 20px;
     margin-bottom: 10px;
 } 
+
+.top-chart-format{
+    background-color: rgb(196, 195, 195, 0.5);
+    color: rgb(247, 247, 247);
+    font-weight: 900;
+    font-size: 18px !important;
+    border-radius: 5px;
+}
+
