@@ -27,6 +27,10 @@ app.get('/', function (req, res) { // hàm comeback, khi điều kiện thỏa t
     res.render('homepage');
 });
 
+app.get('/login', function (req, res) {
+    res.render('login'); 
+});
+
 app.listen(3000, function () {
     console.log('newsLand is running on port at http://localhost:3000');
 });
