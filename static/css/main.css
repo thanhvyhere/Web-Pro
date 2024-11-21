@@ -80,7 +80,7 @@ body{
     box-shadow: 0 2px 0 0 #007bff; 
 }
 .navbar-nav .nav-link {
-    font-size: 18px;
+    font-size: 15px;
     color: black; 
 }
 
@@ -141,4 +141,11 @@ hr {
 }
 
 
+
+.body-homepage{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin-left: 50px;
+}
 
