@@ -118,6 +118,10 @@
     margin-bottom: 15px; /* Tạo khoảng cách giữa các text box */
 }
 
+.social-login {
+    margin-top: 20px;
+}
+
 /* Login button style */
 .login-btn {
     background-color: #F5DEF4;
