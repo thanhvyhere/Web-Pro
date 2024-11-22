@@ -28,7 +28,11 @@ app.get('/', function (req, res) { // hàm comeback, khi điều kiện thỏa t
 });
 
 app.get('/login', function (req, res) {
-    res.render('login', {layout: false}); 
+    res.render('login', {layout: 'blank-bg'}); 
+});
+
+app.get('/register', function (req, res) {
+    res.render('register', {layout: 'blank-bg'}); 
 });
 
 app.listen(3000, function () {
