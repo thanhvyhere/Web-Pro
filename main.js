@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
 import numeral from 'numeral';
 import path from 'path'; // Import the 'path' module
+import hbs_section from 'express-handlebars-sections';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
@@ -15,6 +16,13 @@ app.use(express.urlencoded({
 app.engine('hbs', engine({
     extname: 'hbs',
     defaultLayout: 'main',
+    helpers:{
+        format_number(value)
+        {
+            return numeral(value).format('0,0')+'đ';
+        },
+        section: hbs_section(),
+    }
 }));
 app.set('view engine', 'hbs');
 app.set('views', './views');
@@ -27,7 +35,9 @@ app.use('/imgs', express.static(path.join(__dirname, 'static', 'imgs')));
 app.get('/', function (req, res) { // hàm comeback, khi điều kiện thỏa thì chạy
     res.render('homepage');
 });
-
+app.get('/role', function (req, res) {
+    res.render('homepage', { layout: 'role' }); // Hiển thị trang 'role' với layout 'role'
+});
 app.listen(3000, function () {
     console.log('newsLand is running on port at http://localhost:3000');
 });

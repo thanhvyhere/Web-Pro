@@ -10,7 +10,9 @@
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="/css/tailwind.css" rel="stylesheet">
-   
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="header-nav">
@@ -30,11 +32,11 @@
             </div>
             <button class="btn-subcribe" type="submit">Subcribe</button>
             <i id="btn-bell" class="bi bi-bell-fill" role="button"></i>
-            <img id="img-account" src="" alt="" class="img-fluid rounded-circle">
+            <img id="img-account" src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle">
         </div>
-        <div id="nav-bar">
-            <a href="#">
-                <i class="bi bi-list tw-mr-[30vh]" style="font-size: 2rem; color: cornflowerblue;"></i>
+        <div id="nav-bar" class="d-flex flex-row justify-content-around align-items-center">
+            <a id="toggleNavleft" type="button">
+                <i class="bi bi-list" style="font-size: 2rem; color: cornflowerblue;"></i>
             </a>
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
@@ -69,7 +71,36 @@
         </div>
     </div>
 
-    <div>
+    <div class="tw-flex tw-flex-row tw-min-h-screen">
+        <div id="nav-left" class="tw-hidden">
+            <div class="tw-flex tw-flex-row tw-mt-5 tw-mb-10 tw-px-5">
+                <img src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle tw-h-[50px] tw-w-[50px]">
+                <div class="tw-mx-5">
+                    <span class="tw-block tw-font-bold tw-font-[18px]">
+                        Cam là cây bút
+                    </span>
+                    <span class="tw-block tw-font-bold tw-font-[18px] tw-text-[#F0B617]">
+                        <i class="bi bi-pencil-square">
+                            Editor
+                        </i>
+                    </span>
+                </div>
+            </div>
+            <nav class="navbar">
+                <!-- Links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Link 1</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Link 2</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Link 3</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
         {{{body}}}
     </div>
     <div id="footer">
@@ -108,11 +139,20 @@
 
         
     </div>
-    
+    <script>
+        document.getElementById('toggleNavleft').addEventListener('click', function () {
+            const myDiv = document.getElementById('nav-left');
+            if (myDiv.classList.contains('tw-hidden')) {
+                myDiv.classList.remove('tw-hidden');
+            } else {
+                myDiv.classList.add('tw-hidden');
+            }
+        });
+    </script>
     <!-- Sửa lại jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script> <!-- Phiên bản đầy đủ của jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-
+    {{{_sections.js}}}
 </body>
 </html>
