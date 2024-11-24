@@ -106,7 +106,6 @@
   --tw-contain-style:  
 }
 
-<<<<<<< HEAD
 .tw-mx-5 {
   margin-left: 1.25rem !important;
   margin-right: 1.25rem !important
@@ -164,8 +163,4 @@
 .tw-text-\[\#F0B617\] {
   --tw-text-opacity: 1 !important;
   color: rgb(240 182 23 / var(--tw-text-opacity, 1)) !important
-=======
-.tw-mr-\[30vh\] {
-  margin-right: 30vh !important
->>>>>>> 8dbab6e772763a3e52d128278d64377dc6688051
 }
