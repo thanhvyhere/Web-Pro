@@ -35,6 +35,14 @@ app.use('/imgs', express.static(path.join(__dirname, 'static', 'imgs')));
 app.get('/', function (req, res) { // hàm comeback, khi điều kiện thỏa thì chạy
     res.render('homepage');
 });
+
+app.get('/login', function (req, res) {
+    res.render('account/login', { layout: 'blank-bg' }); 
+});
+
+app.get('/register', function (req, res) {
+    res.render('account/register', { layout: 'blank-bg' }); 
+});
 app.use('/role', editorRouter);
 app.listen(3000, function () {
     console.log('newsLand is running on port at http://localhost:3000');
