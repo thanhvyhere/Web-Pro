@@ -120,20 +120,27 @@
 
 /* Login button style */
 .login-btn {
-    background-color: #F5DEF4;
-    padding: 15px; /* Increase login button padding */
-    width: 100%;
-    font-family: 'League Spartan', sans-serif; /* Sử dụng font League Spartan */
-    font-weight: bold; /* Nếu cần chữ đậm */
-    font-size: 20px; /* Reduce font size */
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.3s ease;
+    background-color: #F5DEF4; /* Màu nền hồng nhạt */
+    padding: 12px 20px; /* Giảm padding để nút vừa vặn hơn */
+    display: block;
+    width: 100%; /* Nút chiếm toàn bộ chiều rộng */
+    font-family: 'League Spartan', sans-serif; /* Font chữ League Spartan */
+    font-weight: 700; /* Chữ đậm */
+    font-size: 18px; /* Font size vừa phải */
+    color: #4a154b; /* Chữ màu tím đậm để tương phản */
+    text-align: center; /* Căn giữa nội dung */
+    cursor: pointer; /* Con trỏ khi hover */
+    border: none; /* Bỏ viền */
+    border-radius: 8px; /* Góc bo tròn hơn */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển màu và scale khi hover */
 }
 
 .login-btn:hover {
-    background-color: #d46e9d; /* Darken on hover */
+    background-color: #d46e9d; /* Màu nền đậm hơn khi hover */
+    color: white; /* Đổi màu chữ khi hover */
+    transform: translateY(-3px); /* Nút nhảy nhẹ lên trên */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Tăng hiệu ứng đổ bóng */
 }
 
 /* Footer text styling */

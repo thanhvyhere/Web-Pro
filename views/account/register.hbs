@@ -18,7 +18,7 @@
 
             <!-- Card Body -->
             <div class="card-body">
-                <div class="form-login">
+                <div class="form-register">
                     <label for="txtUsername">Email hoặc tên người dùng</label>
                     <div class="form-group">    
                         <input type="text" name="username" id="txtUsername" class="form-control" placeholder="Email or username">
@@ -33,53 +33,52 @@
                     <div class="form-group">
                         <input type="password" name="confirm_password" id="txtConfirmPassword" class="form-control" placeholder="Confirm Password">
                     </div>
-
-                    <button type="submit" class="login-btn">Đăng ký</button>
+                    <a href="/login" class="register-btn">Đăng ký</a>
                 </div>
 
                 <hr> <!-- Dấu gạch ngang -->
 
-                <div class="social-login">
-                    <button type="submit" class="btn btn-google">
+                <div class="social-register">
+                     <a href="/register-google" class="btn btn-google">
                         <div class="icon-box">
                             <i class="fab fa-google"></i>
                         </div>
                         <div class="text-box">
                             Tiếp tục với Google
                         </div>
-                    </button>
+                    </a>
 
-                    <button type="submit" class="btn btn-facebook">
+                    <a href="/register-facebook" class="btn btn-facebook">
                         <div class="icon-box">
                             <i class="fab fa-facebook-f"></i>
                         </div>
                         <div class="text-box">
                             Tiếp tục với Facebook
                         </div>
-                    </button>
+                    </a>
 
-                    <button type="submit" class="btn btn-github">
+                    <a href="/register-github" class="btn btn-github">
                         <div class="icon-box">
                             <i class="fab fa-github"></i>
                         </div>
                         <div class="text-box">
                             Tiếp tục với GitHub
                         </div>
-                    </button>
+                    </a>
 
-                    <button type="submit" class="btn btn-phone">
+                    <a href="/register-phone" class="btn btn-phone">
                         <div class="icon-box">
                             <i class="fas fa-phone"></i>
                         </div>
                         <div class="text-box">
                             Tiếp tục với Điện thoại
                         </div>
-                    </button>
+                    </a>
                 </div>
             </div>
             <!-- Card Footer -->
             <div class="card-footer text-muted">
-                <p>Bạn đã có tài khoản? <a href="#">Đăng nhập</a></p>
+                <p>Bạn đã có tài khoản? <a href="/login">Đăng nhập</a></p>
             </div>
         </div>
     </div>

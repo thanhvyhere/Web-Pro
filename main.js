@@ -35,6 +35,18 @@ app.get('/register', function (req, res) {
     res.render('account/register', { layout: 'blank-bg' }); 
 });
 
+app.get('/change-password', function (req, res) {
+    res.render('account/change-pass', { layout: 'blank-bg' }); 
+});
+
+app.get('/new-password', function (req, res) {
+    res.render('account/new-pass', { layout: 'blank-bg' }); 
+});
+
+app.get('/otp', function (req, res) {
+    res.render('account/otp', { layout: 'blank-bg' }); 
+});
+
 app.listen(3000, function () {
     console.log('newsLand is running on port at http://localhost:3000');
 });
