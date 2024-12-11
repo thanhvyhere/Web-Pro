@@ -1,7 +1,8 @@
 body{
     font-size: 14px;
-    font-family: 'Inner';
+    font-family: 'Inter';
     color: black;
+
 }
 
 #footer, #header {
@@ -10,7 +11,10 @@ body{
     padding-left: 20px ;
     padding-right: 40px;
 }
-
+#footer
+{
+    margin-bottom: 0;
+}
 .btn-subcribe {
     background-color: rgba(231, 202, 105, 0.8); /* Màu #E7CA69 với độ trong suốt 80% */
     color: white; /* Màu chữ không bị trong suốt */
@@ -142,6 +146,37 @@ hr {
     margin-left: 100px;
     margin-right: 100px;
 }
+<<<<<<< HEAD
+#nav-bar
+{
+    border: 1px solid rgb(213, 213, 213);
+}
+#nav-left
+{
+    min-width: 35vh;
+    background-color:  white;
+    border-right: 5px solid rgb(213, 213, 213);
+    text-align: center;
+}
+#nav-left a
+{
+    min-width: 180px;
+    text-align: center;
+    margin-top: 10px;
+}
+#nav-left a:hover
+{
+    background-color: rgb(213, 213, 213);
+    border-radius: 10px;
+    /* color: #F0B617; */
+    color: black;
+    text-decoration: none !important; 
+    min-width: 180px;
+    width:30vh;
+    font-weight: bold;
+    text-align: center;
+}
+=======
 
 .body-homepage{
     display: flex;
@@ -151,6 +186,7 @@ hr {
 
 }
 
+<<<<<<< HEAD
 
 
 /* Container của dropdown menu */
@@ -224,3 +260,6 @@ hr {
 
 /* Nút Log out */
 
+=======
+>>>>>>> 8dbab6e772763a3e52d128278d64377dc6688051
+>>>>>>> origin/yue
