@@ -3,7 +3,9 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import session from 'express-session';
 import { engine } from 'express-handlebars';
+import numeral from 'numeral';
 import hbs_sections from 'express-handlebars-sections';
+import editorRouter from './routes/editor.route.js';
 import accountRouter from './routes/account.route.js'
 import configurePassportGithub from './controllers/passportGithub.config.js';
 import configurePassportGoogle from './controllers/passportGoogle.config.js';
@@ -11,19 +13,11 @@ import moment from 'moment';
 import passport from 'passport';
 
 
-
 const app = express();
 app.use(express.urlencoded({
     extended: true
 }));
 
-const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
-app.set('view engine', 'hbs');
-app.set('views', './views');
-app.use('/static', express.static('static'));
-
-configurePassportGithub();
-configurePassportGoogle();
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -34,6 +28,29 @@ app.use(session({
     },
     
 }))
+
+app.engine('hbs', engine({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    helpers: {
+        format_number(value) {
+            return numeral(value).format('0,0') + ' đ'
+        },
+        section: hbs_sections(),
+        formatDate: function (date) {
+            return moment(date).format('YYYY-MM-DD HH:mm:ss'); // Định dạng ngày theo YYYY-MM-DD
+        }
+    }
+}));
+
+const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
+app.set('view engine', 'hbs');
+app.set('views', './views');
+app.use('/static', express.static('static'));
+
+configurePassportGithub();
+configurePassportGoogle();
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -94,6 +111,19 @@ app.use('/writer', writerRouter);
 // Khởi động server
 // app.use('/artist', artistRouter);
 
+
+// app.get('/change-password', function (req, res) {
+//     res.render('account/change-pass', { layout: 'blank-bg' }); 
+// });
+
+// app.get('/new-password', function (req, res) {
+//     res.render('account/new-pass', { layout: 'blank-bg' }); 
+// });
+
+// app.get('/otp', function (req, res) {
+//     res.render('account/otp', { layout: 'blank-bg' }); 
+// });
+app.use('/role', editorRouter);
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
 });

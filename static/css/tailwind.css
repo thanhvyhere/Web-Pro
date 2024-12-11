@@ -106,6 +106,61 @@
   --tw-contain-style:  
 }
 
-.tw-mr-\[30vh\] {
-  margin-right: 30vh !important
+.tw-mx-5 {
+  margin-left: 1.25rem !important;
+  margin-right: 1.25rem !important
+}
+
+.tw-mb-10 {
+  margin-bottom: 2.5rem !important
+}
+
+.tw-mt-5 {
+  margin-top: 1.25rem !important
+}
+
+.tw-block {
+  display: block !important
+}
+
+.tw-flex {
+  display: flex !important
+}
+
+.tw-hidden {
+  display: none !important
+}
+
+.tw-h-\[50px\] {
+  height: 50px !important
+}
+
+.tw-min-h-screen {
+  min-height: 100vh !important
+}
+
+.tw-w-\[50px\] {
+  width: 50px !important
+}
+
+.tw-flex-row {
+  flex-direction: row !important
+}
+
+.tw-px-5 {
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important
+}
+
+.tw-font-\[18px\] {
+  font-weight: 18px !important
+}
+
+.tw-font-bold {
+  font-weight: 700 !important
+}
+
+.tw-text-\[\#F0B617\] {
+  --tw-text-opacity: 1 !important;
+  color: rgb(240 182 23 / var(--tw-text-opacity, 1)) !important
 }
