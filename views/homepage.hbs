@@ -1,6 +1,12 @@
-<link rel="stylesheet" href="/css/homepage.css">
 
-<div class="feature-paper mb-5">
+{{#section "css"}}
+    <link href="/static/css/homepage.css" rel="stylesheet">
+{{/section}}
+
+{{#section "script"}}
+    
+{{/section}}
+<div class="feature-paper mb-5" style="--bg-image: url('/static/imgs/Trump.jpg')">
     <div class="paper-infor">
         <div class="header-paper">
             <button class="name-category-paper" disabled="disabled">Chính trị</button>
@@ -20,10 +26,10 @@
 </div>
 <div class="title-paper-list mb-3">
     <h1>Trending News</h1>
-    <div class="container-fluid d-flex justify-content-between">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4 feature-paper">   
-                <div class="paper-infor ">
+                <div class="paper-infor">
                     <div class="header-paper">
                         <button class="name-category-paper" disabled="disabled">Chính trị</button>
                         <h6>
@@ -43,7 +49,7 @@
             <div class="col-sm-4">
                 <div class="">
                     <div class="card d-flex flex-row mb-2">
-                        <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
+                        <img src="/static/imgs/Trump.jpg" alt="..." class="img-title-paper">
                         <div class="paper-small">
                             <div class="header-paper small mt-2">
                                 <button class="name-category-paper" disabled="disabled">Chính trị</button>
@@ -83,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            <div id="top-chart" class="col-sm-3">
+            <div id="top-chart" class="col-sm-4">
                 <h4>TOP CHART</h4>
                 <hr>
                 <div class="container text-center">

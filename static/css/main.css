@@ -145,8 +145,82 @@ hr {
 
 .body-homepage{
     display: flex;
+    align-items: center;
     flex-direction: column;
-    width: 90%;
-    margin-left: 50px;
+    justify-content: center;
+
 }
+
+
+
+/* Container của dropdown menu */
+.dropdown-menu {
+    display: none; /* Ẩn menu mặc định */
+    position: absolute; /* Đặt menu theo vị trí tương đối của cha */
+    top: 100%; /* Hiển thị ngay dưới nút hoặc phần tử kích hoạt */
+    left: 0;
+    height: auto;
+    min-width: 200px; /* Chiều rộng tối thiểu của menu */
+    background-color: #ffffff; /* Nền trắng */
+    border: 1px solid #e0e0e0; /* Đường viền nhạt */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+    border-radius: 8px; /* Bo góc */
+    padding: 10px 0; /* Khoảng cách trên và dưới cho menu */
+    z-index: 1000; /* Hiển thị trên các phần tử khác */
+    font-family: Arial, sans-serif;
+}
+
+/* Hiển thị menu khi hover */
+.dropdown:hover .dropdown-menu {
+    display: block; /* Hiển thị menu khi hover vào dropdown */
+}
+
+/* Kiểu ảnh đại diện và thông tin tài khoản */
+#account-inf {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding: 10px; /* Khoảng cách trong cho phần thông tin tài khoản */
+    border-bottom: 1px solid #e0e0e0; /* Đường viền phân cách với menu */
+}
+
+#account-inf img {
+    width: 80px; /* Kích thước ảnh đại diện */
+    height: 80px; /* Đảm bảo ảnh là hình tròn */
+    object-fit: cover; /* Giữ ảnh đúng tỷ lệ */
+    margin-right: 10px; /* Khoảng cách giữa ảnh và text */
+}
+
+#account-inf p {
+    margin-top: 5px;
+    font-size: 25px; /* Kích thước chữ */
+    font-weight: bold; /* Chữ đậm */
+    color: #333333; /* Màu chữ */
+}
+
+/* Kiểu các mục trong dropdown */
+.dropdown-item {
+    height: 50px;
+    display: flex; /* Đặt biểu tượng và text trên cùng một hàng */
+    align-items: center; /* Căn giữa biểu tượng và text */
+    padding: 10px 15px; /* Khoảng cách trong cho từng mục */
+    font-size: 30px; /* Kích thước chữ */
+    color: #000000; /* Màu chữ */
+    text-decoration: none; /* Xóa gạch chân */
+    transition: background-color 0.2s ease; /* Hiệu ứng hover mượt */
+}
+
+.dropdown-item:hover {
+    background-color: #c13636; /* Nền khi hover */
+    color: #000000; /* Màu chữ khi hover */
+}
+
+/* Biểu tượng trong các mục menu */
+.dropdown-item i {
+    font-size: 20px; /* Kích thước biểu tượng */
+    margin-right: 10px; /* Khoảng cách giữa biểu tượng và text */
+    color: #000000; /* Màu biểu tượng */
+}
+
+/* Nút Log out */
 
