@@ -2,6 +2,7 @@ body {
     font-size: 14px;
     font-family: "League Spartan", sans-serif;
     color: black;
+    background-color: black;
 }
 .card {
     min-height: 100vh;
@@ -56,4 +57,10 @@ body {
 .link-pw:hover {
     color: rgb(33, 130, 204);
     text-decoration: underline;
+}
+
+
+.email-format{
+    color: black;
+    font-weight: bold;
 }

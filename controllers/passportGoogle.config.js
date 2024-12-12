@@ -13,13 +13,14 @@ export default function configurePassport() {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/account/login/googleAuth/callback",
-      scope: ['profile'] 
+      scope: ['profile', 'email'] 
     },
     
         async function (accessToken, refreshToken, profile, done) {
         try {
-          // Lấy email (nếu có)
-          // Tìm user theo GitHub ID hoặc email
+          const email = profile.emails && profile.emails.length > 0
+            ? profile.emails[0].value
+            : null;
           let user = await User.findByUsername(profile.displayName);
           if (user) {
             // Nếu user tồn tại nhưng chưa liên kết GitHub, cập nhật GitHub ID
@@ -32,6 +33,7 @@ export default function configurePassport() {
             user = await User.add({
               googleId: profile.id,
               username: profile.displayName,
+              email: email
             });
           }
 

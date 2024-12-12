@@ -7,12 +7,15 @@
 <script
     src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 <script>
-    $('#txtDOB').datetimepicker({
-        timepicker: false,
-        format: 'd/m/Y',
-        mask: true
-    });
-
+    function checkValidEmail() {
+        const email = document.querySelector('#txtEmail').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Định dạng cơ bản cho email
+        if (email.length === 0 || !emailRegex.test(email)) {
+            document.querySelector('#txtEmail').select();
+            return false; // Trả về false nếu không hợp lệ
+        }
+        return true; // Trả về true nếu hợp lệ
+    }
     $('#fmSignup').on('submit', function (e) {
         e.preventDefault();
         const username = $('#txtUsername').val();
@@ -42,6 +45,15 @@
             return;
         }
 
+        if (!checkValidEmail()) {
+            Swal.fire({
+                title: 'Error',
+                text: "Invalid email format. Please provide a valid email.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
         // Kiểm tra username khả dụng qua AJAX
         $.getJSON(`/account/is-available?username=${username}`, function (data) {
             if (data === false) {
@@ -56,7 +68,7 @@
                 // Hiển thị thông báo đăng ký thành công
                 Swal.fire({
                     title: 'Success!',
-                    text: "You have successfully signed up. Welcome to SoundLand!",
+                    text: "You have successfully signed up. Welcome to Newsland!",
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then((result) => {
@@ -113,8 +125,7 @@
                     <input type="text" name="raw_dob" id="txtDOB" class="form-control txt-input" placeholder="">
                 </div>
 
-                <button type="submit" class="btn btn-info btn-connect mb-3" href="#">
-                    </i>Sign Up</button>
+                <button type="submit" class="btn btn-info btn-connect mb-3" href="#">Sign Up</button>
                 <div class="d-flex justify-content-center align-items-center gap-10">
                     <label>Bạn đã có tài khoản?</label>
                     <label><a href="/account/login" class="link-underline-dark link-pw">Đăng nhập</a></label>
