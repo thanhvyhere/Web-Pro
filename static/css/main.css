@@ -1,8 +1,7 @@
 body{
     font-size: 14px;
-    font-family: 'Inter';
+    font-family: 'Inner';
     color: black;
-
 }
 
 #footer, #header {
@@ -11,10 +10,7 @@ body{
     padding-left: 20px ;
     padding-right: 40px;
 }
-#footer
-{
-    margin-bottom: 0;
-}
+
 .btn-subcribe {
     background-color: rgba(231, 202, 105, 0.8); /* Màu #E7CA69 với độ trong suốt 80% */
     color: white; /* Màu chữ không bị trong suốt */
