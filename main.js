@@ -105,24 +105,16 @@ app.get('/', async function(req, res) {
     });
 });
 
-import writerRouter from './routes/writer.route.js'
+import writerRouter from './routes/writer.route.js';
+import newspaperRouter from './routes/news.route.js';
 app.use('/account', accountRouter);
 app.use('/writer', writerRouter);
+app.use('/newspaper', newspaperRouter);
 // Khởi động server
 // app.use('/artist', artistRouter);
 
 
-// app.get('/change-password', function (req, res) {
-//     res.render('account/change-pass', { layout: 'blank-bg' }); 
-// });
 
-// app.get('/new-password', function (req, res) {
-//     res.render('account/new-pass', { layout: 'blank-bg' }); 
-// });
-
-// app.get('/otp', function (req, res) {
-//     res.render('account/otp', { layout: 'blank-bg' }); 
-// });
 app.use('/role', editorRouter);
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');

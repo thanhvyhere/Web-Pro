@@ -2,14 +2,15 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import moment from 'moment'; // format month day
 import multer from 'multer';
+import dotenv from 'dotenv';
 import accountService from '../services/account.service.js';
 import auth from '../middleware/auth.mdw.js';
 import configurePassportGithub from '../controllers/passportGithub.config.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
-
 import passport from 'passport';
-
+import nodemailer from 'nodemailer'
 const router = express.Router();
+dotenv.config();
 
 router.get('/login', function (req, res) {
     res.render('vwAccount/login', {
@@ -51,11 +52,12 @@ router.post('/register', async function (req, res) {
         dob: ymd_dob,
         permission: 0
     }
-
     const ret = await accountService.add(entity);
-    res.render('vwAccount/register', {
-        layout: 'account-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
-    });
+    const user = await accountService.findByUsername(req.body.username);
+    req.session.auth = true;
+    req.session.authUser = user;
+    const retUrl = req.session.retUrl || '/'
+    res.redirect(retUrl);
 });
 
 router.get('/profile', async function(req, res){
@@ -99,46 +101,58 @@ router.post('/logout', auth, function(req, res){
     res.redirect(req.headers.referer);
 })
 
-router.get('/forgot-password', (req, res) => {
+router.get('/forgot-password', function (req, res) {
     res.render('vwAccount/forgot-password', {
         layout: 'account-layout',
     });
 });
 
-router.post('/forgot-password', async (req, res) => {
-    const { email } = req.body;
 
+
+router.post('/forgot-password', async function(req, res) {
+    const email = req.body.email || '';
+    const username = req.body.username || '';
     try {
         // Kiểm tra email tồn tại trong cơ sở dữ liệu
-        const user = await db.User.findOne({ where: { email } });
+        const user = await accountService.findByUsername(username);
         if (!user) {
             return res.render('vwAccount/forgot-password', {
                 layout: 'account-layout',
-                errorMessage: 'Email không tồn tại trong hệ thống',
+                errorMessage: 'Không có người dùng trong hệ thống',
+            });
+        }
+        if (user.email !== email) {
+            return res.render('vwAccount/forgot-password', {
+                layout: 'account-layout',
+                errorMessage: 'Email không trùng khớp',
             });
         }
 
         // Tạo OTP và thời gian hết hạn
-        const otp = Math.floor(100000 + Math.random() * 900000); // Mã OTP 6 chữ số
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // Hết hạn sau 10 phút
-
-        // Lưu OTP vào database
-        await db.Otp.create({ email, otp, expiresAt });
-
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        const expriteAt = new Date(Date.now() + 10 * 60 * 1000);
+        const newOTP = {
+            otp: otp, 
+            expire_time: expriteAt, 
+            email: email
+        }   
+        
+        const ret = await accountService.addOTP(newOTP);
         // Cấu hình gửi email qua Nodemailer
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: "smtp.gmail.com",
+            port: 587, // Hoặc 465 nếu sử dụng SSL
+            secure: false, // true cho 465, false cho 587
             auth: {
-                user: 'your-email@gmail.com', // Thay bằng email của bạn
-                pass: 'your-email-password', // Thay bằng mật khẩu của bạn
+                user: process.env.MY_EMAIL,
+                pass: process.env.MY_EMAIL_PW,
             },
         });
-
         // Nội dung email
         const mailOptions = {
-            from: 'your-email@gmail.com',
+            from: process.env.MY_EMAIL,
             to: email,
-            subject: 'Mã OTP để khôi phục mật khẩu',
+            subject: '[RESET PASSWORD] - NEWSLAND SENT YOU',
             text: `Mã OTP của bạn là: ${otp}. Mã sẽ hết hạn sau 10 phút.`,
         };
 
@@ -154,38 +168,39 @@ router.post('/forgot-password', async (req, res) => {
 });
 
 // Trang OTP (GET)
-router.get('/otp', (req, res) => {
-    const { email } = req.query; // Nhận email từ URL query
+router.get('/otp', function (req, res) {
+    const email= req.query.email; // Nhận email từ URL query
     res.render('vwAccount/otp', {
         layout: 'account-layout',
-        email,
+        email: email
     });
 });
 
-router.post('/otp', async (req, res) => {
-    const { email, otp } = req.body;
-
+router.post('/otp', async function (req, res) {
+    const email = req.body.email || '';
+    const otp = req.body.otp || '';
     try {
-        // Kiểm tra OTP từ database
-        const otpRecord = await db.Otp.findOne({ where: { email, otp } });
-
+        const otpRecord = await accountService.findOTPByEmail(email);
+        console.log(otpRecord);
         if (!otpRecord) {
             return res.render('vwAccount/otp', {
                 layout: 'account-layout',
-                email,
+                email: email,
                 errorMessage: 'Mã OTP không hợp lệ.',
             });
         }
 
         // Kiểm tra thời gian hết hạn
-        if (new Date() > otpRecord.expiresAt) {
+        if (otp !== otpRecord.otp) {
+            console.log(otp);
+            console.log(otpRecord.otp);
             return res.render('vwAccount/otp', {
                 layout: 'account-layout',
-                email,
-                errorMessage: 'Mã OTP đã hết hạn.',
+                email: email,
+                errorMessage: 'Nhập sai mã OTP, yêu cầu nhập lại',
             });
         }
-
+        const ret = await accountService.delOTP(otp);
         // Nếu hợp lệ, chuyển đến trang đặt lại mật khẩu
         res.redirect(`/account/reset-password?email=${email}`);
     } catch (err) {
@@ -194,53 +209,26 @@ router.post('/otp', async (req, res) => {
     }
 });
 
-// Trang xử lý OTP (POST)
-router.post('/verify-otp', async function (req, res) {
-    const { email, otp } = req.body;
-
-    try {
-        // Kiểm tra OTP trong cơ sở dữ liệu
-        const storedOtp = await db.Otp.findOne({ where: { email: email, otp: otp } });
-
-        if (!storedOtp) {
-            return res.render('vwAccount/otp', {
-                layout: 'account-layout',
-                email: email,
-                errorMessage: 'Mã OTP không chính xác',
-            });
-        }
-
-        // Nếu OTP hợp lệ, chuyển hướng đến trang đặt lại mật khẩu
-        res.redirect(`/account/reset-password?email=${email}`);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại');
-    }
-});
 
 // Route POST reset-password (to handle resetting the password)
-router.get('/reset-password', (req, res) => {
-    const { email } = req.query;
+router.get('/reset-password', function (req, res) {
+    const email = req.query.email || '';
     res.render('vwAccount/reset-password', {
         layout: 'account-layout',
-        email,
+        email: email
     });
 });
 
-router.post('/reset-password', async (req, res) => {
-    const { email, password } = req.body;
-
+router.post('/reset-password', async function (req, res) {
+    const email = req.body.email || '';
     try {
         // Hash mật khẩu mới
-        const hashedPassword = bcrypt.hashSync(password, 10);
-
+        const hashedPassword = bcrypt.hashSync(req.body.raw_password, 8);
         // Cập nhật mật khẩu trong database
-        await db.User.update({ password: hashedPassword }, { where: { email } });
+        const ret = await accountService.updatePassword(email, hashedPassword);
 
         // Xóa OTP sau khi sử dụng
-        await db.Otp.destroy({ where: { email } });
-
-        res.render('vwAccount/reset-password', {
+        res.render('vwAccount/login', {
             layout: 'account-layout',
             successMessage: 'Mật khẩu đã được thay đổi thành công.',
         });
