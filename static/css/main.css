@@ -56,6 +56,9 @@ body{
     font-size: 20px;
 }
 
+.btn-format{
+    margin: 20px;
+}
 #img-account{
     width: 40px;
     height: 40px;
@@ -146,7 +149,7 @@ hr {
     margin-left: 100px;
     margin-right: 100px;
 }
-<<<<<<< HEAD
+
 #nav-bar
 {
     border: 1px solid rgb(213, 213, 213);
@@ -176,7 +179,6 @@ hr {
     font-weight: bold;
     text-align: center;
 }
-=======
 
 .body-homepage{
     display: flex;
@@ -186,7 +188,6 @@ hr {
 
 }
 
-<<<<<<< HEAD
 
 
 /* Container của dropdown menu */
@@ -260,6 +261,3 @@ hr {
 
 /* Nút Log out */
 
-=======
->>>>>>> 8dbab6e772763a3e52d128278d64377dc6688051
->>>>>>> origin/yue
