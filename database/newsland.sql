@@ -15,9 +15,8 @@ CREATE TABLE `users` (
   `permission` int(11) NOT NULL,
   `NoOfFollower` int(11) DEFAULT 0,    -- Số người theo dõi
   `NoOfFollowing` int(11) DEFAULT 0,  -- Số người đang theo dõi
-  `PublicPlaylist` int(11) DEFAULT 0, -- Số playlist công khai
   PRIMARY KEY (`id`),
-  UNIQUE (`name`) -- Thêm chỉ mục UNIQUE cho cột name
+  UNIQUE (`username`) -- Thêm chỉ mục UNIQUE cho cột name
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `userRefreshTokenExt` (
@@ -27,3 +26,10 @@ CREATE TABLE `userRefreshTokenExt` (
   PRIMARY KEY (`ID`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`ID`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE otp_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    otp VARCHAR(6) NOT NULL,
+    expire_time BIGINT NOT NULL
+);
