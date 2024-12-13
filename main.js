@@ -11,6 +11,8 @@ import configurePassportGithub from './controllers/passportGithub.config.js';
 import configurePassportGoogle from './controllers/passportGoogle.config.js';
 import moment from 'moment';
 import passport from 'passport';
+import writerRouter from './routes/writer.route.js';
+import newspaperRouter from './routes/news.route.js';
 
 
 const app = express();
@@ -47,7 +49,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirn
 app.set('view engine', 'hbs');
 app.set('views', './views');
 app.use('/static', express.static('static'));
-
+app.use('/css', express.static(path.join(__dirname, 'static', 'css')));
+app.use('/imgs', express.static(path.join(__dirname, 'static', 'imgs')));
 configurePassportGithub();
 configurePassportGoogle();
 
@@ -56,20 +59,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 // passport.use('github', configurePassport);
 
-
-app.engine('hbs', engine({
-    extname: 'hbs',
-    defaultLayout: 'main',
-    helpers: {
-        format_number(value) {
-            return numeral(value).format('0,0') + ' đ'
-        },
-        section: hbs_sections(),
-        formatDate: function (date) {
-            return moment(date).format('YYYY-MM-DD HH:mm:ss'); // Định dạng ngày theo YYYY-MM-DD
-        }
-    }
-}));
 
 
 app.set('trust proxy', 1)
@@ -84,14 +73,6 @@ app.use(async function (req, res, next){
     res.locals.authUser = req.session.authUser;
     next();
 })
-// Thiết lập Handlebars làm view engine
-
-
-
-
-app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
-app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
-// Node.js với Express: phục vụ các tệp trong thư mục services
 
 
 
@@ -105,14 +86,12 @@ app.get('/', async function(req, res) {
     });
 });
 
-import writerRouter from './routes/writer.route.js';
-import newspaperRouter from './routes/news.route.js';
+
 app.use('/account', accountRouter);
 app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
 // Khởi động server
 // app.use('/artist', artistRouter);
-
 
 
 app.use('/role', editorRouter);
