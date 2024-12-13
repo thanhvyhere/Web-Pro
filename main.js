@@ -116,6 +116,14 @@ app.use('/newspaper', newspaperRouter);
 
 
 app.use('/role', editorRouter);
+app.get('/login', function (req, res) {
+    res.render('account/login', { layout: 'blank-bg' }); 
+});
+
+app.get('/register', function (req, res) {
+    res.render('account/register', { layout: 'blank-bg' }); 
+});
+app.use('/editor', editorRouter);
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
 });
