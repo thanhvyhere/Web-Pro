@@ -43,7 +43,7 @@ app.get('/login', function (req, res) {
 app.get('/register', function (req, res) {
     res.render('account/register', { layout: 'blank-bg' }); 
 });
-app.use('/role', editorRouter);
+app.use('/editor', editorRouter);
 app.listen(3000, function () {
     console.log('newsLand is running on port at http://localhost:3000');
 });
