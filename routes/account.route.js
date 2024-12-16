@@ -32,11 +32,13 @@ router.post('/login', async function (req, res) {
             showErrors: true,
         }); 
     }
+    const role = await accountService.findRoleById(user.permission);
     req.session.auth = true;
     req.session.authUser = {
-        username: user.usermame,
+        username: user.username,
         userid: user.id,
-        permission: user.permission
+        permission: user.permission,
+        rolename: role.RoleName
     };
     const retUrl = req.session.retUrl || '/'
     res.redirect(retUrl);

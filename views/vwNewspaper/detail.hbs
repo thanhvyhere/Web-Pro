@@ -1,0 +1,20 @@
+<!-- Place the first <script> tag in your HTML's <head> -->
+{{#section "css"}}
+<link rel="stylesheet" href="/static/css/detail.css">
+{{/section}}
+{{#section "script"}}
+
+{{/section}}
+
+<div id="card-contain">
+    <div id="signup-card">
+        <div class="d-flex flex-row justify-content-start align-items-start mb-3">
+            <img src="/static/imgs/NEWSLANDlogoRmBg.png" alt="" class="img-format">
+            <div class="d-flex flex-column">
+                <h6>{{news.author}}</h6>
+                <p>{{news.datetime}}</p>
+            </div>
+        </div>
+        <p>{{{news.content}}}</p>
+    </div>
+</div>

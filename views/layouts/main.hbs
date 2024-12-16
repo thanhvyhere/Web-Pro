@@ -114,11 +114,11 @@
                 <img src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle tw-h-[50px] tw-w-[50px]">
                 <div class="tw-mx-5">
                     <span class="tw-block tw-font-bold tw-font-[18px]">
-                        Cam là cây bút
+                        {{authUser.username}}
                     </span>
                     <span class="tw-block tw-font-bold tw-font-[18px] tw-text-[#F0B617]">
                         <i class="bi bi-pencil-square">
-                            Editor
+                            {{authUser.rolename}}
                         </i>
                     </span>
                 </div>
@@ -138,7 +138,7 @@
     {{/if}}
 
             
-    <div class="body-homepage tab-content">
+    <div class="">
         {{{ body }}}
     </div>
     </div>
