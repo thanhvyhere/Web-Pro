@@ -70,7 +70,7 @@
                 </a>
             </div>
         </div>
-        <div id="nav-bar" class="d-flex flex-row justify-content-around align-items-center">
+        <div id="nav-bar" class="d-flex flex-row justify-content-start align-items-center">
             <a id="toggleNavleft" type="button">
                 <i class="bi bi-list" style="font-size: 2rem; color: cornflowerblue;"></i>
             </a>
@@ -108,6 +108,7 @@
     </div>
    
      <div class="tw-flex tw-flex-row tw-min-h-screen">
+    {{#if auth}}
         <div id="nav-left" class="">
             <div class="tw-flex tw-flex-row tw-mt-5 tw-mb-10 tw-px-5">
                 <img src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle tw-h-[50px] tw-w-[50px]">
@@ -122,18 +123,21 @@
                     </span>
                 </div>
             </div>
-            <nav class="nav flex-column" >
+            <nav class="nav flex-column">
                 {{#with (getFirstItem lcFeatureRoles) as |firstRole|}}
-                    <a class="nav-link active-link"  href="/{{firstRole.RoleName}}/{{firstRole.PathName}}">
-                        {{{firstRole.Icon}}}{{firstRole.FeatureName}}
-                    </a>
+                <a class="nav-link active-link" href="/{{firstRole.RoleName}}/{{firstRole.PathName}}">
+                    {{{firstRole.Icon}}}{{firstRole.FeatureName}}
+                </a>
                 {{/with}}
                 <!-- Links -->
                 {{#each (skipFirst lcFeatureRoles)}}
-                    <a class="nav-link" href="/{{RoleName}}/{{PathName}}">{{{Icon}}}{{FeatureName}}</a>
+                <a class="nav-link" href="/{{RoleName}}/{{PathName}}">{{{Icon}}}{{FeatureName}}</a>
                 {{/each}}
             </nav>
         </div>
+    {{/if}}
+
+            
     <div class="body-homepage tab-content">
         {{{ body }}}
     </div>
@@ -186,19 +190,57 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{{_sections.script}}}
-     <script>
-     $(document).ready(function () {
-        // Gắn sự kiện click vào #toggleNavleft
-        $('#toggleNavleft').on('click', function () {
-            // Kiểm tra nếu #nav-left đang hiển thị (display: block) thì ẩn nó đi (display: none)
-            if ($('#nav-left').css('display') === 'none') {
-                $('#nav-left').css('display', 'block'); // Hiển thị #nav-left
-            } else {
-                $('#nav-left').css('display', 'none'); // Ẩn #nav-left
+    <script>
+        $(document).ready(function () {
+            // Kiểm tra nếu người dùng đã đăng nhập
+            if (!{{auth}}) {  // Kiểm tra nếu auth là false
+                // Nếu chưa đăng nhập, hiển thị thông báo SweetAlert
+                $('#toggleNavleft').on('click', function () {
+                    Swal.fire({
+                        title: 'Bạn chưa đăng nhập',
+                        text: 'Bạn cần đăng nhập để truy cập các tính năng này.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Đăng nhập',
+                        cancelButtonText: 'Hủy',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/account/login';  // Điều hướng đến trang đăng nhập
+                        }
+                    });
+                });
+            } 
+            else if ({{auth}} && parseInt({{authUser.permission}}) === 1) {  // Kiểm tra quyền của người dùng
+                $('#toggleNavleft').on('click', function () {
+                    Swal.fire({
+                        title: 'Bạn không đủ quyền',
+                        text: 'Bạn cần đăng ký premium để truy cập các tính năng này.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Subscribe',
+                        cancelButtonText: 'Hủy',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/account/subscribe';  // Điều hướng đến trang đăng ký
+                        }
+                    });
+                });
+            }
+            else {
+                // Nếu người dùng đã đăng nhập và có quyền truy cập, hiển thị menu
+                $('#toggleNavleft').on('click', function () {
+                    // Kiểm tra nếu #nav-left đang hiển thị (display: block) thì ẩn nó đi (display: none)
+                    if ($('#nav-left').css('display') === 'none') {
+                        $('#nav-left').css('display', 'block'); // Hiển thị #nav-left
+                    } else {
+                        $('#nav-left').css('display', 'none'); // Ẩn #nav-left
+                    }
+                });
             }
         });
-    });
     </script>
+
+
     <script>
         document.querySelector('#img-account').addEventListener('mouseover', function () {
                 const dropdown = document.querySelector('.dropdown-nav');

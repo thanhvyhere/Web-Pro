@@ -29,7 +29,7 @@ router.post('/login', async function (req, res) {
     if(!bcrypt.compareSync(req.body.raw_password, user.password)){
         return res.render('vwAccount/login', {
             layout: 'account-layout',
-            showErrors: true
+            showErrors: true,
         }); 
     }
     req.session.auth = true;
