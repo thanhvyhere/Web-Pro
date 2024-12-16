@@ -188,13 +188,7 @@ hr {
 #nav-left a .active-link {
   background-color: rgb(213, 213, 213) !important;
 }
-.body-homepage{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
 
-}
 
 
 /* Container của dropdown menu */

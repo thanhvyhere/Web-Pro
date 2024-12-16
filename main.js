@@ -16,7 +16,6 @@ import newspaperRouter from './routes/news.route.js';
 import subcriberRouter from './routes/subcriber.route.js';
 import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
-import { authPermission } from './middleware/auth.mdw.js';
 const app = express();
 app.use(express.urlencoded({
     extended: true
