@@ -1,6 +1,5 @@
 body{
     font-size: 14px;
-    font-family: 'Inner';
     color: black;
 }
 
@@ -15,12 +14,19 @@ body{
     background-color: rgba(231, 202, 105, 0.8); /* Màu #E7CA69 với độ trong suốt 80% */
     color: white; /* Màu chữ không bị trong suốt */
     border-radius: 5px;
-    width: 150px;
+    width: 120px;
     height: 40px;
     border: none;
+    font-weight: bold;
     text-align: center;
     line-height: 35px; /* Căn chữ giữa theo chiều dọc */
     cursor: pointer; /* Thêm hiệu ứng trỏ chuột */
+    margin-right: 10px;
+}
+.btn-subcribe:hover{
+    text-decoration: none;
+    background-color: goldenrod;
+    color: black;
 }
 
 
@@ -152,30 +158,36 @@ hr {
 }
 #nav-left
 {
-    min-width: 35vh;
+    min-width: 40vh;
     background-color:  white;
     border-right: 5px solid rgb(213, 213, 213);
     text-align: center;
+    
 }
 #nav-left a
 {
-    min-width: 180px;
-    text-align: center;
-    margin-top: 10px;
+    min-width: 30vh;
+    text-align: left;
+    font-size: 20px;
+    margin-top: 10%;
+    padding-left: 50px;
+    color: #000000;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 5px;
 }
+
 #nav-left a:hover
 {
     background-color: rgb(213, 213, 213);
-    border-radius: 10px;
+    border-radius: 5px;
     /* color: #F0B617; */
     color: black;
-    text-decoration: none !important; 
-    min-width: 180px;
-    width:30vh;
     font-weight: bold;
-    text-align: center;
 }
-
+#nav-left a .active-link {
+  background-color: rgb(213, 213, 213) !important;
+}
 .body-homepage{
     display: flex;
     align-items: center;
@@ -183,7 +195,6 @@ hr {
     justify-content: center;
 
 }
-
 
 
 /* Container của dropdown menu */
@@ -200,7 +211,6 @@ hr {
     border-radius: 8px; /* Bo góc */
     padding: 10px 0; /* Khoảng cách trên và dưới cho menu */
     z-index: 1000; /* Hiển thị trên các phần tử khác */
-    font-family: Arial, sans-serif;
 }
 
 /* Hiển thị menu khi hover */

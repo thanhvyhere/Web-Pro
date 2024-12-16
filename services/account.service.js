@@ -36,6 +36,23 @@ export default {
     delOTP(otp)
     {
         return db('otp_table').where('otp', otp).del();
+    },
+    roleFeature(id) {
+        return db('features')
+            .join('roles', 'features.RoleID', 'roles.RoleID') // Thực hiện JOIN
+            .select(
+                'features.FeatureID',
+                'features.FeatureName',
+                'features.PathName',
+                'features.RoleID',
+                'features.Icon',
+                'roles.RoleName' // Lấy RoleName từ bảng roles
+            )
+            .where('features.RoleID', id); // Lọc theo RoleID
+    },
+    findbyrolename(permission)
+    {
+        return db('roles').where('RoleName', permission).first();
     }
 };
 
