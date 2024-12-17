@@ -1,0 +1,37 @@
+.txt-input {
+    width: 100%;
+    height: 50px;
+}
+
+.card-contain{
+    width: 100%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+.header-create hr {
+    width: 100%;              
+    height: 1px;               
+    border: none;              
+    background-color: black; 
+}
+
+ .header-create{
+    margin-bottom: 10px;
+ }
+.create-body{
+    
+}
+.formCreate{
+    width: 150%;
+    margin: 40px;
+    margin-left: 40%;
+    margin-right: 40%;
+}
+
+.btn-footer{
+   
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+

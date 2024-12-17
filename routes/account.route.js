@@ -8,7 +8,8 @@ import auth from '../middleware/auth.mdw.js';
 import configurePassportGithub from '../controllers/passportGithub.config.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
 import passport from 'passport';
-import nodemailer from 'nodemailer'
+import nodemailer from 'nodemailer';
+
 const router = express.Router();
 dotenv.config();
 
@@ -28,11 +29,17 @@ router.post('/login', async function (req, res) {
     if(!bcrypt.compareSync(req.body.raw_password, user.password)){
         return res.render('vwAccount/login', {
             layout: 'account-layout',
-            showErrors: true
+            showErrors: true,
         }); 
     }
+    const role = await accountService.findRoleById(user.permission);
     req.session.auth = true;
-    req.session.authUser = user;
+    req.session.authUser = {
+        username: user.username,
+        userid: user.id,
+        permission: user.permission,
+        rolename: role.RoleName
+    };
     const retUrl = req.session.retUrl || '/'
     res.redirect(retUrl);
 })
@@ -50,7 +57,7 @@ router.post('/register', async function (req, res) {
         name: req.body.name,
         email: req.body.email, 
         dob: ymd_dob,
-        permission: 0
+        permission: 1
     }
     const ret = await accountService.add(entity);
     const user = await accountService.findByUsername(req.body.username);
@@ -98,7 +105,7 @@ router.get('/is-available', async function (req, res) {
 router.post('/logout', auth, function(req, res){
     req.session.auth = false;
     req.session.authUser = null;
-    res.redirect(req.headers.referer);
+    res.redirect('/');
 })
 
 router.get('/forgot-password', function (req, res) {
