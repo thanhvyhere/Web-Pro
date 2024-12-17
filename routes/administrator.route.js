@@ -1,13 +1,16 @@
 import express from 'express';
 //import AdministratorService from '../services/Administrator.service.js';
+import newsService from '../services/news.service.js';
 const router = express.Router();
-router.get('/', async function (req,res) 
-{
-    res.render('homepage', 
-        
-    );
+router.get('/', async function (req,res) {
+    const categories = await newsService.getAllCategoriesWithChildren();
+    const limitCate = categories.slice(0, 8);
+    res.render('homepage', {
+        categories: categories,
+        limitCate: limitCate
+    });
 });
-// manage_categories
+
 router.get('/manage_categories', async function (req,res) 
 {
    

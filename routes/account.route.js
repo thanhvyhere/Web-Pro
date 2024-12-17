@@ -37,6 +37,7 @@ router.post('/login', async function (req, res) {
     req.session.authUser = {
         username: user.username,
         userid: user.id,
+        name: user.name,
         permission: user.permission,
         rolename: role.RoleName
     };
@@ -251,7 +252,7 @@ router.get('/login/githubAuth',
 
 router.get('/login/githubAuth/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
-  function (req, res) {
+  async function (req, res) {
     // Lấy thông tin user từ session do passport tự lưu
     const user = req.user; 
 
@@ -259,9 +260,16 @@ router.get('/login/githubAuth/callback',
       return res.redirect('/login');
      }
 
-    // Đánh dấu người dùng đã đăng nhập
+      // Đánh dấu người dùng đã đăng nhập
+    const role = await accountService.findRoleById(user.permission);
     req.session.auth = true;
-    req.session.authUser = user;
+    req.session.authUser = {
+        username: user.username,
+        userid: user.id,
+        name: user.name,
+        permission: user.permission,
+        rolename: role.RoleName
+    };
 
     // Chuyển hướng về trang chủ hoặc nơi khác
     res.redirect('/');
@@ -273,17 +281,23 @@ router.get('/login/googleAuth',
 
 router.get('/login/googleAuth/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
-  function (req, res) {
+  async function (req, res) {
     // Lấy thông tin user từ session do passport tự lưu
     const user = req.user; 
 
     if (!user) {
       return res.redirect('/login');
      }
-
+     const role = await accountService.findRoleById(user.permission);
     // Đánh dấu người dùng đã đăng nhập
     req.session.auth = true;
-    req.session.authUser = user;
+    req.session.authUser = {
+        username: user.username,
+        userid: user.id,
+        name: user.name,
+        permission: user.permission,
+        rolename: role.RoleName
+    };
 
     res.redirect('/');
   })
