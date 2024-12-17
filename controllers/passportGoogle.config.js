@@ -33,10 +33,10 @@ export default function configurePassport() {
             user = await User.add({
               googleId: profile.id,
               username: profile.displayName,
-              email: email
+              email: email,
+              permission: 2
             });
           }
-
           // Xác thực thành công
           return done(null, user);
         } catch (error) {

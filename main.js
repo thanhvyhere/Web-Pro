@@ -19,12 +19,24 @@ import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
 import categoriesRoute from './routes/categories.route.js';
 import newsService from './services/news.service.js';
+import fnMySQLStore from 'express-mysql-session';
+import db from './utils/db.js';
 
 const app = express();
 app.use(express.urlencoded({
     extended: true
 }));
 
+// app.use(session({
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         httpOnly: true,
+//         maxAge: 1000 * 60 * 60 * 24 * 7
+//     },
+    
+// }))
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -32,10 +44,8 @@ app.use(session({
     cookie: {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7
-    },
-    
-}))
-
+    }
+  }));
 app.engine('hbs', engine({
     extname: 'hbs',
     defaultLayout: 'main',

@@ -272,7 +272,7 @@ router.get('/login/githubAuth/callback',
     };
 
     // Chuyển hướng về trang chủ hoặc nơi khác
-    res.redirect('/');
+    res.redirect('/subscriber');
   }
 );
 configurePassportGoogle();
@@ -284,11 +284,10 @@ router.get('/login/googleAuth/callback',
   async function (req, res) {
     // Lấy thông tin user từ session do passport tự lưu
     const user = req.user; 
-
     if (!user) {
       return res.redirect('/login');
      }
-     const role = await accountService.findRoleById(user.permission);
+    const role = await accountService.findRoleById(user.permission);
     // Đánh dấu người dùng đã đăng nhập
     req.session.auth = true;
     req.session.authUser = {
@@ -299,6 +298,6 @@ router.get('/login/googleAuth/callback',
         rolename: role.RoleName
     };
 
-    res.redirect('/');
+    res.redirect('/subscriber');
   })
 export default router;
