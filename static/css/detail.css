@@ -1,0 +1,34 @@
+hr{
+    height: 1pt;
+    background-color: black;
+    width: 100%;
+}
+.card-contain{
+    font-size: 20px;
+    margin: 40px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+.des{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: rgb(126, 123, 123);
+    font-size: 12pt;
+}
+h1{
+    font-weight: 900;
+}
+img{
+    width: 100%;
+    max-width: 100%;
+}
+
+#txtComment{
+    height: 100px;
+}
+
+.comment label{
+    font-size: 20pt;
+    font-weight: 600;
+}

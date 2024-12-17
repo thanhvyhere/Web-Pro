@@ -6,7 +6,7 @@ export default
     },
 
     findById(id) {
-        return db('news').where('ProID', id).first();
+        return db('news').where('NewsID', id).first();
     },
 
     add(entity) { // entity: {co truong CatName de add vao bang}
@@ -14,11 +14,11 @@ export default
     },
 
     del(id) {
-        return db('news').where('ProID', id).del();
+        return db('news').where('NewsID', id).del();
     },
 
     patch(id, entity) {
-        return db('news').where('ProID', id).update(entity);
+        return db('news').where('NewsID', id).update(entity);
     },
 
     findByCatId(catId) {
@@ -59,7 +59,7 @@ export default
     },
 
     findCatByCatId(catId) {
-        return ('categories').where('CatID', catId).first();
+        return db('categories').where('CatID', catId).first();
     },
 
 

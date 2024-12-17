@@ -74,4 +74,34 @@
             </div>
         </div>
     </div>
+    <ul class="pagination">
+        <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+        </li>
+        {{#each this.pageNumbers}}
+        {{#if active}}
+        <li class="page-item active">
+            <a class="page-link" href="#">{{value}}</a>
+        </li>
+        {{else}}
+        <li class="page-item">
+            <a class="page-link" href="?id={{../status}}&page={{value}}">{{value}}</a>
+        </li>
+        {{/if}}
+        {{!-- {{#if value === 1}}
+        <li class="page-item disable">
+            <a class="page-link" href="#">{{value}}</a>
+        </li>
+        {{#elif value === }}
+        <li class="page-item">
+            <a class="page-link" href="?id={{../catId}}&page={{value}}">{{value}}</a>
+        </li>
+        {{else}}
+        {{/if}} --}}
+        {{/each}}
+    
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
 </div>

@@ -45,3 +45,10 @@
     color: blue;
     font-size: 15pt;
 }
+
+a{
+    color: black;
+}
+a:hover{
+    color: black;
+}
