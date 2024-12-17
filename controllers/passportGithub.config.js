@@ -43,7 +43,8 @@ export default function configurePassport() {
               githubId: profile.id,
               username: profile.username,
               name: profile.displayName || profile.username || 'No Name',
-              email: email
+              email: email,
+              permission: 2
             });
           }
 

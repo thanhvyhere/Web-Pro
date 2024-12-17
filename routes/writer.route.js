@@ -75,9 +75,9 @@ router.get('/approved', async function (req, res) { // hàm comeback, khi điề
     // Render trang với thông tin các bài viết và danh mục tương ứng
     res.render('vwWriter/approved', {
         newsApproved: newsWithCategories,
-        empty: list.length === 0,
+        empty: newsWithCategories.length === 0,
         pageNumbers: pageNumbers,
-        catId: id
+        //catId: id
     });
 
 });
