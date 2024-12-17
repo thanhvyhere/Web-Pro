@@ -78,6 +78,7 @@
                 <div class="container-fluid">
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav">
+
                             {{#each limitCate}}
                             {{#if children.length}}
                             <!-- Dropdown menu nếu có danh mục con -->
@@ -86,10 +87,13 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{CatName}}
                                 </a>
+
+
                                 <div class="dropdown-menu" aria-labelledby="dropdown-{{id}}">
                                     {{#each children}}
                                     <a class="dropdown-item" href="/newspaper/byCat?catId={{CatID}}">{{CatName}}</a>
                                     {{/each}}
+
                                 </div>
                             </li>
                             {{else}}

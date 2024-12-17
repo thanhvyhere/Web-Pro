@@ -11,11 +11,13 @@ import configurePassportGithub from './controllers/passportGithub.config.js';
 import configurePassportGoogle from './controllers/passportGoogle.config.js';
 import moment from 'moment';
 import passport from 'passport';
+import knex from './utils/db.js';
 import writerRouter from './routes/writer.route.js';
 import newspaperRouter from './routes/news.route.js';
 import subcriberRouter from './routes/subcriber.route.js';
 import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
+import categoriesRoute from './routes/categories.route.js';
 import newsService from './services/news.service.js';
 import fnMySQLStore from 'express-mysql-session';
 import db from './utils/db.js';
@@ -79,7 +81,6 @@ app.use('/imgs', express.static(path.join(__dirname, 'static', 'imgs')));
 configurePassportGithub();
 configurePassportGoogle();
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 // passport.use('github', configurePassport);
@@ -132,8 +133,23 @@ app.get('/', async function (req, res) {
             return res.redirect('/');
     }
 });
-app.use(async function(req,res,next){
-    const rolePort = req.path.split('/')[1]; 
+app.use(async function (req, res, next) {
+    let roleNum = req.session.authUser ? req.session.authUser.permission : 1;
+    let rolePort;
+    switch (roleNum) {
+        case 2: // Subscriber
+            rolePort = 'subscriber';
+            break;
+        case 3: // Writer
+            rolePort = 'writer';
+            break;
+        case 4: // Editor
+            rolePort = 'editor';
+            break;
+        case 5: // Admin
+            rolePort = 'admin';
+            break;
+    }
      if (rolePort === 'editor' || rolePort === 'administrator'||rolePort === 'writer' || rolePort === 'subscriber') {
         try {
             const permission = await accountService.findbyrolename(rolePort);
@@ -144,16 +160,15 @@ app.use(async function(req,res,next){
             console.error(`Lỗi khi lấy dữ liệu cho port: ${rolePort}`, error);
         }
     }
-    // Tiến hành tiếp tục xử lý middleware cho các đường dẫn khác
+    console.log("hehehehhee")
     next();
 });
 
 app.use('/account', accountRouter);
 app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
-// Khởi động server
-// app.use('/artist', artistRouter);
-
+app.use('/categories', categoriesRoute);
+//
 
 app.use('/role', editorRouter);
 app.get('/login', function (req, res) {

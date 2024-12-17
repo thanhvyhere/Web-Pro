@@ -36,7 +36,8 @@ export default
     },
     getCategoriesChild(catId) {
         return db('categories').where('parent_id', catId);
-    },
+    }, 
+    
     getAllCategoriesLimit() {
     return db('categories')
         .select('*') // Chọn tất cả các cột
