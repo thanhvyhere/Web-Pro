@@ -1,0 +1,119 @@
+/* Định dạng container của bài viết */
+.article-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 50px 0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Phần header tiêu đề bài viết */
+.page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Định dạng phần chi tiết bài viết */
+.article-detail {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.article-detail:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Định dạng phần hình ảnh bài viết */
+.article-image-wrapper {
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.article-image {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* Thông tin bài viết */
+.article-info {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #555;
+}
+
+.article-info p {
+    margin-bottom: 10px;
+}
+
+.article-author,
+.article-category,
+.article-date {
+    font-weight: bold;
+}
+
+/* Định dạng nội dung bài viết */
+.article-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+    margin-top: 30px;
+}
+
+/* Nút "Quay lại" */
+.btn-back {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 40px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-back:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn-back:focus {
+    outline: none;
+}
+
+/* Đảm bảo responsive */
+@media screen and (max-width: 768px) {
+    .article-container {
+        width: 90%;
+    }
+
+    .article-detail {
+        padding: 20px;
+    }
+
+    .article-info {
+        font-size: 0.9rem;
+    }
+
+    .article-content {
+        font-size: 1rem;
+    }
+
+    .btn-back {
+        width: 100%;
+        padding: 14px 0;
+    }
+}
