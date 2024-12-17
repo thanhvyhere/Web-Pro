@@ -16,6 +16,7 @@ import newspaperRouter from './routes/news.route.js';
 import subcriberRouter from './routes/subcriber.route.js';
 import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
+import newsService from './services/news.service.js';
 const app = express();
 app.use(express.urlencoded({
     extended: true
@@ -81,11 +82,24 @@ app.use(async function (req, res, next){
     next();
 })
 
+app.use(async (req, res, next) => {
+    // Lấy tất cả categories và limitCate (8 cái đầu tiên)
+    const categories = await newsService.getAllCategoriesWithChildren();
+    const limitCate = categories.slice(0, 8);
+
+    // Lưu vào res.locals để có thể sử dụng trong tất cả các view
+    res.locals.categories = categories;
+    res.locals.limitCate = limitCate;
+
+    // Tiếp tục xử lý request
+    next();
+});
 
 
 app.get('/', async function (req, res) {
      if (!req.session.auth || !req.session.authUser) {
-        return res.render('homepage'); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+         return res.render('homepage', {
+        }); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
     }
     if (req.session.views) {
         req.session.views++;
@@ -107,7 +121,6 @@ app.get('/', async function (req, res) {
             return res.redirect('/');
     }
 });
-
 app.use(async function(req,res,next){
     const rolePort = req.path.split('/')[1]; 
      if (rolePort === 'editor' || rolePort === 'administrator'||rolePort === 'writer' || rolePort === 'subscriber') {
