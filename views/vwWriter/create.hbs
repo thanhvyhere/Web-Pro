@@ -1,0 +1,133 @@
+{{#section "css"}}
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.9.3/dist/tagify.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/cssWriter/writer.css">
+
+{{/section}}
+{{#section "script"}}
+<script src="https://cdn.tiny.cloud/1/phvhvcvzrs6bon8nebxuyvig5ln78s4n2mtlz4eodyg21gj5/tinymce/7/tinymce.min.js"
+  referrerpolicy="origin"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.9.3/dist/tagify.min.js"></script>
+<script>
+  // Khởi tạo TinyMCE
+  tinymce.init({
+    selector: '#txtContent'
+  });
+
+  // Khởi tạo Tagify
+  // Xử lý chọn danh mục con
+  $(document).ready(function () {
+    $('#txtCat').on('change', function () {
+      var categoryId = $(this).val(); // Lấy ID của category cha
+
+      if (categoryId) {
+        // Gửi yêu cầu AJAX
+        $.get('/writer/categories/children/' + categoryId, function (data) {
+          var childSelect = $('#txtCatChild');
+          childSelect.empty(); // Xóa các option cũ
+
+          // Thêm option mặc định
+          childSelect.append('<option value="" disabled selected>Select a category child</option>');
+
+          // Thêm các category con vào dropdown
+          if (data.length > 0) {
+            data.forEach(function (child) {
+              childSelect.append('<option value="' + child.CatID + '">' + child.CatName + '</option>');
+            });
+            childSelect.prop('disabled', false); // Kích hoạt dropdown
+          } else {
+            childSelect.prop('disabled', true); // Vô hiệu hóa nếu không có category con
+          }
+        }).fail(function () {
+          alert('Failed to load category children.');
+        });
+      } else {
+        $('#txtCatChild').prop('disabled', true); // Vô hiệu hóa nếu không chọn category cha
+      }
+    });
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Khởi tạo Tagify với whitelist và dropdown
+    var input = document.querySelector('#txtTag');
+    var tagify = new Tagify(input, {
+      whitelist: ['JavaScript', 'HTML', 'CSS', 'Node.js', 'React', 'Vue.js', 'Python', 'Django', 'Flask'],
+      maxTags: 5,
+      placeholder: 'Add tags',
+      enforceWhitelist: true,
+      dropdown: {
+        maxItems: 10, // Hiển thị tối đa 10 tag
+        enabled: 0, // Hiển thị dropdown ngay khi focus
+        closeOnSelect: false // Giữ dropdown mở sau khi chọn
+      }
+    });
+
+    // Xử lý sự kiện khi thêm tag
+    tagify.on('add', function (e) {
+      console.log('Tag added:', e.detail.data);
+    });
+
+    // Xử lý sự kiện khi xóa tag
+    tagify.on('remove', function (e) {
+      console.log('Tag removed:', e.detail.data);
+    });
+  });
+</script>
+{{/section}}
+
+<form class="formCreate" action="/news/articles/create" method="post">
+  <div class="header-create">
+    <h4>UPLOAD NEWSPAPER</h4>
+    <hr>
+  </div>
+  <div class="form-group mb-3">
+    <label for="txtTitle">Title</label>
+    <input type="text" name="title" id="txtTitle" class="form-control txt-input" placeholder=""
+      aria-describedby="helpId">
+  </div>
+  <div class="form-group mb-3">
+    <label for="txtAuthor">Author</label>
+    <input type="text" name="author" id="txtAuthor" class="form-control txt-input" placeholder=""
+      aria-describedby="helpId">
+  </div>
+  <div class="form-group mb-3">
+    <label for="txtAbstract">Abstract</label>
+    <input type="text" name="abstract" id="txtAbstract" class="form-control txt-input" placeholder=""
+      aria-describedby="helpId">
+  </div>
+  <div>
+    <div class="form-group mb-3">
+      <label for="txtCat">Category</label>
+      <select name="CatID" id="txtCat" class="form-control txt-input" aria-describedby="helpId">
+        <option value="" disabled selected>Select a category</option>
+        {{#each categories}}
+        <option value="{{CatID}}">{{CatName}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="form-group mb-3">
+      <label for="txtCatChild">Category Child</label>
+      <select name="category_child_id" id="txtCatChild" class="form-control txt-input" aria-describedby="helpId"
+        disabled>
+        <option value="" disabled selected>Select a category child</option>
+        <!-- Các option category child sẽ được thêm vào ở đây -->
+      </select>
+    </div>
+  </div>
+  <div class="form-group mb-3">
+    <label for="txtTag" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Tag</label>
+    <input type="text" id="txtTag" name="tags" class="form-control txt-input" placeholder="Add tags" autofocus>
+  </div>
+  <div class="flex items-center space-x-1 mb-3">
+    <label for="imageInput" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Image File</label>
+    <input type="file" id="imageInput" name="ImagePath" class="mb-4 p-2 border rounded text-white">
+  </div>
+  <div class="form-group mb-3">
+    <label for="txtContent">Content</label>
+    <textarea id="txtContent" name="content">Hello World</textarea>
+  </div>
+  <div class="d-flex flex-row btn-footer">
+    <button type="" class="btn btn-danger">Cancel</button>
+    <button type="submit" class="btn btn-warning ">Upload</button>
+  </div>
+</form>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category List</title>
+  <link rel="stylesheet" href="/static/css/cssAdministrator/categories.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">Category List</h1>
+      <a href="/categories/add" class="btn btn-primary">Add Category</a>
+    </header>
+
+    <div class="table-container">
+      <table class="categories-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category Name</th>
+            <th>Parent Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each categories}}
+          <tr>
+            <td>{{this.CatID}}</td>
+            <td>{{this.CatName}}</td>
+            <td>{{#if this.parent_id}}{{lookup ../categories this.parent_id}}{{else}}None{{/if}}</td>
+            <td>
+              <a href="/categories/detail/{{this.CatID}}" class="btn btn-detail">View</a>
+              <a href="/categories/update/{{this.CatID}}" class="btn btn-update">Edit</a>
+              <a href="/categories/delete/{{this.CatID}}" class="btn btn-delete">Delete</a>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>

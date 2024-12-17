@@ -115,6 +115,10 @@
   margin-bottom: 2.5rem !important
 }
 
+.tw-mb-2 {
+  margin-bottom: 0.5rem !important
+}
+
 .tw-mt-5 {
   margin-top: 1.25rem !important
 }
@@ -125,10 +129,6 @@
 
 .tw-flex {
   display: flex !important
-}
-
-.tw-hidden {
-  display: none !important
 }
 
 .tw-h-\[50px\] {

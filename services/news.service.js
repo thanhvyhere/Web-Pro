@@ -1,25 +1,40 @@
-import knex from '../utils/db.js';
-
-const newsService = {
-    // Fetch all news
-    async getAllNews() {
-        return await knex('news').select('*'); // Adjust table name and fields as needed
+import db from '../utils/db.js';
+export default
+{
+    findAll() {
+        return db('news');
     },
 
-    // Fetch news by ID
-    async getNewsById(id) {
-        return await knex('news').where('id', id).first();
+    findById(id) {
+        return db('news').where('ProID', id).first();
     },
 
-    // Add a new news item
-    async addNews(newsItem) {
-        return await knex('news').insert(newsItem);
+    add(entity) { // entity: {co truong CatName de add vao bang}
+        return db('news').insert(entity);
     },
 
-    // Delete news by ID
-    async deleteNewsById(id) {
-        return await knex('news').where('id', id).del();
+    del(id) {
+        return db('news').where('ProID', id).del();
     },
-};
 
-export default newsService;
+    patch(id, entity) {
+        return db('news').where('ProID', id).update(entity);
+    },
+
+    findByCatId(catId) {
+        return db('news').where('CatID', catId);
+    },
+
+    findPageByCatId(catId, limit, offset){
+        return db('news').where('CatID', catId).limit(limit).offset(offset);
+    },
+    countByCatId(catId){
+        return db('news').where('CatID', catId).count('* as total').first();
+    },
+    getAllCategories() {
+        return db('categories').where('parent_id', null);
+    },
+    getCategoriesChild(catId) {
+        return db('categories').where('parent_id', catId);
+    }
+}

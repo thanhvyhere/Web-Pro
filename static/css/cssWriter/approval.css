@@ -1,0 +1,45 @@
+#card-list-new{
+    margin: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size: 12pt;
+}
+
+.abstract-font{
+    font-size: 8pt;
+}
+.img-title-paper{
+    border-radius: 5px;
+}
+.card-news{
+    gap: 10px;
+}
+
+.header-paper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.name-category-paper{
+    background-color: rgb(239, 107, 107);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+}
+.paper-small{
+    margin-left: 10px;
+}
+
+.tick-icon{
+    color: green;
+    font-size: 15pt;
+}
+.refuse-icon{
+    color: red;
+    font-size: 15pt;
+}
+.pending-icon{
+    color: blue;
+    font-size: 15pt;
+}
