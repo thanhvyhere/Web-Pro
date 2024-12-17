@@ -1,0 +1,81 @@
+{{#section "css"}}
+<link rel="stylesheet" href="/static/css/cssWriter/writer.css">
+<link rel="stylesheet" href="/static/css/cssWriter/approval.css">
+{{/section}}
+{{#section "script"}}
+<script>
+    // Lấy tất cả các phần tử có class "PublishedDate"
+        const dateElements = document.querySelectorAll('.PublishedDate');
+
+        // Lặp qua từng phần tử và định dạng ngày tháng
+        dateElements.forEach(dateElement => {
+            const rawDate = dateElement.innerText;
+
+            // Định dạng ngày tháng theo kiểu Việt Nam
+            const formattedDate = new Date(rawDate).toLocaleDateString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+            // Cập nhật lại nội dung của phần tử với ngày tháng đã định dạng
+            dateElement.innerText = formattedDate;
+        });
+</script>
+
+{{/section}}
+<div id="card-list-new">
+    {{#if this.empty}}
+    <div class="card-body">
+        null
+    </div>
+    {{else}}
+    <div class="card-body">
+        <div class="row">
+            {{#each news}}
+            <div class="col-sm-6 mb-3">
+                <div class="card">
+                    <div class="card-body card-news d-flex flex-row">
+                        <img src="{{ImageCover}}" alt="..." class="img-title-paper">
+                        <div class="paper-small">
+                            <div class="header-paper small mb-2">
+                                <button class="name-category-paper" disabled="disabled">{{catName}}</button>
+                                <div class="PublishedDate">
+                                    <i class="bi bi-calendar3"></i>
+                                    {{CreatedDate}}
+                                </div>
+                            </div>
+                            <a href="/newspaper/detail?id={{NewsID}}">
+                                <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                            </a>
+                            <p class="abstract-font">{{Abstract}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div> <!-- Kết thúc .row -->
+
+        <!-- Pagination -->
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+            {{#each this.pageNumbers}}
+            {{#if active}}
+            <li class="page-item active">
+                <a class="page-link" href="#">{{value}}</a>
+            </li>
+            {{else}}
+            <li class="page-item">
+                <a class="page-link" href="?id={{../catId}}&page={{value}}">{{value}}</a>
+            </li>
+            {{/if}}
+            {{/each}}
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </div> <!-- Kết thúc .card-body -->
+    {{/if}}
+</div> <!-- Kết thúc #card-list-new -->
