@@ -1,15 +1,15 @@
 import express from 'express';
+import newsService from '../services/news.service.js';
 //import editorService from '../services/editor.service.js';
 const router = express.Router();
 const role = 'editor';
-router.get('/', async function (req,res) 
-{
-    //await dung de móc được promise và dùng kèm với async
-    //const list = await editorService.findAll();
-   
-    res.render('homepage', 
-       
-    );
+router.get('/', async function (req,res) {
+    const categories = await newsService.getAllCategoriesWithChildren();
+    const limitCate = categories.slice(0, 8);
+    res.render('homepage', {
+        categories: categories,
+        limitCate: limitCate
+    });
 });
 router.get('/storage', async function (req,res) 
 {

@@ -50,7 +50,7 @@
                     </a>
                 </div>
             {{/if}}
-            <div class="dropdown-menu" aria-labelledby="navbarAccount">
+            <div id="info-dropdown" class="dropdown-menu" aria-labelledby="navbarAccount">
                 <div id="account-inf">
                     <img id="img-account" src="/static/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle">
                     <h5 class="text-uppercase mt-3">{{authUser.username}}</h5>
@@ -78,27 +78,53 @@
                 <div class="container-fluid">
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Features</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Pricing</a>
-                            </li>
+                            {{#each limitCate}}
+                            {{#if children.length}}
+                            <!-- Dropdown menu nếu có danh mục con -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Dropdown link
+                                <a class="nav-link dropdown-toggle" href="#" id="dropdown-{{id}}" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{CatName}}
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-{{id}}">
+                                    {{#each children}}
+                                    <a class="dropdown-item" href="#">{{CatName}}</a>
+                                    {{/each}}
                                 </div>
                             </li>
+                            {{else}}
+                            <!-- Hiển thị danh mục bình thường nếu không có con -->
                             <li class="nav-item">
-                                <img class="search-icon" src="/imgs/btn-catalog.png" alt="Catalog">
+                                <a class="nav-link" href="#">{{CatName}}</a>
+                            </li>
+                            {{/if}}
+                            {{/each}}
+            
+                            <li class="nav-item dropdown">
+                                <!-- Nút chính có icon -->
+                                <a class="nav-link dropdown-toggle" href="#" id="catalogDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img class="search-icon" src="/imgs/btn-catalog.png" alt="Catalog">
+                                </a>
+            
+                                <!-- Dropdown menu chứa danh mục -->
+                                <ul class="dropdown-menu" aria-labelledby="catalogDropdown">
+                                    <h6>TẤT CẢ DANH MỤC</h6>
+                                    <hr>
+                                    {{#each categories}}
+                                    <li class="dropdown-item">
+                                        <a href="#">{{CatName}}</a>
+                                        {{#if children.length}}
+                                        <!-- Submenu cho danh mục con -->
+                                        <ul class="submenu">
+                                            {{#each children}}
+                                            <li><a href="#">{{CatName}}</a></li>
+                                            {{/each}}
+                                        </ul>
+                                        {{/if}}
+                                    </li>
+                                    {{/each}}
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -107,7 +133,7 @@
         </div>
     </div>
    
-     <div class="tw-flex tw-flex-row tw-min-h-screen">
+     <div class="tw-flex tw-flex-row tw-min-h-screen card-body">
     {{#if auth}}
         <div id="nav-left" class="">
             <div class="tw-flex tw-flex-row tw-mt-5 tw-mb-10 tw-px-5">
@@ -138,7 +164,7 @@
     {{/if}}
 
             
-    <div class="">
+    <div class="homepage-body">
         {{{ body }}}
     </div>
     </div>

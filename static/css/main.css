@@ -28,8 +28,12 @@ body{
     background-color: goldenrod;
     color: black;
 }
-
-
+#info-dropdown{
+    z-index: 100000;
+}
+.homepage-body{
+    width: 100%;
+}
 .search-container {
     position: relative;
     width: 50%; /* Đảm bảo thanh tìm kiếm chiếm toàn bộ chiều ngang */
@@ -87,6 +91,7 @@ body{
 .navbar-nav .nav-item {
     position: relative;
     margin-right: 50px;
+    z-index: 2000;
 }
 .navbar-nav .nav-item:hover {
     box-shadow: 0 2px 0 0 #007bff; 
@@ -99,6 +104,8 @@ body{
 .navbar-nav .nav-link:hover {
     color: #007bff; 
 }
+
+/* Đảm bảo phần tử cha có đủ không gian để chứa dropdown */
 
 
 .dropdown-menu .dropdown-item {
@@ -120,7 +127,9 @@ body{
 #footer{
     color: white;
 }
-
+.honepage{
+    width: 100%;
+}
 #footer h4{
     color:#F6FB9E;
     font-size: 25px;
@@ -162,6 +171,7 @@ hr {
     background-color:  white;
     border-right: 5px solid rgb(213, 213, 213);
     text-align: center;
+    z-index: 1000;
     
 }
 #nav-left a
@@ -199,7 +209,6 @@ hr {
     left: 0;
     height: auto;
     min-width: 200px; /* Chiều rộng tối thiểu của menu */
-    background-color: #ffffff; /* Nền trắng */
     border: 1px solid #e0e0e0; /* Đường viền nhạt */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
     border-radius: 8px; /* Bo góc */
@@ -242,15 +251,10 @@ hr {
     align-items: center; /* Căn giữa biểu tượng và text */
     padding: 10px 15px; /* Khoảng cách trong cho từng mục */
     font-size: 30px; /* Kích thước chữ */
-    color: #000000; /* Màu chữ */
     text-decoration: none; /* Xóa gạch chân */
     transition: background-color 0.2s ease; /* Hiệu ứng hover mượt */
 }
 
-.dropdown-item:hover {
-    background-color: #c13636; /* Nền khi hover */
-    color: #000000; /* Màu chữ khi hover */
-}
 
 /* Biểu tượng trong các mục menu */
 .dropdown-item i {
@@ -261,3 +265,39 @@ hr {
 
 /* Nút Log out */
 
+
+/* Ẩn submenu mặc định */
+.submenu {
+    display: none; /* Ẩn danh mục con */
+    position: absolute; /* Đặt submenu ở vị trí tuyệt đối */
+    left: 100%; /* Đặt submenu bên phải danh mục cha */
+    top: 0; /* Đảm bảo submenu hiển thị ngay bên cạnh */
+    background-color: #ffffff; /* Nền trắng cho submenu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    padding: 10px 0; /* Khoảng cách cho các mục con */
+    z-index: 1000; /* Đảm bảo submenu nằm trên các phần tử khác */
+    min-width: 200px; /* Chiều rộng tối thiểu */
+}
+
+/* Hiển thị submenu khi hover vào danh mục cha */
+.dropdown-item:hover .submenu {
+    display: block; /* Hiển thị submenu khi hover */
+}
+
+/* Kiểu dáng cho các mục trong submenu */
+.submenu li {
+    list-style: none; /* Loại bỏ dấu chấm */
+}
+
+.submenu a {
+    display: block;
+    padding: 8px 15px; /* Khoảng cách giữa các mục */
+    color: #333;
+    text-decoration: none;
+}
+
+/* Hiệu ứng hover cho các mục trong submenu */
+.submenu a:hover {
+    background-color: #007bff; /* Màu nền khi hover */
+    color: #fff; /* Màu chữ khi hover */
+}
