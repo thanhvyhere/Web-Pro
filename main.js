@@ -26,17 +26,7 @@ const app = express();
 app.use(express.urlencoded({
     extended: true
 }));
-
-// app.use(session({
-//     secret: 'keyboard cat',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//         httpOnly: true,
-//         maxAge: 1000 * 60 * 60 * 24 * 7
-//     },
-    
-// }))
+app.use(express.json()); 
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -68,6 +58,43 @@ app.engine('hbs', engine({
                 return array[0];
             }
             return null; // Nếu không có phần tử
+        },
+        getRoleIcon(roleName) {
+            // Trả về icon HTML tương ứng với roleName
+            switch (roleName) {
+                case 'administrator':
+                    return '<i class="bi bi-shield-lock"></i>'; // Icon cho Administrator
+                case 'editor':
+                    return '<i class="bi bi-pencil-square"></i>'; // Icon cho Editor
+                case 'subscriber':
+                    return '<i class="bi bi-person"></i>'; // Icon cho Subscriber
+                case 'writer':
+                    return '<i class="bi bi-vector-pen"></i>'; // Icon cho Subscriber
+                default:
+                    return '<i class="bi bi-person-fill"></i>'; // Icon mặc định
+            }
+        },
+        getStatusColor(status) {
+            switch (status) {
+                case 'Đang chờ':
+                    return 'gray'; // Màu xám
+                case 'Đã đăng':
+                    return 'green'; // Màu xanh
+                case 'Đã xóa':
+                    return 'red'; // Màu đỏ
+                case 'Đã nhận xét':
+                    return 'orange'; // Màu vàng
+                case 'Đã chỉnh sửa':
+                    return 'purple'; // Màu vàng
+                case 'Đã duyệt':
+                    return 'yellow'; // Màu vàng
+                case 'Đã từ chối':
+                    return 'blue'; // Màu vàng
+                default:
+                    return 'black'; // Màu mặc định
+            }
+        },eq: function (a, b) {
+            return a === b;
         },
     }
 }));
@@ -155,6 +182,7 @@ app.use(async function (req, res, next) {
             const permission = await accountService.findbyrolename(rolePort);
             const roleFeature = await accountService.roleFeature(permission.RoleID);
             res.locals.lcFeatureRoles = roleFeature;
+            res.locals.roleName = rolePort;
         } catch (error) {
             console.error(`Lỗi khi lấy dữ liệu cho port: ${rolePort}`, error);
         }
