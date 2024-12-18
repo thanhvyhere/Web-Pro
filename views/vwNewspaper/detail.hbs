@@ -4,16 +4,24 @@
 {{/section}}
 {{#section "script"}}
 <script>
-    const dateElement = document.getElementById('PublishedDate');
-    const rawDate = dateElement.innerText;
+    // Lấy tất cả các phần tử có class "PublishedDate"
+    const dateElements = document.querySelectorAll('.PublishedDate');
 
-    const formattedDate = new Date(rawDate).toLocaleDateString('vi-VN', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+    // Lặp qua từng phần tử và định dạng ngày tháng
+    dateElements.forEach(dateElement => {
+        const rawDate = dateElement.innerText;
+
+        // Định dạng ngày tháng theo kiểu Việt Nam
+        const formattedDate = new Date(rawDate).toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+
+        // Chèn icon và ngày tháng đã định dạng vào phần tử
+        dateElement.innerHTML = `<i class="bi bi-calendar3"></i> ${formattedDate}`;
     });
 
-    dateElement.innerText = formattedDate;
 </script>
     
 {{/section}}
@@ -27,15 +35,16 @@
                 <i class="bi bi-book"></i>
                 Tác giả: {{this.news.AuthorName}}
             </div>
-            <div id="PublishedDate">
+            <div class="PublishedDate">
                 {{this.news.PublishedDay}}
             </div>
         </div>
         <hr>
     </div>
     <div class="mb-5">
-        <button type="button" class="btn btn-outline-primary disable">Nghệ thuật</button>
-        <button type="button" class="btn btn-outline-primary disable">USUK</button>
+        {{#each tags}}
+            <button type="button" class="btn btn-outline-primary disable">{{TagName}}</button>
+        {{/each}}
     </div>
     <div class="d-flex flex-row justify-content-start align-items-start mb-3">
         <img src="{{this.news.ImageCover}}" alt="" class="img-format">

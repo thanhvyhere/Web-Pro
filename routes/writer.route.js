@@ -59,9 +59,44 @@ router.get('/create_article', async (req, res) => {
 });
 
 router.post('/create_article', async (req, res) => {
-    const { title, author, abstract, content, image_url, is_premium, category_id } = req.body;
-    await newsService.add({ title, author, abstract, content, image_url, is_premium, category_id });
-    res.redirect('/articles');
+    const { title, author, abstract, content, image_url, is_premium, category_child_id, CatID} = req.body;
+    const entity = {
+        Title: title,
+        AuthorName: req.session.authUser.name,
+        Abstract: abstract,
+        CatID: category_child_id,
+        Content: content,
+        Premium: 0,
+        CreatedDate: new Date(),
+        Status: 2
+    }
+    await newsService.add(entity);
+    const [result] = await newsService.getIdNewEntity();
+    const newsID = result[0].NewsID;
+    const { tags } = req.body; // Lấy danh sách tags từ request body
+    console.log(tags);
+    try {
+        const savedTags = [];
+        for (const tag of tags) {
+            // Kiểm tra nếu tag đã tồn tại
+            let existingTag = await newsService.findTagByTagName(tag.value);
+            if (!existingTag) {
+                // Lưu tag mới vào database
+                ret = await newsService.addNewTag(tag);
+                existingTag = tag;
+                savedTags.push(existingTag);
+            }
+            const tagNewsEntity = {
+                TagID: existingTag.TagID,
+                NewsID: newsID
+            };
+            ret = await newsService.addTagIdAndNewsId(tagNewsEntity);
+        }
+        res.status(201).json({ message: 'Tags saved successfully', tags: savedTags });
+        res.redirect('/writer/pending_approval');
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to save tags' });
+    }
 });
 
 // Get category children

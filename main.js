@@ -128,7 +128,7 @@ app.get('/', async function (req, res) {
         case 4: // Editor
             return res.redirect('/editor');
         case 5: // Admin
-            return res.redirect('/admin');
+            return res.redirect('/administrator');
         default: // Guest or invalid permission
             return res.redirect('/');
     }
@@ -147,7 +147,7 @@ app.use(async function (req, res, next) {
             rolePort = 'editor';
             break;
         case 5: // Admin
-            rolePort = 'admin';
+            rolePort = 'administrator';
             break;
     }
      if (rolePort === 'editor' || rolePort === 'administrator'||rolePort === 'writer' || rolePort === 'subscriber') {
@@ -155,12 +155,10 @@ app.use(async function (req, res, next) {
             const permission = await accountService.findbyrolename(rolePort);
             const roleFeature = await accountService.roleFeature(permission.RoleID);
             res.locals.lcFeatureRoles = roleFeature;
-            console.log(roleFeature);
         } catch (error) {
             console.error(`Lỗi khi lấy dữ liệu cho port: ${rolePort}`, error);
         }
     }
-    console.log("hehehehhee")
     next();
 });
 

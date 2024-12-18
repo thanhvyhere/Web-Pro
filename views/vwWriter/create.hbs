@@ -47,35 +47,62 @@
   });
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Khởi tạo Tagify với whitelist và dropdown
-    var input = document.querySelector('#txtTag');
-    var tagify = new Tagify(input, {
-      whitelist: ['JavaScript', 'HTML', 'CSS', 'Node.js', 'React', 'Vue.js', 'Python', 'Django', 'Flask'],
-      maxTags: 5,
-      placeholder: 'Add tags',
-      enforceWhitelist: true,
-      dropdown: {
-        maxItems: 10, // Hiển thị tối đa 10 tag
-        enabled: 0, // Hiển thị dropdown ngay khi focus
-        closeOnSelect: false // Giữ dropdown mở sau khi chọn
-      }
-    });
+  document.addEventListener('DOMContentLoaded', async function () {
+    const input = document.querySelector('#txtTag');
 
-    // Xử lý sự kiện khi thêm tag
-    tagify.on('add', function (e) {
-      console.log('Tag added:', e.detail.data);
-    });
+    try {
+      // Gọi API để lấy danh sách tags
+      const response = await fetch('/newspaper/api/tags');
+      if (!response.ok) throw new Error('Failed to fetch tags');
+      const tags = await response.json(); // Danh sách tags từ API
 
-    // Xử lý sự kiện khi xóa tag
-    tagify.on('remove', function (e) {
-      console.log('Tag removed:', e.detail.data);
-    });
+      // Khởi tạo Tagify với danh sách tags từ API
+      const tagify = new Tagify(input, {
+        whitelist: tags, // Sử dụng danh sách tags từ API
+        maxTags: 5,
+        placeholder: 'Add tags',
+        dropdown: {
+          maxItems: 10, // Hiển thị tối đa 10 tag
+          enabled: 0, // Hiển thị dropdown ngay khi focus
+          closeOnSelect: true // Giữ dropdown mở sau khi chọn
+        }
+      });
+
+      // Xử lý sự kiện khi thêm tag
+      tagify.on('add', async function (e) {
+        console.log('Tag added:', e.detail.data);
+
+        // Gửi tag mới lên server
+        try {
+          const addedTag = e.detail.data.value; // Lấy giá trị tag mới
+          const response = await fetch('/newspaper/api/tags', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tags: [addedTag] }) // Gửi mảng tags
+          });
+
+          if (!response.ok) throw new Error('Failed to save tag');
+          const result = await response.json();
+          console.log('Tag saved successfully:', result);
+        } catch (error) {
+          console.error('Error saving tag:', error);
+        }
+      });
+
+      // Xử lý sự kiện khi xóa tag
+      tagify.on('remove', function (e) {
+        console.log('Tag removed:', e.detail.data);
+        // Nếu cần, bạn có thể thêm logic để xóa tag khỏi cơ sở dữ liệu
+      });
+    } catch (error) {
+      console.error('Error initializing tags:', error);
+    }
   });
 </script>
+
 {{/section}}
 
-<form class="formCreate" action="/news/articles/create" method="post">
+<form class="formCreate" action="/writer/create_article" method="post">
   <div class="header-create">
     <h4>UPLOAD NEWSPAPER</h4>
     <hr>
@@ -127,7 +154,6 @@
     <textarea id="txtContent" name="content">Hello World</textarea>
   </div>
   <div class="d-flex flex-row btn-footer">
-    <button type="" class="btn btn-danger">Cancel</button>
-    <button type="submit" class="btn btn-warning ">Upload</button>
+    <button type="submit" class="btn btn-warning">Upload</button>
   </div>
 </form>

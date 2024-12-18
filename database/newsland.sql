@@ -271,3 +271,56 @@ VALUES
   (NULL, NULL, 'writer', '123', 'Writer User', 'writer@example.com', '2000-01-01', 3, 0, 0),
   (NULL, NULL, 'editor', '123', 'Editor User', 'editor@example.com', '2000-01-01', 4, 0, 0),
   (NULL, NULL, 'admin', '123', 'Administrator User', 'admin@example.com', '2000-01-01', 5, 0, 0);
+
+
+
+
+
+
+CREATE TABLE `comment` (
+  `CommentID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của bình luận
+  `Comment` text COLLATE utf8_unicode_ci NOT NULL, -- Nội dung bình luận
+  `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
+  `UserID` int(11) unsigned NOT NULL, -- ID người dùng bình luận
+  `CreatedDate` DATE DEFAULT CURRENT_DATE, -- Ngày tạo bình luận, mặc định là ngày hiện tại
+  PRIMARY KEY (`CommentID`),
+  FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Tham chiếu đến bảng news và xóa bình luận khi bài viết bị xóa
+  FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE CASCADE -- Tham chiếu đến bảng users, xóa bình luận nếu người dùng bị xóa
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `tag` (
+  `TagID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của tag
+  `TagName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên tag
+  PRIMARY KEY (`TagID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `news` ENGINE = InnoDB;
+CREATE TABLE `news_tags` (
+  `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
+  `TagID` int(11) unsigned NOT NULL, -- ID tag
+  PRIMARY KEY (`NewsID`, `TagID`),
+  FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Liên kết với bảng news
+  FOREIGN KEY (`TagID`) REFERENCES `tag`(`TagID`) ON DELETE CASCADE -- Liên kết với bảng tag
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+
+CREATE TABLE `status` (
+  `StatusID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID trạng thái
+  `StatusName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên trạng thái
+  PRIMARY KEY (`StatusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- Chèn dữ liệu vào bảng status
+INSERT INTO `status` (`StatusName`) VALUES
+  ('Đã duyệt'),
+  ('Đang chờ'),
+  ('Đã đăng'),
+  ('Đã từ chối'),
+  ('Đã xóa'),
+  ('Đã nhận xét'),
+  ('Đã chỉnh sửa');
+
+
