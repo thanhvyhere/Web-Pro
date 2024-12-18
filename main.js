@@ -17,10 +17,8 @@ import newspaperRouter from './routes/news.route.js';
 import subcriberRouter from './routes/subcriber.route.js';
 import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
-import categoriesRoute from './routes/categories.route.js';
 import newsService from './services/news.service.js';
 import fnMySQLStore from 'express-mysql-session';
-import db from './utils/db.js';
 
 const app = express();
 app.use(express.urlencoded({
@@ -35,8 +33,8 @@ app.use(express.urlencoded({
 //         httpOnly: true,
 //         maxAge: 1000 * 60 * 60 * 24 * 7
 //     },
-    
 // }))
+
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -45,7 +43,8 @@ app.use(session({
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
-  }));
+}));
+
 app.engine('hbs', engine({
     extname: 'hbs',
     defaultLayout: 'main',
@@ -53,21 +52,53 @@ app.engine('hbs', engine({
         format_number(value) {
             return numeral(value).format('0,0') + ' đ'
         },
+
         section: hbs_sections(),
         formatDate: function (date) {
             return moment(date).format('YYYY-MM-DD HH:mm:ss'); // Định dạng ngày theo YYYY-MM-DD
         },
+
         skipFirst(array) {
             if (Array.isArray(array)) {
                 return array.slice(1); // Bỏ phần tử đầu tiên
             }
             return []; // Nếu không phải mảng, trả về mảng rỗng
         },
+
         getFirstItem(array) {
             if (Array.isArray(array) && array.length > 0) {
                 return array[0];
             }
             return null; // Nếu không có phần tử
+        },
+
+        eq: function (a, b) {
+            return a === b;  // So sánh a và b, trả về true nếu bằng nhau
+        },
+
+        gt: function (a, b) {
+            return a > b;
+        },
+          
+        lt: function (a, b) {
+            return a < b;
+        },
+          
+        // Helper: Phép cộng và trừ
+        add: function (a, b) {
+            return a + b;
+        },
+          
+        sub: function (a, b) {
+            return a - b;
+        },
+
+        range: function (start, end) {
+            let result = [];
+            for (let i = start; i <= end; i++) {
+              result.push(i);
+            }
+            return result;
         },
     }
 }));
@@ -84,6 +115,7 @@ configurePassportGoogle();
 app.use(passport.initialize());
 app.use(passport.session());
 // passport.use('github', configurePassport);
+
 app.use(async function (req, res, next){
     if(!req.session.auth)
     {
@@ -107,7 +139,6 @@ app.use(async (req, res, next) => {
     next();
 });
 
-
 app.get('/', async function (req, res) {
      if (!req.session.auth || !req.session.authUser) {
          return res.render('homepage', {
@@ -128,11 +159,12 @@ app.get('/', async function (req, res) {
         case 4: // Editor
             return res.redirect('/editor');
         case 5: // Admin
-            return res.redirect('/admin');
+            return res.redirect('/administrator');
         default: // Guest or invalid permission
             return res.redirect('/');
     }
 });
+
 app.use(async function(req,res,next){
     const rolePort = req.path.split('/')[1]; 
      if (rolePort === 'editor' || rolePort === 'administrator'||rolePort === 'writer' || rolePort === 'subscriber') {
@@ -152,285 +184,8 @@ app.use(async function(req,res,next){
 app.use('/account', accountRouter);
 app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
-app.use('/categories', categoriesRoute);
 // Khởi động server
 // app.use('/artist', artistRouter);
-
-// Route cho các trang ở thanh Nav-bar
-// Route để hiển thị danh sách bài viết theo thể loại
-app.get('/life', async (req, res) => {
-    try {
-        // Lọc bài viết theo thể loại "life"
-        const articles = await knex('articles').where('category', 'life').select('*');
-
-        // Kiểm tra có nhận được articles hay không
-        if (!articles || articles.length === 0) {
-            throw new Error('No articles found');
-        }
-
-        // Nhóm bài viết theo category (nếu cần thiết, nếu không có thể bỏ qua bước này)
-        const articlesGroupedByCategory = articles.reduce((acc, article) => {
-            if (!acc[article.category]) {
-                acc[article.category] = [];
-            }
-            acc[article.category].push(article);
-            return acc;
-        }, {});
-
-        // Chuyển đổi từ object sang array để render
-        const groupedArray = Object.keys(articlesGroupedByCategory).map(key => ({
-            category: key,
-            articles: articlesGroupedByCategory[key]
-        }));
-
-        // Render view với dữ liệu đã nhóm (hoặc trực tiếp bài viết nếu không cần nhóm)
-        res.render('life', { articles: groupedArray });
-
-    } catch (error) {
-        // Xử lý lỗi khi xảy ra
-        console.error('Error fetching articles:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-
-// Route cho Chính trị
-app.get('/politics', async (req, res) => {
-    try {
-        // Lọc bài viết theo thể loại "politics"
-        const articles = await knex('articles').where('category', 'politics').select('*');
-
-        // Kiểm tra có nhận được articles hay không
-        if (!articles || articles.length === 0) {
-            throw new Error('No articles found');
-        }
-
-        // Nhóm bài viết theo category (nếu cần thiết, nếu không có thể bỏ qua bước này)
-        const articlesGroupedByCategory = articles.reduce((acc, article) => {
-            if (!acc[article.category]) {
-                acc[article.category] = [];
-            }
-            acc[article.category].push(article);
-            return acc;
-        }, {});
-
-        // Chuyển đổi từ object sang array để render
-        const groupedArray = Object.keys(articlesGroupedByCategory).map(key => ({
-            category: key,
-            articles: articlesGroupedByCategory[key]
-        }));
-
-        // Render view với dữ liệu đã nhóm (hoặc trực tiếp bài viết nếu không cần nhóm)
-        res.render('politics', { articles: groupedArray });
-
-    } catch (error) {
-        // Xử lý lỗi khi xảy ra
-        console.error('Error fetching articles:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-
-// Route cho các thể thao
-// Route cho thể loại football
-app.get('/sports/football', async (req, res) => {
-    try {
-        // Lọc bài viết theo thể loại "football"
-        const articles = await knex('articles').where('category', 'football').select('*');
-
-        // Kiểm tra có nhận được articles hay không
-        if (!articles || articles.length === 0) {
-            throw new Error('No articles found');
-        }
-
-        // Nhóm bài viết theo category (nếu cần thiết, nếu không có thể bỏ qua bước này)
-        const articlesGroupedByCategory = articles.reduce((acc, article) => {
-            if (!acc[article.category]) {
-                acc[article.category] = [];
-            }
-            acc[article.category].push(article);
-            return acc;
-        }, {});
-
-        // Chuyển đổi từ object sang array để render
-        const groupedArray = Object.keys(articlesGroupedByCategory).map(key => ({
-            category: key,
-            articles: articlesGroupedByCategory[key]
-        }));
-
-        // Render view với dữ liệu đã nhóm
-        res.render('football', { articles: groupedArray });
-
-    } catch (error) {
-        // Xử lý lỗi khi xảy ra
-        console.error('Error fetching articles:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// Route cho thể loại basketball
-app.get('/sports/basketball', async (req, res) => {
-    try {
-        // Lọc bài viết theo thể loại "basketball"
-        const articles = await knex('articles').where('category', 'basketball').select('*');
-
-        // Kiểm tra có nhận được articles hay không
-        if (!articles || articles.length === 0) {
-            throw new Error('No articles found');
-        }
-
-        // Nhóm bài viết theo category
-        const articlesGroupedByCategory = articles.reduce((acc, article) => {
-            if (!acc[article.category]) {
-                acc[article.category] = [];
-            }
-            acc[article.category].push(article);
-            return acc;
-        }, {});
-
-        // Chuyển đổi từ object sang array để render
-        const groupedArray = Object.keys(articlesGroupedByCategory).map(key => ({
-            category: key,
-            articles: articlesGroupedByCategory[key]
-        }));
-
-        // Render view với dữ liệu đã nhóm
-        res.render('basketball', { articles: groupedArray });
-
-    } catch (error) {
-        // Xử lý lỗi khi xảy ra
-        console.error('Error fetching articles:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// Route cho thể loại volleyball
-app.get('/sports/volleyball', async (req, res) => {
-    try {
-        // Lọc bài viết theo thể loại "volleyball"
-        const articles = await knex('articles').where('category', 'volleyball').select('*');
-
-        // Kiểm tra có nhận được articles hay không
-        if (!articles || articles.length === 0) {
-            throw new Error('No articles found');
-        }
-
-        // Nhóm bài viết theo category
-        const articlesGroupedByCategory = articles.reduce((acc, article) => {
-            if (!acc[article.category]) {
-                acc[article.category] = [];
-            }
-            acc[article.category].push(article);
-            return acc;
-        }, {});
-
-        // Chuyển đổi từ object sang array để render
-        const groupedArray = Object.keys(articlesGroupedByCategory).map(key => ({
-            category: key,
-            articles: articlesGroupedByCategory[key]
-        }));
-
-        // Render view với dữ liệu đã nhóm
-        res.render('volleyball', { articles: groupedArray });
-
-    } catch (error) {
-        // Xử lý lỗi khi xảy ra
-        console.error('Error fetching articles:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// Route cho Bất động sản
-app.get('/realestate', async (req, res) => {
-    try {
-        // Lọc bài viết theo thể loại "realestate"
-        const articles = await knex('articles').where('category', 'realestate').select('*');
-
-        // Kiểm tra có nhận được articles hay không
-        if (!articles || articles.length === 0) {
-            throw new Error('No articles found');
-        }
-
-        // Nhóm bài viết theo category (nếu cần thiết, nếu không có thể bỏ qua bước này)
-        const articlesGroupedByCategory = articles.reduce((acc, article) => {
-            if (!acc[article.category]) {
-                acc[article.category] = [];
-            }
-            acc[article.category].push(article);
-            return acc;
-        }, {});
-
-        // Chuyển đổi từ object sang array để render
-        const groupedArray = Object.keys(articlesGroupedByCategory).map(key => ({
-            category: key,
-            articles: articlesGroupedByCategory[key]
-        }));
-
-        // Render view với dữ liệu đã nhóm (hoặc trực tiếp bài viết nếu không cần nhóm)
-        res.render('realestate', { articles: groupedArray });
-
-    } catch (error) {
-        // Xử lý lỗi khi xảy ra
-        console.error('Error fetching articles:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-app.get('/sports', async (req, res) => {
-    try {
-        // Lọc bài viết theo các thể loại thể thao
-        const articles = await knex('articles')
-            .whereIn('category', ['football', 'basketball', 'volleyball'])
-            .select('*');
-
-        // Kiểm tra có nhận được articles hay không
-        if (!articles || articles.length === 0) {
-            throw new Error('No articles found');
-        }
-
-        // Nhóm bài viết theo thể loại thể thao
-        const articlesGroupedByCategory = articles.reduce((acc, article) => {
-            if (!acc[article.category]) {
-                acc[article.category] = [];
-            }
-            acc[article.category].push(article);
-            return acc;
-        }, {});
-
-        // Chuyển đổi từ object sang array để render
-        const groupedArray = Object.keys(articlesGroupedByCategory).map(key => ({
-            category: key,
-            articles: articlesGroupedByCategory[key]
-        }));
-
-        // Render view với dữ liệu đã nhóm (hoặc trực tiếp bài viết nếu không cần nhóm)
-        res.render('sports', { articles: groupedArray });
-
-    } catch (error) {
-        // Xử lý lỗi khi xảy ra
-        console.error('Error fetching articles:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-app.get('/article/:id', async (req, res) => {
-    try {
-        const articleId = req.params.id; // Lấy id từ URL
-        const article = await knex('articles').where('id', articleId).first(); // Lấy bài viết theo id
-
-        if (!article) {
-            throw new Error('Article not found');
-        }
-
-        // Render trang detail với dữ liệu bài viết
-        res.render('detail', { article });
-
-    } catch (error) {
-        // Xử lý lỗi nếu bài viết không tồn tại hoặc có lỗi khi lấy dữ liệu
-        console.error('Error fetching article:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
 
 app.use('/role', editorRouter);
 app.get('/login', function (req, res) {
@@ -441,10 +196,10 @@ app.get('/register', function (req, res) {
     res.render('account/register', { layout: 'blank-bg' }); 
 });
 
-
 app.use('/editor', editorRouter);
 app.use('/subscriber', subcriberRouter);
 app.use('/administrator', administratorRouter);
+
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
 });

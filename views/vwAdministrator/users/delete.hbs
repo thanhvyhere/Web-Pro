@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete User</title>
+    <link rel="stylesheet" href="/static/css/cssAdministrator/users/delete.css"> <!-- Link to delete.css -->
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Delete User</h1>
+            <a href="/administrator/manage_users" class="btn btn-back">Back to User Management</a>
+        </header>
+
+        <main>
+            <p>Are you sure you want to delete user <strong>{{user.username}}</strong>?</p>
+
+            <form action="/administrator/manage_users/delete/{{user.id}}" method="POST">
+                <button type="submit" class="btn btn-delete">Delete</button>
+                <a href="/administrator/manage_users" class="btn btn-cancel">Cancel</a>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
