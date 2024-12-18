@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Category</title>
-  <link rel="stylesheet" href="/static/css/cssAdministrator/add.css">
+  <link rel="stylesheet" href="/static/css/cssAdministrator/categories/add.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
@@ -13,11 +13,11 @@
   <div id="add-category-container">
     <header id="add-category-header">
       <h1 id="add-category-title">Add New Category</h1>
-      <a href="/categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
+      <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
     </header>
 
     <div id="add-category-form-container" class="form-container">
-      <form id="add-category-form" action="/categories/add" method="POST">
+      <form id="add-category-form" action="/administrator/manage_categories/add" method="POST">
         <div id="category-name-container" class="form-group">
           <label for="category-name" id="category-name-label">Category Name</label>
           <input type="text" id="category-name" name="CatName" required placeholder="Enter category name" class="form-control">
@@ -35,7 +35,7 @@
 
         <div id="form-actions-container" class="form-actions">
           <button type="submit" id="submit-category-btn" class="btn btn-submit">Add Category</button>
-          <a href="/categories" id="cancel-btn" class="btn btn-cancel">Cancel</a>
+          <a href="/administrator/manage_categories" id="cancel-btn" class="btn btn-cancel">Cancel</a>
         </div>
       </form>
     </div>

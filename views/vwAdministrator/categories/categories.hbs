@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Category List</title>
-  <link rel="stylesheet" href="/static/css/cssAdministrator/categories.css">
+  <link rel="stylesheet" href="/static/css/cssAdministrator/categories/categories.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
@@ -13,36 +13,97 @@
   <div class="container">
     <header class="header">
       <h1 class="title">Category List</h1>
-      <a href="/categories/add" class="btn btn-primary">Add Category</a>
+      <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
+      <div id="category-actions">
+        <a href="#" id="categories-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
+        <a href="#" id="categories-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
+      </div>
     </header>
 
     <div class="table-container">
       <table class="categories-table">
         <thead>
           <tr>
+            <th><input type="checkbox" id="select-all-categories" /></th> <!-- Checkbox to select all -->
             <th>ID</th>
             <th>Category Name</th>
             <th>Parent Category</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {{#each categories}}
-          <tr>
+          <tr id="category-row-{{this.CatID}}">
+            <td><input type="checkbox" class="category-checkbox" data-id="{{this.CatID}}" /></td>
             <td>{{this.CatID}}</td>
             <td>{{this.CatName}}</td>
-            <td>{{#if this.parent_id}}{{lookup ../categories this.parent_id}}{{else}}None{{/if}}</td>
-            <td>
-              <a href="/categories/detail/{{this.CatID}}" class="btn btn-detail">View</a>
-              <a href="/categories/update/{{this.CatID}}" class="btn btn-update">Edit</a>
-              <a href="/categories/delete/{{this.CatID}}" class="btn btn-delete">Delete</a>
-            </td>
+            <td>{{#if this.parent_id}}
+                  {{#with (lookup ../categories this.parent_id)}}
+                    {{CatName}}
+                  {{/with}}
+                {{else}}None{{/if}}</td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="3">No categories found</td>
           </tr>
           {{/each}}
         </tbody>
       </table>
     </div>
   </div>
+
+  <div class="pagination">
+    {{#if (gt currentPage 1)}}
+    <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+    {{/if}}
+
+    {{#each (range 1 totalPages)}}
+    <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
+      {{this}}
+    </a>
+    {{/each}}
+
+    {{#if (lt currentPage totalPages)}}
+    <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+    {{/if}}
+  </div>
+
+  <script>
+    // JavaScript to handle select/deselect all checkboxes
+    document.getElementById('select-all-categories').addEventListener('change', function () {
+      const checkboxes = document.querySelectorAll('.category-checkbox');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+      });
+    });
+
+    // JavaScript to handle delete selected categories
+    document.getElementById('categories-delete-btn').addEventListener('click', function () {
+      const selectedCategories = [];
+      document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
+        selectedCategories.push(checkbox.dataset.id);
+      });
+      if (selectedCategories.length > 0) {
+        alert('Deleting categories with IDs: ' + selectedCategories.join(', '));
+        // Add your delete logic here, e.g., make a POST request to the server
+      } else {
+        alert('Please select at least one category to delete.');
+      }
+    });
+
+    // JavaScript to handle edit selected categories
+    document.getElementById('categories-edit-btn').addEventListener('click', function () {
+      const selectedCategories = [];
+      document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
+        selectedCategories.push(checkbox.dataset.id);
+      });
+      if (selectedCategories.length === 1) {
+        window.location.href = '/administrator/manage_categories/update/' + selectedCategories[0];
+      } else {
+        alert('Please select exactly one category to edit.');
+      }
+    });
+  </script>
 </body>
 
 </html>
