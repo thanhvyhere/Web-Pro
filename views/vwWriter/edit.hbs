@@ -1,0 +1,182 @@
+{{#section "css"}}
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.9.3/dist/tagify.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/cssWriter/writer.css">
+
+{{/section}}
+{{#section "script"}}
+<script src="https://cdn.tiny.cloud/1/phvhvcvzrs6bon8nebxuyvig5ln78s4n2mtlz4eodyg21gj5/tinymce/7/tinymce.min.js"
+    referrerpolicy="origin"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.9.3/dist/tagify.min.js"></script>
+<script>
+    // Khởi tạo TinyMCE
+    tinymce.init({
+        selector: '#txtContent'
+    });
+
+    // Khởi tạo Tagify
+    // Xử lý chọn danh mục con
+    $(document).ready(function () {
+        $('#txtCat').on('change', function () {
+            var categoryId = $(this).val(); // Lấy ID của category cha
+
+            if (categoryId) {
+                // Gửi yêu cầu AJAX
+                $.get('/writer/categories/children/' + categoryId, function (data) {
+                    var childSelect = $('#txtCatChild');
+                    childSelect.empty(); // Xóa các option cũ
+
+                    // Thêm option mặc định
+                    childSelect.append('<option value="" disabled selected>Select a category child</option>');
+
+                    // Thêm các category con vào dropdown
+                    if (data.length > 0) {
+                        data.forEach(function (child) {
+                            childSelect.append('<option value="' + child.CatID + '">' + child.CatName + '</option>');
+                        });
+                        childSelect.prop('disabled', false); // Kích hoạt dropdown
+                    } else {
+                        childSelect.prop('disabled', true); // Vô hiệu hóa nếu không có category con
+                    }
+                }).fail(function () {
+                    alert('Failed to load category children.');
+                });
+            } else {
+                $('#txtCatChild').prop('disabled', true); // Vô hiệu hóa nếu không chọn category cha
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Khởi tạo Tagify với whitelist và dropdown
+        var input = document.querySelector('#txtTag');
+        var tagify = new Tagify(input, {
+            whitelist: ['JavaScript', 'HTML', 'CSS', 'Node.js', 'React', 'Vue.js', 'Python', 'Django', 'Flask'],
+            maxTags: 5,
+            placeholder: 'Add tags',
+            enforceWhitelist: true,
+            dropdown: {
+                maxItems: 10, // Hiển thị tối đa 10 tag
+                enabled: 0, // Hiển thị dropdown ngay khi focus
+                closeOnSelect: false // Giữ dropdown mở sau khi chọn
+            }
+        });
+
+        // Xử lý sự kiện khi thêm tag
+        tagify.on('add', function (e) {
+            console.log('Tag added:', e.detail.data);
+        });
+
+        // Xử lý sự kiện khi xóa tag
+        tagify.on('remove', function (e) {
+            console.log('Tag removed:', e.detail.data);
+        });
+    });
+</script>
+<script>
+    // Hiển thị hộp thoại xác nhận SweetAlert
+    function confirmDelete(newsId) {
+        Swal.fire({
+            title: 'bạn có chắc chắn muốn xóa?',
+            text: "Hành động này không thể hoàn tác!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Có, xóa nó!',
+            cancelButtonText: 'Hủy bỏ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Gửi request xóa nếu người dùng xác nhận
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/del';
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'newsId';
+                input.value = newsId;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+
+    // Hiển thị thông báo sau khi xóa thành công
+    window.onload = function () {
+        const params = new URLSearchParams(window.location.search);
+        const message = params.get('message');
+        if (message === 'success') {
+            Swal.fire({
+                title: 'Sweetheart!',
+                text: 'Xóa thành công!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } else if (message === 'error') {
+            Swal.fire({
+                title: 'Sweetheart!',
+                text: 'Đã xảy ra lỗi khi xóa!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
+</script>
+{{/section}}
+
+<form class="formCreate" action="/newspaper/patch" method="post">
+    <div class="header-create">
+        <h4>UPLOAD NEWSPAPER</h4>
+        <hr>
+    </div>
+    <div class="form-group mb-3">
+        <label for="txtNewsID">Newspaper ID</label>
+        <input type="text" name="newsId" id="txtNewsID" class="form-control txt-input" readonly value="{{this.news.NewsID}}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="txtTitle">Title</label>
+        <input type="text" name="title" id="txtTitle" class="form-control txt-input" value="{{this.news.Title}}">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="txtAbstract">Abstract</label>
+        <input type="text" name="abstract" id="txtAbstract" class="form-control txt-input" value="{{this.news.Abstract}}">
+    </div>
+    <div>
+        <div class="form-group mb-3">
+            <label for="txtCat">Category</label>
+            <select name="CatID" id="txtCat" class="form-control txt-input" aria-describedby="helpId">
+                <option value="{{this.news.CatID}}" disabled selected>{{this.CatName}}</option>
+                {{#each categories}}
+                <option value="{{CatID}}">{{CatName}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label for="txtCatChild">Category Child</label>
+            <select name="category_child_id" id="txtCatChild" class="form-control txt-input">
+                <option value="" disabled selected>Select a category child</option>
+                <!-- Các option category child sẽ được thêm vào ở đây -->
+            </select>
+        </div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="txtTag" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Tag</label>
+        <input type="text" id="txtTag" name="tags" class="form-control txt-input" placeholder="Add tags" autofocus>
+    </div>
+    <div class="flex items-center space-x-1 mb-3">
+        <label for="imageInput" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Image File</label>
+        <input type="file" id="imageInput" name="ImagePath" class="mb-4 p-2 border rounded text-white">
+    </div>
+    <div class="form-group mb-3">
+        <label for="txtContent">Content</label>
+        <textarea id="txtContent" name="content" value="{{this.news.Content}}"></textarea>
+    </div>
+    <div class="d-flex flex-row btn-footer">
+        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{this.news.NewsID}}')">
+            Delete
+        </button>
+        <button type="submit" class="btn btn-warning ">Update</button>
+    </div>
+</form>

@@ -8,24 +8,24 @@
         <hr>
     </div>
     <div class="row">
-
+        {{#each this.newsList}}
         <div class="col-sm-6 mb-3">
             <div class="card">
                 <div class="card-body card-news d-flex flex-row">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
+                    <img src="{{ImageCover}}" alt="..." class="img-title-paper">
                     <div class="paper-small">
                         <div class="header-paper small mb-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <div>
+                            <button class="name-category-paper" disabled="disabled">{{catName}}</button>
+                            <div class="PublishedDate">
                                 <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
+                                {{PublishedDate}}
                             </div>
                             <i class="bi bi-clock-history pending-icon"></i>
                         </div>
-                        <h5 class="card-title tw-mb-2">Donald Trump đắc cử tổng thống Mỹ</h5>
-                        <p class="abstract-font"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum dolore
-                            debitis, quae omnis quaerat quod aspernatur illo maiores sint tempore quia architecto natus
-                            numquam iusto sunt animi eveniet dolorum labore.</p>
+                        <a href="/newspaper/edit?id={{NewsID}}">
+                            <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                        </a>
+                        <p class="abstract-font">{{Abstract}}</p>
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary">
@@ -34,5 +34,5 @@
                 </button>
             </div>
         </div>
-    </div>
-</div>
+        {{/each}}
+        

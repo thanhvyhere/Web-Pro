@@ -18,9 +18,10 @@
                 year: 'numeric'
             });
 
-            // Cập nhật lại nội dung của phần tử với ngày tháng đã định dạng
-            dateElement.innerText = formattedDate;
+            // Chèn icon và ngày tháng đã định dạng vào phần tử
+            dateElement.innerHTML = `<i class="bi bi-calendar3"></i> ${formattedDate}`;
         });
+
 </script>
 
 {{/section}}
@@ -41,8 +42,7 @@
                             <div class="header-paper small mb-2">
                                 <button class="name-category-paper" disabled="disabled">{{catName}}</button>
                                 <div class="PublishedDate">
-                                    <i class="bi bi-calendar3"></i>
-                                    {{CreatedDate}}
+                                    {{PublishedDay}}
                                 </div>
                             </div>
                             <a href="/newspaper/detail?id={{NewsID}}">
@@ -54,10 +54,9 @@
                 </div>
             </div>
             {{/each}}
-        </div> <!-- Kết thúc .row -->
-
-        <!-- Pagination -->
-        <ul class="pagination">
+        </div>
+        
+        <ul class="pagination tw-flex justify-content-center card-footer">
             <li class="page-item disabled">
                 <a class="page-link">Previous</a>
             </li>
@@ -77,5 +76,8 @@
             </li>
         </ul>
     </div> <!-- Kết thúc .card-body -->
+
+    <!-- Pagination -->
+   
     {{/if}}
 </div> <!-- Kết thúc #card-list-new -->

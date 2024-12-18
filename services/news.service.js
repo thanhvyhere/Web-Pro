@@ -55,13 +55,37 @@ export default
     },
     getNewsByAuthorStatus(authorName, status) {
         return db('news')
-            .where('AuthorName', authorName)
-            .andWhere('Status', status)
+            .where({
+                AuthorName: authorName,
+                Status: status
+            });
     },
+
 
     findCatByCatId(catId) {
         return db('categories').where('CatID', catId).first();
     },
 
+    getAllTags(){
+        return db('tag'); 
+    },
 
+    findTagByTagName(tagname) {
+        return db('tag').where('TagName', tagname).first();
+    },
+
+    addNewTag(newTag)
+    {
+        return db('tag').insert(newTag); 
+    },
+    addTagIdAndNewsId(entity) {
+        return db('news_tags').insert(entity);
+    },
+    delTagByNewsId(newId) { 
+        return db('news_tags').where('NewsID', newId).del();
+    },
+    getIdNewEntity() {
+        return db.raw('SELECT LAST_INSERT_ID() as NewsID');
+    }
+       
 }
