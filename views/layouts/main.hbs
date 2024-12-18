@@ -107,7 +107,7 @@
         </div>
     </div>
    
-     <div class="tw-flex tw-flex-row tw-min-h-screen">
+     <div class="tw-flex tw-flex-row tw-min-h-screen tw-g-2">
         <div id="nav-left" class="">
             <div class="tw-flex tw-flex-row tw-mt-5 tw-mb-10 tw-px-5">
                 <img src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle tw-h-[50px] tw-w-[50px]">
@@ -116,25 +116,24 @@
                         Cam là cây bút
                     </span>
                     <span class="tw-block tw-font-bold tw-font-[18px] tw-text-[#F0B617]">
-                        <i class="bi bi-pencil-square">
-                            Editor
-                        </i>
+                        {{{getRoleIcon roleName}}}&nbsp;
+                        {{roleName}}
                     </span>
                 </div>
             </div>
             <nav class="nav flex-column" >
                 {{#with (getFirstItem lcFeatureRoles) as |firstRole|}}
                     <a class="nav-link active-link"  href="/{{firstRole.RoleName}}/{{firstRole.PathName}}">
-                        {{{firstRole.Icon}}}{{firstRole.FeatureName}}
+                        {{{firstRole.Icon}}}&nbsp;{{firstRole.FeatureName}}
                     </a>
                 {{/with}}
                 <!-- Links -->
                 {{#each (skipFirst lcFeatureRoles)}}
-                    <a class="nav-link" href="/{{RoleName}}/{{PathName}}">{{{Icon}}}{{FeatureName}}</a>
+                    <a class="nav-link" href="/{{RoleName}}/{{PathName}}">{{{Icon}}}&nbsp;{{FeatureName}}</a>
                 {{/each}}
             </nav>
         </div>
-    <div class="body-homepage tab-content">
+    <div class="body-homepage tw-w-full">
         {{{ body }}}
     </div>
     </div>

@@ -25,15 +25,7 @@
                   <div class="tw-flex tw-flex-row tw-justify-between tw-items-center tw-w-[100%] tw-mt-auto">
                         <p style="margin: 0;">Tác giả: {{AuthorName}}</p>
                         <div class="tw-flex tw-flex-row tw-justify-center tw-items-center tw-gap-2">
-                       {{#if (eq StatusName "Đang chờ")}}
-                        <a href="#" class="tw-text-green-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '1')">
-                              <i class="bi bi-check-circle"></i>
-                        </a>
-                        <a href="#" class="tw-text-red-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '4')">
-                              <i class="bi bi-x-circle"></i>
-                        </a>
-                     
-                        {{/if}}
+                        <a href="#"><i class="bi bi-pencil-square" style="color: black"></i></a>
                         <div 
                         style="
                               color: {{getStatusColor StatusName}};
@@ -48,35 +40,8 @@
             </div>
             </div>
             {{/each}}
+
+    
 </div>
-{{#section 'script'}}
-<script>
-      function updateStatus(newsId, newStatus) {
-    // Kiểm tra body trước khi gửi
-    const bodyData = { id: newsId, status: newStatus };
-    console.log('Dữ liệu gửi đi:', JSON.stringify(bodyData)); // Console body
-      fetch('/editor/update-status', {
-            method: 'POST',
-            headers: {
-                  'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id: newsId, status: newStatus }),
-      })
-      .then((response) => {
-            console.log('HTTP status:', response.status); // Log trạng thái HTTP
-            return response.json(); // Hoặc sử dụng .json() nếu phản hồi là JSON
-      })
-      .then((data) => {
-            console.log('Phản hồi server:', data);  // Log toàn bộ dữ liệu trả về từ server
-            if (data.success) {
-                  alert('Cập nhật trạng thái thành công!');
-                  location.reload();
-            } else {
-                  console.error('Lỗi:', data.message); // Log chi tiết thông báo lỗi từ server
-                  alert('Không thành công: ' + data.message);
-            }
-            })
-      .catch((error) => console.error('Error:', error));
-      }
-</script>
-{{/section}}
+      
+        
