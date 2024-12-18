@@ -28,6 +28,7 @@ router.get('/reviewed', async function (req,res)
 router.get('/editor_rejected', async function (req,res) 
 {
     const list = await editorService.findRejected();
+    console.log(list)
     res.render('vwEditor/rejected', {news: list}
         );
 });
@@ -35,32 +36,37 @@ router.get('/editor_rejected', async function (req,res)
 router.get('/editor_approved', async function (req,res) 
 {
     const list = await editorService.findApproved();
+   
     res.render('vwEditor/approved', {news: list}
         );
 });
 // schedule
 router.get('/schedule', async function (req,res) 
 {
-    const list = await editorService.findApproved();
-    const parentcatList = await editorService.findParentCat();
-    const updatedList = list.map(item => ({
-        ...item,
-        parentCatList: parentcatList  // Gắn parentCatList vào từng phần tử
-    }));
-   
-    res.render('vwEditor/schedule', {news: updatedList});
-});
-router.post('/schedule', async function (req,res) 
-{
-    const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm')
-    const id = req.body.NewsID;
-    const changes = {
-        PublishedDay: publishedDay,
-        CatID: req.body.CatID,
+    try {
+        const list = await editorService.findApproved();
+        const parentcatList = await editorService.findParentCat();
+        const updatedList = list.map(item => ({
+            ...item,
+            parentCatList: parentcatList, // Gắn parentCatList vào từng phần tử
+        }));
+        res.render('vwEditor/schedule', { news: updatedList });
+    } catch (error) {
+        console.error('Error:', error); // Ghi lỗi ra console
+        res.status(500).send('Internal Server Error');
     }
-    await editorService.update(changes,id)
-    res.redirect('/editor/schedule');
 });
+// router.post('/schedule', async function (req,res) 
+// {
+//     const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm')
+//     const id = req.body.NewsID;
+//     const changes = {
+//         PublishedDay: publishedDay,
+//         CatID: req.body.CatID,
+//     }
+//     await editorService.update(changes,id)
+//     res.redirect('/editor/schedule');
+// });
 router.get('/getChildCategories/:parentCatId', async (req, res) => {
     const parentCatId = req.params.parentCatId;
     
@@ -92,10 +98,32 @@ router.post('/feedback', async function (req,res)
         Feedback: req.body.Feedback,
         Status: req.body.Status,
     }
-    console.log(changes)
-    console.log(id)
+
     await editorService.update(changes,id)
     res.redirect('/editor/reviewed');
+});
+router.get('/modify', async function (req,res) 
+{
+    const id = +req.query.id || 0;
+    const news = await editorService.findANews(id)
+    const parentcatList = await editorService.findParentCat();
+    const updatedList = news.map(item => ({
+        ...item,
+        parentCatList: parentcatList, // Gắn parentCatList vào từng phần tử
+    }));
+    res.render('vwEditor/editAfterProved', { newsList: updatedList });
+});
+router.post('/modify', async function (req,res) 
+{
+    const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm')
+    const id = req.body.NewsID;
+    const changes = {
+        PublishedDay: publishedDay,
+        CatID: req.body.CatID,
+    }
+    await editorService.update(changes,id)
+    res.redirect('/editor/schedule');
+   
 });
 router.post('/update-status', async function (req, res) {
    

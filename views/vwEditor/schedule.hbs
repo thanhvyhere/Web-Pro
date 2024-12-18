@@ -1,41 +1,4 @@
-{{#section "css"}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20
-/jquery.datetimepicker.min.css">
-<style>
-  /* Overlay toàn màn hình */
-  .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none; /* Ẩn popup mặc định */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
 
-  /* Nội dung của popup */
-  .popup-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  /* Nút đóng popup */
-  .popup-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    cursor: pointer;
-  }
-</style>
-{{/section}}
 <table class="table">
   <thead>
     <tr>
@@ -43,140 +6,41 @@
       <th scope="col">Bài đăng</th>
       <th scope="col">Lịch đăng</th>
       <th scope="col">Category</th>
-      <th scope="col">Tags</th>
-      <th scope="col">Xác nhận</th>
+      <th scope="col" class="tw-w-[15%]">Tags</th>
+      <th scope="col" class="tw-w-[15%]">Điều chỉnh</th>
     </tr>
   </thead>
   <tbody>
     {{#each news}}
-    <form action="" method="post">
     <tr class="tw-my-auto">
         <th scope="row">{{No}}</th>
-        <td class="tw-flex tw-flex-row tw-items-center tw-gap-2 tw-px-0 tw-w-[100%]">
+        <td class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-gap-2 tw-px-0 tw-w-[100%]">
             <img src="{{ImageCover}}" alt="{{Title}}" class="tw-w-[100px] tw-h-[100px]">
-            <p class="tw-flex tw-justify-center tw-w-full">
+            <p class="tw-w-[60%]">
                 <strong>{{Title}}</strong>
             </p>
-            <div 
-                style="background-color: {{getStatusColor  StatusName}}; color:black; font-weight:semi-bold; padding: 8px; border: 0px; border-radius: 20px;">
-                {{ StatusName}}
-            </div>
+            
         </td>
-        <td>
-            <input type="text" name="PublishedDay" id="txtPublishedDay" class="form-control" placeholder="{{PublishedDay}}" aria-describedby="helpId">
+        <td >
+            <p>Ngày đăng: </p>
+            <p>{{formatDate PublishedDay}}</p>
         </td>
-        <td>
-        {{#if parentCatList}}
-            <label for="ParentCat">Danh mục cha</label><br>
-            <select id="ParentCat" class="tw-rounded-[20px] tw-border tw-w-full">
-                <option value="{{ParentCatID}}">{{ParentCatName}}</option>
-                {{#each parentCatList}}
-                    <option value="{{CatID}}">{{CatName}}</option>
-                {{/each}}
-            </select>
-        {{else}}
-            <p>Không có dữ liệu danh mục</p>
-        {{/if}}
-        <label for="ChildCat" class="tw-mt-2">Danh mục con</label>
-        <select name="CatID" id="ChildCat" class="tw-rounded-[20px] tw-border tw-w-full ">
-            <option value="{{ChildCatID}}">{{ChildCatName}}</option>
+        <td class="tw-w-[20%]">
+       
+        <p>Danh mục cha: </p> <p>{{ParentCatName}}</p> 
+        <p>Danh mục cha:</p><p>{{ChildCatName}}</p>
         </select> 
         </td>
-        <td>@mdo</td>
-         <input type="hidden" name="NewsID" value="{{NewsID}}">
-        <td><button type="submit"  formaction="/editor/schedule" class="tw-rounded-[20px] tw-bg-yellow-400 tw-border-0 tw-text-white tw-px-4 tw-py-2
-         hover:tw-bg-yellow-200 hover:tw-text-black transition-colors duration-300">Done</button></td>
+        <td>{{Tags}}
+        </td>
+        <td> <a href="/editor/modify?id={{NewsID}}" class="tw-rounded-[20px] tw-bg-blue-500 tw-border-1 tw-text-white tw-p-[8px] tw-w-full
+          hover:tw-bg-blue-300 hover:tw-text-black hover:tw-border-1 hover:tw-border-orange-500 transition-colors duration-300 tw-mb-2 tw-text-center tw-block">Chỉnh sửa</a><br>
+          <div 
+                style="background-color: {{getStatusColor  StatusName}}; text-align:center; color:black; font-weight:bold; padding: 8px; border: 0px; border-radius: 20px;">
+                {{ StatusName}}
+            </div></td>
     </tr>
     </form>
     {{/each}}
 </tbody>
 </table>
-
-{{#section "script"}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
-</script>
-<script>
-  $('#txtPublishedDay').datetimepicker(
-    {
-        datepicker: true,  // Bật lịch chọn ngày
-        timepicker: true,  // Bật chọn giờ
-        format: 'd/m/Y H:i',  // Định dạng ngày giờ, H là giờ (24 giờ), i là phút
-        mask: true,
-        minDate: 0,  // Ngày hiện tại là ngày sớm nhất có thể chọn
-        step:15,
-         onSelectDate: function (currentDate) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Xóa giờ để so sánh chỉ ngày
-        currentDate.setHours(0, 0, 0, 0);
-
-        if (currentDate.getTime() === today.getTime()) {
-            // Nếu ngày được chọn là hôm nay, đặt minTime từ giờ hiện tại
-            const now = new Date();
-            this.setOptions({
-                minTime: `${now.getHours()}:${now.getMinutes()}`
-            });
-        } else {
-            // Nếu không phải hôm nay, không cần giới hạn thời gian
-            this.setOptions({
-                minTime: false
-            });
-        }
-        }
-     }
-  );
-</script>
-<script>
-   document.addEventListener('DOMContentLoaded', function() {
-    const parentCatSelect = document.getElementById('ParentCat');
-    const childCatSelect = document.getElementById('ChildCat');
-    
-    // Lưu trữ dữ liệu ban đầu của ChildCat
-    const initialChildCatOptions = childCatSelect.innerHTML;
-
-    // Hàm cập nhật danh mục con
-    const updateChildCategories = (parentCatId) => {
-        fetch(`/editor/getChildCategories/${parentCatId}`)
-            .then(response => response.json())
-            .then(data => {
-                // Xóa tất cả các options hiện tại trong ChildCat
-                childCatSelect.innerHTML = '<option value="">Chọn danh mục con</option>';
-
-                // Cập nhật lại các options trong ChildCat với dữ liệu mới
-                data.forEach(childCategory => {
-                    const option = document.createElement('option');
-                    option.value = childCategory.CatID;
-                    option.textContent = childCategory.CatName;
-                    childCatSelect.appendChild(option);
-                });
-
-                // Nếu có danh mục con, bật dropdown
-                childCatSelect.disabled = false;
-            })
-            .catch(error => {
-                console.error('Lỗi khi lấy danh mục con:', error);
-                childCatSelect.disabled = true; // Vô hiệu hóa dropdown nếu có lỗi
-            });
-    };
-
-    // Giữ dữ liệu ChildCat ban đầu khi trang tải
-    const parentCatId = parentCatSelect.value;
-    if (!parentCatId) {
-        childCatSelect.disabled = true; // Vô hiệu hóa nếu không có ParentCat
-    }
-
-    // Lắng nghe sự kiện change trên ParentCat
-    parentCatSelect.addEventListener('change', function() {
-        const selectedParentCatId = this.value;
-        if (selectedParentCatId) {
-            updateChildCategories(selectedParentCatId); // Cập nhật lại ChildCat khi chọn ParentCat mới
-        } else {
-            // Khôi phục lại dữ liệu ban đầu của ChildCat
-            childCatSelect.innerHTML = initialChildCatOptions;
-            childCatSelect.disabled = true; // Vô hiệu hóa nếu không chọn ParentCat
-        }
-    });
-});
-
-</script>
-
-{{/section}}
