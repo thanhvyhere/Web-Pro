@@ -198,7 +198,10 @@ hr {
 #nav-left a .active-link {
   background-color: rgb(213, 213, 213) !important;
 }
-
+.body-homepage{
+    
+    margin: 2%;
+}
 
 
 /* Container của dropdown menu */

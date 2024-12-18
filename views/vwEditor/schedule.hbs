@@ -1,0 +1,46 @@
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Bài đăng</th>
+      <th scope="col">Lịch đăng</th>
+      <th scope="col">Category</th>
+      <th scope="col" class="tw-w-[15%]">Tags</th>
+      <th scope="col" class="tw-w-[15%]">Điều chỉnh</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each news}}
+    <tr class="tw-my-auto">
+        <th scope="row">{{No}}</th>
+        <td class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-gap-2 tw-px-0 tw-w-[100%]">
+            <img src="{{ImageCover}}" alt="{{Title}}" class="tw-w-[100px] tw-h-[100px]">
+            <p class="tw-w-[60%]">
+                <strong>{{Title}}</strong>
+            </p>
+            
+        </td>
+        <td >
+            <p>Ngày đăng: </p>
+            <p>{{formatDate PublishedDay}}</p>
+        </td>
+        <td class="tw-w-[20%]">
+       
+        <p>Danh mục cha: </p> <p>{{ParentCatName}}</p> 
+        <p>Danh mục cha:</p><p>{{ChildCatName}}</p>
+        </select> 
+        </td>
+        <td>{{Tags}}
+        </td>
+        <td> <a href="/editor/modify?id={{NewsID}}" class="tw-rounded-[20px] tw-bg-blue-500 tw-border-1 tw-text-white tw-p-[8px] tw-w-full
+          hover:tw-bg-blue-300 hover:tw-text-black hover:tw-border-1 hover:tw-border-orange-500 transition-colors duration-300 tw-mb-2 tw-text-center tw-block">Chỉnh sửa</a><br>
+          <div 
+                style="background-color: {{getStatusColor  StatusName}}; text-align:center; color:black; font-weight:bold; padding: 8px; border: 0px; border-radius: 20px;">
+                {{ StatusName}}
+            </div></td>
+    </tr>
+    </form>
+    {{/each}}
+</tbody>
+</table>
