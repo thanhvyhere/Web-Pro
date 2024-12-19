@@ -44,8 +44,14 @@
             <form action="" method="post">
                 <input type="hidden" name="NewsID"  value="{{NewsID}}">
                 <label for="txtPublishedDay">Ngày đăng</label>
-                <input type="text" name="PublishedDay" id="txtPublishedDay" class="form-control" value="{{formatDate PublishedDay}}" aria-describedby="helpId"> <br>
-                  <div>
+                <input
+                    type="text"
+                    name="PublishedDay"
+                    id="txtPublishedDay"
+                    class="form-control"
+                    value="{{formatDate PublishedDay}}"
+                    aria-describedby="helpId">                 
+                    <div>
                     {{#if parentCatList}}
                         <label for="ParentCat">Danh mục cha</label><br>
                         <select id="ParentCat" class="tw-rounded-[20px] tw-border tw-w-full tw-p-2">
@@ -61,6 +67,19 @@
                     <select name="CatID" id="ChildCat" class="tw-rounded-[20px] tw-border tw-w-full tw-p-2">
                         <option value="{{ChildCatID}}">{{ChildCatName}}</option>
                     </select> 
+                    <div class="tw-mt-3">
+                    <label for="txtTags" class="tw-mt-">Nhãn trang báo</label> &nbsp; 
+                    <button type="button" id="addTagButton" class="tw-rounded-[20px] tw-bg-blue-200 tw-border-0 tw-px-4 tw-py-2 tw-w-[25%]
+                  hover:tw-bg-yellow-200 hover:tw-text-black transition-colors duration-300">Thêm nhãn</button>
+                    <div id="tagContainer" class="input-group tw-mt-2" style="display: flex; flex-wrap: wrap;">
+                        {{#each tags}}
+                            <div class="tw-w-[48%] tw-mb-2">
+                                <input value="{{this}}" class="form-control" name="tags[]"/>
+                            </div>
+                        {{/each}}
+                    </div>
+                    </div>
+                    
                     </td>
                   </div><br>
                 <button  type="submit" formaction="/editor/modify" class="tw-rounded-[20px] tw-bg-yellow-500 tw-border-0 tw-text-white tw-px-4 tw-py-2 tw-w-full
@@ -80,10 +99,10 @@
         datepicker: true,  // Bật lịch chọn ngày
         timepicker: true,  // Bật chọn giờ
         format: 'd/m/Y H:i',  // Định dạng ngày giờ, H là giờ (24 giờ), i là phút
-        mask: true,
+        mask: false,
         minDate: 0,  // Ngày hiện tại là ngày sớm nhất có thể chọn
         step:15,
-         onSelectDate: function (currentDate) {
+        onSelectDate: function (currentDate) {
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Xóa giờ để so sánh chỉ ngày
         currentDate.setHours(0, 0, 0, 0);
@@ -154,6 +173,25 @@
             childCatSelect.disabled = true; // Vô hiệu hóa nếu không chọn ParentCat
         }
     });
+});
+</script>
+<script>
+    document.getElementById('addTagButton').addEventListener('click', function() {
+    // Tạo một div chứa input mới
+    const newTagDiv = document.createElement('div');
+    newTagDiv.classList.add('tw-w-[48%]', 'tw-mb-2');
+
+    // Tạo một input mới
+    const newTagInput = document.createElement('input');
+    newTagInput.classList.add('form-control');
+    newTagInput.setAttribute('name', 'tags[]'); 
+    newTagInput.setAttribute('placeholder', 'Nhập nhãn mới');
+
+    // Thêm input vào div
+    newTagDiv.appendChild(newTagInput);
+
+    // Thêm div vào #tagContainer
+    document.getElementById('tagContainer').appendChild(newTagDiv);
 });
 </script>
 {{/section}}
