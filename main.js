@@ -11,11 +11,16 @@ import configurePassportGithub from './controllers/passportGithub.config.js';
 import configurePassportGoogle from './controllers/passportGoogle.config.js';
 import moment from 'moment';
 import passport from 'passport';
+import knex from './utils/db.js';
 import writerRouter from './routes/writer.route.js';
 import newspaperRouter from './routes/news.route.js';
 import subcriberRouter from './routes/subcriber.route.js';
 import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
+import categoriesRoute from './routes/categories.route.js';
+import newsService from './services/news.service.js';
+import fnMySQLStore from 'express-mysql-session';
+import db from './utils/db.js';
 
 const app = express();
 app.use(express.urlencoded({
@@ -29,10 +34,8 @@ app.use(session({
     cookie: {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7
-    },
-    
-}))
-
+    }
+  }));
 app.engine('hbs', engine({
     extname: 'hbs',
     defaultLayout: 'main',
@@ -108,19 +111,9 @@ app.use('/imgs', express.static(path.join(__dirname, 'static', 'imgs')));
 configurePassportGithub();
 configurePassportGoogle();
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 // passport.use('github', configurePassport);
-
-app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {} 
-}))
-
 app.use(async function (req, res, next){
     if(!req.session.auth)
     {
@@ -131,23 +124,62 @@ app.use(async function (req, res, next){
     next();
 })
 
+app.use(async (req, res, next) => {
+    // Lấy tất cả categories và limitCate (8 cái đầu tiên)
+    const categories = await newsService.getAllCategoriesWithChildren();
+    const limitCate = categories.slice(0, 8);
+
+    // Lưu vào res.locals để có thể sử dụng trong tất cả các view
+    res.locals.categories = categories;
+    res.locals.limitCate = limitCate;
+
+    // Tiếp tục xử lý request
+    next();
+});
 
 
-app.get('/', async function(req, res) {
+app.get('/', async function (req, res) {
+     if (!req.session.auth || !req.session.authUser) {
+         return res.render('homepage', {
+        }); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+    }
     if (req.session.views) {
         req.session.views++;
     } else req.session.views = 1;
-    //đang để permission cứng để test thôi sau tìm cách để cập nhật theo user
-    const permission = 2;
-    const role = await accountService.roleFeature(permission);
-    // Render ra giao diện với thông tin album và nghệ sĩ
-    res.render('homepage', {
-        user: req.session.authUser,
-        roleName:role.RoleName,
-    });
+
+    const permission = req.session.authUser.permission;
+
+    // Redirect users to their respective dashboards
+    switch (permission) {
+        case 2: // Subscriber
+            return res.redirect('/subscriber');
+        case 3: // Writer
+            return res.redirect('/writer');
+        case 4: // Editor
+            return res.redirect('/editor');
+        case 5: // Admin
+            return res.redirect('/administrator');
+        default: // Guest or invalid permission
+            return res.redirect('/');
+    }
 });
-app.use(async function(req,res,next){
-    const rolePort = req.path.split('/')[1]; 
+app.use(async function (req, res, next) {
+    let roleNum = req.session.authUser ? req.session.authUser.permission : 1;
+    let rolePort;
+    switch (roleNum) {
+        case 2: // Subscriber
+            rolePort = 'subscriber';
+            break;
+        case 3: // Writer
+            rolePort = 'writer';
+            break;
+        case 4: // Editor
+            rolePort = 'editor';
+            break;
+        case 5: // Admin
+            rolePort = 'administrator';
+            break;
+    }
      if (rolePort === 'editor' || rolePort === 'administrator'||rolePort === 'writer' || rolePort === 'subscriber') {
         try {
             const permission = await accountService.findbyrolename(rolePort);
@@ -158,16 +190,14 @@ app.use(async function(req,res,next){
             console.error(`Lỗi khi lấy dữ liệu cho port: ${rolePort}`, error);
         }
     }
-    // Tiến hành tiếp tục xử lý middleware cho các đường dẫn khác
     next();
 });
 
 app.use('/account', accountRouter);
 app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
-// Khởi động server
-// app.use('/artist', artistRouter);
-
+app.use('/categories', categoriesRoute);
+//
 
 app.use('/role', editorRouter);
 app.get('/login', function (req, res) {
@@ -177,6 +207,8 @@ app.get('/login', function (req, res) {
 app.get('/register', function (req, res) {
     res.render('account/register', { layout: 'blank-bg' }); 
 });
+
+
 app.use('/editor', editorRouter);
 app.use('/subscriber', subcriberRouter);
 app.use('/administrator', administratorRouter);

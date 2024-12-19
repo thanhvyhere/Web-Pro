@@ -28,7 +28,6 @@ export default {
         return db('users').where('email', email).update({ password: newPassword });
     },
     // Lấy OTP từ cơ sở dữ liệu
-
     findbyID(userId)
     {
         return db('users').where({ id: userId }).first()
@@ -53,6 +52,9 @@ export default {
     findbyrolename(permission)
     {
         return db('roles').where('RoleName', permission).first();
+    },
+    findRoleById(roleId) {
+        return db('roles').where('RoleID', roleId).first();
     }
 };
 

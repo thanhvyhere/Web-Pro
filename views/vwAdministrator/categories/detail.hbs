@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category Details</title>
+  <link rel="stylesheet" href="/static/css/cssAdministrator/detail.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="category-detail-container">
+    <header id="category-detail-header">
+      <h1 id="category-detail-title">Category Details</h1>
+      <a href="/categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
+    </header>
+
+    <div id="category-detail-content">
+      <table id="category-detail-table" class="details-table">
+        <tr>
+          <th id="detail-id">Category ID</th>
+          <td id="detail-id-value">{{category.CatID}}</td>
+        </tr>
+        <tr>
+          <th id="detail-name">Category Name</th>
+          <td id="detail-name-value">{{category.CatName}}</td>
+        </tr>
+        <tr>
+          <th id="detail-parent">Parent Category</th>
+          <td id="detail-parent-value">
+            {{#if category.parent_id}} 
+              {{lookup ../categories category.parent_id}} 
+            {{else}} 
+              None 
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>

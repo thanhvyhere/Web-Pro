@@ -212,6 +212,10 @@
   width: 15% !important
 }
 
+.tw-w-\[15\%\] {
+  width: 15% !important
+}
+
 .tw-w-\[20\%\] {
   width: 20% !important
 }
@@ -315,16 +319,6 @@
 .tw-border-orange-500 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(249 115 22 / var(--tw-border-opacity, 1)) !important
-}
-
-.tw-bg-blue-200 {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1)) !important
-}
-
-.tw-bg-blue-500 {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1)) !important
 }
 
 .tw-bg-orange-500 {

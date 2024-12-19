@@ -1,0 +1,68 @@
+<!-- Place the first <script> tag in your HTML's <head> -->
+{{#section "css"}}
+<link rel="stylesheet" href="/static/css/detail.css">
+{{/section}}
+{{#section "script"}}
+<script>
+    // Lấy tất cả các phần tử có class "PublishedDate"
+    const dateElements = document.querySelectorAll('.PublishedDate');
+
+    // Lặp qua từng phần tử và định dạng ngày tháng
+    dateElements.forEach(dateElement => {
+        const rawDate = dateElement.innerText;
+
+        // Định dạng ngày tháng theo kiểu Việt Nam
+        const formattedDate = new Date(rawDate).toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+
+        // Chèn icon và ngày tháng đã định dạng vào phần tử
+        dateElement.innerHTML = `<i class="bi bi-calendar3"></i> ${formattedDate}`;
+    });
+
+</script>
+    
+{{/section}}
+
+<div class="card-contain">
+    <div class="title">
+        <h1 class="mb-3">{{this.news.Title}}</h1>
+        <p class="mb-3">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quasi expedita sed inventore assumenda voluptas officiis error repellendus iste totam non sequi, commodi a fugiat. Qui fugiat placeat ea hic quibusdam.</p>
+        <div class="des">
+            <div>
+                <i class="bi bi-book"></i>
+                Tác giả: {{this.news.AuthorName}}
+            </div>
+            <div class="PublishedDate">
+                {{this.news.PublishedDay}}
+            </div>
+        </div>
+        <hr>
+    </div>
+    <div class="mb-5">
+        {{#each tags}}
+            <button type="button" class="btn btn-outline-primary disable">{{TagName}}</button>
+        {{/each}}
+    </div>
+    <div class="d-flex flex-row justify-content-start align-items-start mb-3">
+        <img src="{{this.news.ImageCover}}" alt="" class="img-format">
+        <div class="d-flex flex-column">
+            
+        </div>
+    </div>
+    <p class="mb-3">{{{this.news.Content}}}</p>
+    <hr>
+    <div class="comment">
+        <div class="form-group">
+          <label for="txtComment">Ý kiến (25)</label>
+          <textarea type="text" name="comment" id="txtComment" class="form-control" placeholder="Nêu cảm nghĩ của bạn tại đây"></textarea>
+        </div>
+    </div>
+
+    {{!-- {{#each comment}}
+       
+    {{/each}} --}}
+</div>
+

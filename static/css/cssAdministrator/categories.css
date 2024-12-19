@@ -1,0 +1,163 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+}
+
+/* Category Container */
+#category-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto; /* Adjusted top/bottom margin for more space */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Slightly increased box shadow */
+    border: 5px solid #ff7f50; /* Lighter border color */
+}
+
+/* Header Section */
+#category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px; /* Increased margin for more spacing */
+}
+
+#category-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+#add-category-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+#add-category-btn:hover {
+    background-color: #45a049;
+}
+
+/* Table Section */
+#category-table-container {
+    overflow-x: auto;
+    margin-top: 20px; /* Add spacing on top of the table */
+}
+
+#categories-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#categories-table th,
+#categories-table td {
+    padding: 15px 20px; /* Increased padding for a more spacious look */
+    text-align: left;
+    font-size: 1rem;
+}
+
+#categories-table th {
+    background-color: #2c3e50;
+    color: #fff;
+    font-weight: 600;
+}
+
+#categories-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Slightly lighter color for even rows */
+}
+
+#categories-table tr:hover {
+    background-color: #ddd;
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem; /* Adjusted font size for better readability */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.btn-detail {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.btn-detail:hover {
+    background-color: #2980b9;
+}
+
+.btn-update {
+    background-color: #f39c12;
+    color: #fff;
+}
+
+.btn-update:hover {
+    background-color: #e67e22;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    #category-container {
+      width: 100%;
+      padding: 15px;
+    }
+  
+    #categories-table {
+      font-size: 0.9rem;
+    }
+  
+    #categories-table th,
+    #categories-table td {
+      padding: 10px;
+    }
+  
+    #category-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    #category-title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .btn {
+      font-size: 0.9rem;
+      padding: 8px 15px;
+    }
+  
+    #categories-table th,
+    #categories-table td {
+      padding: 8px 10px;
+    }
+  }
+  
