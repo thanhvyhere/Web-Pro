@@ -14,6 +14,7 @@
     <header id="tags-header" class="header">
       <h1 id="tags-title" class="title">Manage Tags</h1>
       <div id="tags-actions">
+        <input type="text" id="search-tag-name" class="search-box" placeholder="Search by Tag Name">
         <a href="/administrator/manage_tags/add" id="tags-add-btn" class="btn btn-primary">Add New Tag</a>
         <a href="#" id="tags-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
         <a href="#" id="tags-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
@@ -65,6 +66,20 @@
   
   <!-- Đặt mã JavaScript vào thẻ <script> dưới đây -->
   <script>
+  // JavaScript to handle tag name search
+  document.getElementById('search-tag-name').addEventListener('input', function () {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('.tag-table tbody tr');
+    
+    rows.forEach(row => {
+      const tagName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+      if (tagName.includes(searchValue)) {
+        row.style.display = ''; // Hiển thị hàng
+      } else {
+        row.style.display = 'none'; // Ẩn hàng
+      }
+    });
+  });
     // JavaScript to handle select/deselect all checkboxes
     document.getElementById('select-all-tags').addEventListener('change', function () {
       const checkboxes = document.querySelectorAll('.tag-checkbox');
