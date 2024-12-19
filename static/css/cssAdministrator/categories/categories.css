@@ -14,7 +14,7 @@ body {
 
 /* Container Styling */
 .container {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 20px auto;
     padding: 20px;
     background: #ffffff; /* Màu nền trắng */
@@ -157,6 +157,31 @@ body {
 .btn-pagination:hover {
     background-color: #0056b3;
     color: #fff;
+}
+
+.search-container {
+    margin-bottom: 1rem;
+}
+
+.search-container input {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-container button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
 }
   
 @media (max-width: 768px) {

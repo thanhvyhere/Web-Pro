@@ -14,7 +14,7 @@ body {
 
 /* Container Styling */
 .container {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 20px auto;
     padding: 20px;
     background: #ffffff; /* Màu nền trắng */
@@ -152,6 +152,14 @@ body {
     color: #fff;
 }
 
+.search-box {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+  
 /* Media Queries */
 @media (max-width: 768px) {
     .header {

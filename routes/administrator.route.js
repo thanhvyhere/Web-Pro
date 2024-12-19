@@ -103,31 +103,37 @@ router.get('/manage_categories', async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Current page, default to 1
     const limit = 20; // Number of items per page
     const offset = (page - 1) * limit;
-
+    const searchQuery = req.query.search || ''; // Lấy từ khóa tìm kiếm, mặc định rỗng
+  
     try {
-        const { categories, total } = await administratorService.findAllWithPagination(offset, limit);
-        const totalPages = Math.ceil(total / limit);
-
-        if (categories.length === 0) {
-            res.render('vwAdministrator/categories/categories', {
-                categories: [],
-                currentPage: page,
-                totalPages,
-                message: 'No categories found'  // Add a message if no categories exist
-            });
-        } else {
-            res.render('vwAdministrator/categories/categories', {
-                categories,
-                currentPage: page,
-                totalPages
-            });
-        }
+      // Gọi service với offset, limit và searchQuery
+      const { categories, total } = await administratorService.findAllWithPagination(offset, limit, searchQuery);
+      const totalPages = Math.ceil(total / limit);
+  
+      // Kiểm tra và render kết quả
+      if (categories.length === 0) {
+        res.render('vwAdministrator/categories/categories', {
+          categories: [],
+          currentPage: page,
+          totalPages,
+          query: { search: searchQuery },
+          message: searchQuery
+            ? `No categories found for search term "${searchQuery}"`
+            : 'No categories found', // Thông báo tùy thuộc vào có từ khóa tìm kiếm hay không
+        });
+      } else {
+        res.render('vwAdministrator/categories/categories', {
+          categories,
+          currentPage: page,
+          totalPages,
+          query: { search: searchQuery },
+        });
+      }
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error fetching categories');
+      console.error('Error fetching categories:', err);
+      res.status(500).send('Error fetching categories');
     }
-});
-
+  });
 
 // Route: Render Add Category Page
 router.get('/manage_categories/add', async (req, res) => {

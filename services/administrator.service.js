@@ -258,22 +258,30 @@ async findAllWithPaginationUsers(offset, limit) {
   }
 },
 
-async findAllWithPagination(offset, limit) {
+async findAllWithPagination(offset, limit, searchQuery = '') {
   try {
-      console.log('Fetching categories with offset:', offset, 'and limit:', limit);  // Add logging
-      const [categories, [{ total }]] = await Promise.all([
-          db('categories').limit(limit).offset(offset),
-          db('categories').count('CatID as total')
-      ]);
+    console.log('Fetching categories with offset:', offset, 'limit:', limit, 'searchQuery:', searchQuery); // Logging
 
-      console.log('Categories fetched:', categories);  // Log fetched categories
-      console.log('Total categories:', total);  // Log total count
+    // Áp dụng điều kiện tìm kiếm nếu searchQuery không rỗng
+    const query = db('categories');
+    if (searchQuery) {
+      query.where('CatName', 'like', `%${searchQuery}%`);
+    }
 
-      return { categories, total };
+    const [categories, [{ total }]] = await Promise.all([
+      query.clone().limit(limit).offset(offset), // Áp dụng phân trang
+      query.clone().count('CatID as total'),     // Tính tổng số bản ghi theo điều kiện tìm kiếm
+    ]);
+
+    console.log('Categories fetched:', categories);  // Log fetched categories
+    console.log('Total categories:', total);         // Log total count
+
+    return { categories, total };
   } catch (error) {
-      console.error('Error in findAllWithPagination:', error);  // Log error if any
-      throw new Error('Error fetching categories with pagination: ' + error.message);
+    console.error('Error in findAllWithPagination:', error);  // Log error if any
+    throw new Error('Error fetching categories with pagination: ' + error.message);
   }
 }
+
 
 };

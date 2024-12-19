@@ -13,8 +13,21 @@
   <div class="container">
     <header class="header">
       <h1 class="title">Category List</h1>
-      <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
+      <div class="search-container">
+        <form id="search-category" method="GET" action="/administrator/manage_categories">
+          <input 
+            type="text" 
+            name="search" 
+            id="search-category-name" 
+            class="search-box" 
+            placeholder="Search by Category Name" 
+            value="{{query.search}}">
+          <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+      </div>
+
       <div id="category-actions">
+        <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
         <a href="#" id="categories-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
         <a href="#" id="categories-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
       </div>
@@ -102,6 +115,35 @@
       } else {
         alert('Please select exactly one category to edit.');
       }
+    });
+
+    document.getElementById('search-btn').addEventListener('click', function () {
+    const searchTerm = document.getElementById('search-category').value.toLowerCase();
+    const rows = document.querySelectorAll('.categories-table tbody tr');
+
+    rows.forEach(row => {
+      const categoryName = row.querySelector('td:nth-child(3)'); // Cột "Category Name"
+        if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
+          row.style.display = ''; // Hiển thị dòng
+        } else {
+          row.style.display = 'none'; // Ẩn dòng
+        }
+      });
+    });
+
+    // Tìm kiếm ngay khi gõ
+    document.getElementById('search-category').addEventListener('input', function () {
+      const searchTerm = this.value.toLowerCase();
+      const rows = document.querySelectorAll('.categories-table tbody tr');
+
+      rows.forEach(row => {
+        const categoryName = row.querySelector('td:nth-child(3)');
+        if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
     });
   </script>
 </body>
