@@ -1,5 +1,9 @@
 import express from 'express';
 import newsService from '../services/news.service.js';
+import editorService from '../services/editor.service.js';
+import fs from 'fs'
+import multer from 'multer'
+import path from 'path'
 
 const router = express.Router();
 
@@ -66,9 +70,49 @@ router.get('/create_article', async (req, res) => {
     const categories = await newsService.getAllCategories();
     res.render('vwWriter/create', { categories });
 });
+const upload = multer({ dest: './static/imgs/news/' })
+router.post('/create_article',upload.single('ImageFile'), async (req, res) => {
+        const imagePath = './static/imgs/news/';
+        const imageFile = req.file; // Lấy file upload từ multer
+        const imageUrl = req.body.ImageUrl ? req.body.ImageUrl.trim() : ''; // Lấy URL từ form
+        const number = await newsService.countByNews();
+        console.log(number)
+        // Kiểm tra nếu cả file và URL đều được gửi
+        if (imageFile && imageUrl) {
+            return res.status(400).send('Only one input (file or URL) is allowed');
+        }
 
-router.post('/create_article', async (req, res) => {
-    const { title, abstract, content, category_child_id } = req.body;
+        // Mảng chứa các ảnh cuối cùng
+        let finalImages = [];
+
+        // Nếu file được tải lên
+        if (imageFile) {
+            const fileName = `news_${number[0].total}.jpg`;
+            const newFilePath = path.join(imagePath, fileName);
+
+            // Đổi tên file để lưu đúng chuẩn
+            fs.renameSync(imageFile.path, newFilePath);
+
+            // Thêm đường dẫn vào mảng
+            finalImages.push(`/static/imgs/news/${fileName}`);
+        } 
+        // Nếu URL được cung cấp
+        else if (imageUrl) {
+            if (imageUrl.startsWith('http')) {
+                finalImages.push(imageUrl);
+            } else {
+                return res.status(400).send('Invalid URL');
+            }
+        } else {
+            return res.status(400).send('No image provided');
+        }
+
+        console.log('Final Images:', finalImages);
+
+        // Lấy ảnh đầu tiên làm ảnh bìa
+        const coverImage = finalImages[0];
+
+    const { title, author, abstract, content, is_premium, category_child_id, CatID } = req.body;
     const entity = {
         Title: title,
         AuthorName: req.session.authUser.name,
@@ -77,7 +121,8 @@ router.post('/create_article', async (req, res) => {
         Content: content,
         Premium: 0,
         CreatedDate: new Date(),
-        Status: 2
+        Status: 2,
+        ImageCover: coverImage 
     };
 
     try {
@@ -121,12 +166,12 @@ router.post('/create_article', async (req, res) => {
     }
 });
 
-
 // Get category children
 router.get('/categories/children/:CatID', async (req, res) => {
     const categoryChildren = await newsService.getCategoriesChild(req.params.CatID);
     res.json(categoryChildren);
 });
+
 
 // Approved, Published, Rejected, and Pending routes
 router.get('/approved', (req, res) => renderNewsByStatus(req, res, 1, 'vwWriter/approved'));
