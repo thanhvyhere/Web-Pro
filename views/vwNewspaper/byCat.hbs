@@ -3,7 +3,35 @@
 <link rel="stylesheet" href="/static/css/cssWriter/approval.css">
 {{/section}}
 {{#section "script"}}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+                const premiumLinks = document.querySelectorAll(".premium-link");
 
+                premiumLinks.forEach(link => {
+                    link.addEventListener("click", (event) => {
+                        const isPremium = link.getAttribute("data-premium") === "true";
+
+                        if (isPremium) {
+                            event.preventDefault(); // Ngăn chặn chuyển hướng
+                            Swal.fire({
+                                title: "Thông báo",
+                                text: "Bạn cần đăng nhập để xem nội dung này.",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Đăng nhập",
+                                cancelButtonText: "Hủy"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Chuyển hướng đến trang đăng nhập
+                                    window.location.href = "/account/login";
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+
+    </script>
 {{/section}}
 <div id="card-list-new">
     {{#if this.empty}}
@@ -25,10 +53,31 @@
                                     <i class="bi bi-calendar3"></i>
                                     {{formatDate PublishedDay}}
                                 </div>
+                                {{#if this.is_premium}}
+                                    <i class="format-premium bi bi-star-fill"></i>
+                                {{/if}} 
                             </div>
-                            <a href="/newspaper/detail?id={{NewsID}}">
+                    {{#if auth}}
+                    <!-- Người dùng đã đăng nhập -->
+                        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+                            <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                        </a>
+                    {{else}}
+                        {{#if this.is_premium}}
+                            <!-- Bài viết Premium nhưng chưa đăng nhập -->
+                            <a href="javascript:void(0);" class="premium-link" data-premium="true">
                                 <h5 class="card-title tw-mb-2">{{Title}}</h5>
                             </a>
+                        {{else}}
+                            <!-- Bài viết không phải Premium -->
+                            <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+                                <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                            </a>
+                        {{/if}}
+                    {{/if}}
+
+
+
                             <p class="abstract-font">{{Abstract}}</p>
                         </div>
                     </div>
