@@ -141,10 +141,8 @@ app.use(async (req, res, next) => {
     next();
 });
 
-
-app.get('/', async function (req, res) {
-   if (!req.session.auth || !req.session.authUser) {
-        const topNews = await newsService.getTop3NewsByView();
+app.use(async (req, res, next) => {
+    const topNews = await newsService.getTop3NewsByView();
 
         // Đếm số lượng bình luận cho từng bài báo trong top3 và lấy tên danh mục
        const updatedList = await Promise.all(topNews.map(async (item) => {
@@ -154,9 +152,14 @@ app.get('/', async function (req, res) {
                countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
            }
        }));
+    res.locals.topNews = updatedList;
+    next();
+})
 
+app.get('/', async function (req, res) {
+   if (!req.session.auth || !req.session.authUser) {
         // Truyền dữ liệu vào view
-        return res.render('homepage', { topNews: updatedList });
+        return res.render('homepage');
     }
 
     if (req.session.views) {

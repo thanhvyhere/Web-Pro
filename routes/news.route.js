@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/byCat', async function (req, res) {
     const catId = req.query.catId || 0;
     const category = await newsService.findCatByCatId(catId);
-    const limit = 4;
+    const limit = 6;
 
     // Kiểm tra và giới hạn current_page
     const nRows = await newsService.countByCatId(catId);
@@ -25,12 +25,22 @@ router.get('/byCat', async function (req, res) {
             active: (i + 1) === +current_page
         });
     }
-
+    
     // Lấy danh sách bản tin theo trang
     const list = await newsService.findPageByCatId(catId, limit, offset);
-    const updatedList = list.map(item => ({
-        ...item,
-        catName: category.CatName,
+    const updatedList = await Promise.all(list.map(async (item) => {
+        let is_premium;
+        const auth = req.session.auth;
+        if (item.Premium === 1)
+            is_premium = true;
+        else
+            is_premium = false;
+        return{
+            ...item,
+            catName: category.CatName,
+            is_premium,
+            auth
+        }
     }));
 
     // Render view
