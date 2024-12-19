@@ -76,55 +76,74 @@ export default
             return db('tag').where('TagName', tagname).first();
         },
 
-        addNewTag(newTag) {
-            return db('tag').insert(newTag);
-        },
-        addTagIdAndNewsId(entity) {
-            return db('news_tags').insert(entity);
-        },
-        delTagByNewsId(newId) {
-            return db('news_tags').where('NewsID', newId).del();
-        },
-        getIdNewEntity() {
-            return db.raw('SELECT LAST_INSERT_ID() as id');
-        },
+    addNewTag(newTag)
+    {
+        return db('tag').insert(newTag); 
+    },
+    addTagIdAndNewsId(entity) {
+        return db('news_tags').insert(entity);
+    },
+    delTagByNewsId(newId) { 
+        return db('news_tags').where('NewsID', newId).del();
+    },
+    getIdNewEntity() {
+        return db.raw('SELECT LAST_INSERT_ID() as NewsID');
+    },
+    countByNews()
+    {
+        return db('news').count('* as total');
+    },
+       
 
-        getTagByNewsId(newId) {
-            return db('tag as t')
-                .join('news_tags as nt', 't.TagID', '=', 'nt.TagID')
-                .where('nt.NewsID', newId)
-                .select('t.TagName'); // Chỉ chọn cột TagName từ bảng tag
-        },
+    addNewTag(newTag) {
+        return db('tag').insert(newTag);
+    },
+    addTagIdAndNewsId(entity) {
+        return db('news_tags').insert(entity);
+    },
+    delTagByNewsId(newId) {
+        return db('news_tags').where('NewsID', newId).del();
+    },
+    getIdNewEntity() {
+        return db.raw('SELECT LAST_INSERT_ID() as id');
+    },
 
-        getAllCommentById(id) {
-            return db('comment')
-                .join('users', 'comment.UserID', '=', 'users.id') // Hợp bảng comment với users qua UserID
-                .select('comment.*', 'users.username') // Chọn tất cả từ comment và thêm username từ users
-                .where('comment.NewsID', id) // Điều kiện lọc theo NewsID
-                .orderBy('comment.CreatedDate', 'desc'); // Sắp xếp theo ngày (CreatedDate) giảm dần
-        },
+    getTagByNewsId(newId) {
+        return db('tag as t')
+            .join('news_tags as nt', 't.TagID', '=', 'nt.TagID')
+            .where('nt.NewsID', newId)
+            .select('t.TagName'); // Chỉ chọn cột TagName từ bảng tag
+    },
+
+    getAllCommentById(id) {
+        return db('comment')
+            .join('users', 'comment.UserID', '=', 'users.id') // Hợp bảng comment với users qua UserID
+            .select('comment.*', 'users.username') // Chọn tất cả từ comment và thêm username từ users
+            .where('comment.NewsID', id) // Điều kiện lọc theo NewsID
+            .orderBy('comment.CreatedDate', 'desc'); // Sắp xếp theo ngày (CreatedDate) giảm dần
+    },
 
 
 
-        addComment(entity) {
-            return db('comment').insert(entity);
-        },
-        countCommentBynewsId(newId) {
-            return db('comment').where('NewsID', newId).count('* as total').first();
-        },
-    
-        incrementViewCount(newsId) {
-            // Tăng cột view lên 1
+    addComment(entity) {
+        return db('comment').insert(entity);
+    },
+    countCommentBynewsId(newId) {
+        return db('comment').where('NewsID', newId).count('* as total').first();
+    },
+
+    incrementViewCount(newsId) {
+        // Tăng cột view lên 1
+        return db('news')
+            .where('NewsID', newsId)  // Điều kiện lọc theo NewsID
+            .increment('Views', 1); // Tăng giá trị cột 'view' lên 1
+    },
+
+    getTop3NewsByView() {
             return db('news')
-                .where('NewsID', newsId)  // Điều kiện lọc theo NewsID
-                .increment('Views', 1); // Tăng giá trị cột 'view' lên 1
-        },
+            .join('categories', 'news.CatID', '=', 'categories.CatID') 
+            .orderBy('news.Views', 'desc')  
+            .limit(3);  
 
-        getTop3NewsByView() {
-             return db('news')
-                .join('categories', 'news.CatID', '=', 'categories.CatID') 
-                .orderBy('news.Views', 'desc')  
-                .limit(3);  
-
-        }
     }
+}
