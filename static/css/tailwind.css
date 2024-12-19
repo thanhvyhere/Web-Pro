@@ -146,6 +146,10 @@
   margin-top: 0.5rem !important
 }
 
+.tw-mt-3 {
+  margin-top: 0.75rem !important
+}
+
 .tw-mt-5 {
   margin-top: 1.25rem !important
 }
@@ -216,8 +220,16 @@
   width: 20% !important
 }
 
+.tw-w-\[25\%\] {
+  width: 25% !important
+}
+
 .tw-w-\[350px\] {
   width: 350px !important
+}
+
+.tw-w-\[48\%\] {
+  width: 48% !important
 }
 
 .tw-w-\[50px\] {
@@ -307,6 +319,11 @@
 .tw-border-orange-500 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(249 115 22 / var(--tw-border-opacity, 1)) !important
+}
+
+.tw-bg-blue-200 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1)) !important
 }
 
 .tw-bg-blue-500 {

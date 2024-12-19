@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "ecapp",
+  "name": "newsland",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -37,11 +37,8 @@
     "passport-local": "^1.0.0",
     "passport-oauth2": "^1.8.0",
     "path": "^0.12.7",
-    "sqlite3": "^5.1.7",
     "select2": "^4.1.0-rc.0",
     "sweetalert2": "^11.6.13",
-    "tailwindcss": "^3.4.15",
-    "uuid": "^11.0.3",
-    "uuidv4": "^6.2.13"
+    "tailwindcss": "^3.4.15"
   }
 }

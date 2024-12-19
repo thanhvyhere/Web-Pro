@@ -41,7 +41,7 @@
             <form action="" method="post">
                 <input type="hidden" name="NewsID"  value="{{NewsID}}">
                 <label for="txtFeedback" class="tw-text-xl"><strong>Hãy điền góp ý cho tác giả</strong></label> <br>
-                <textarea name="Feedback" id="txtFeedback" class="tw-h-[50vh] tw-w-full" placeholder="Điền nhận xét của bạn ở đây"></textarea>
+                <textarea name="Feedback" id="txtFeedback" class="tw-h-[50vh] tw-w-full">{{Feedback}}</textarea>
                 <input type="hidden" name="Status"  value="6">
                 <button  type="submit" formaction="/editor/feedback" class="tw-rounded-[20px] tw-bg-yellow-500 tw-border-0 tw-text-white tw-px-4 tw-py-2 tw-w-full
                   hover:tw-bg-yellow-200 hover:tw-text-black transition-colors duration-300">Gửi nhận xét</button>

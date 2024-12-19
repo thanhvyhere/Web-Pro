@@ -1,7 +1,6 @@
 import express from 'express';
 import editorService from '../services/editor.service.js';
 import moment from 'moment';
-import { console } from 'inspector';
 const router = express.Router();
 const role = 'editor';
 router.get('/', async function (req,res) 
@@ -13,9 +12,23 @@ router.get('/', async function (req,res)
 // repository
 router.get('/repository', async function (req,res) 
 {
-    const list = await editorService.findAll();
+    const limit =6;
+    const current_page = req.query.page || 1; 
+    const offset = (current_page - 1) *limit; 
+    const nRows = await editorService.countByNews();
+    const nPages = Math.ceil(nRows.total/limit);
+    const pageNumbers = [];
+    for(let i = 0 ; i < nPages;i++)
+        {pageNumbers.push({
+            value : i + 1,
+            active: ( i + 1) === +current_page
+    })}
+    const list = await editorService.findPageById(limit,offset);
     res.render('vwEditor/storage', 
-        {news: list});
+        {news: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers, 
+        });
 });
 // reviewed
 router.get('/reviewed', async function (req,res) 
@@ -28,7 +41,7 @@ router.get('/reviewed', async function (req,res)
 router.get('/editor_rejected', async function (req,res) 
 {
     const list = await editorService.findRejected();
-    console.log(list)
+   
     res.render('vwEditor/rejected', {news: list}
         );
 });
@@ -87,7 +100,8 @@ router.get('/getChildCategories/:parentCatId', async (req, res) => {
 router.get('/feedback', async function (req,res) 
 {
     const id = +req.query.id || 0;
-    const news = await editorService.findANews(id)
+    const news = await editorService.findNewsByID(id)
+  
     res.render('vwEditor/feedback', { newsList: news });
 });
 router.post('/feedback', async function (req,res) 
@@ -107,23 +121,60 @@ router.get('/modify', async function (req,res)
     const id = +req.query.id || 0;
     const news = await editorService.findANews(id)
     const parentcatList = await editorService.findParentCat();
+    const tags = await editorService.findTags(id)
     const updatedList = news.map(item => ({
         ...item,
         parentCatList: parentcatList, // Gắn parentCatList vào từng phần tử
+        tags: tags
     }));
+    
     res.render('vwEditor/editAfterProved', { newsList: updatedList });
 });
-router.post('/modify', async function (req,res) 
-{
-    const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm')
-    const id = req.body.NewsID;
-    const changes = {
-        PublishedDay: publishedDay,
-        CatID: req.body.CatID,
+router.post('/modify', async (req, res) => {
+    try {
+        const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm');
+        const id = req.body.NewsID;
+        const tags = req.body.tags || []; // Nhãn gửi lên từ form
+        
+        // Bước 1: Xóa tất cả các nhãn cũ của bài viết này
+        await editorService.deleteTag(id);
+
+        // Bước 2: Cập nhật thông tin bài viết (PublishedDay, CatID)
+        const changes = {
+            PublishedDay: publishedDay,
+            CatID: req.body.CatID,
+        };
+        await editorService.update(changes, id);
+
+        // Bước 3: Thêm các nhãn mới vào bảng news_tags
+        for (const tagName of tags) {
+            // Kiểm tra xem TagName đã tồn tại trong bảng tag chưa
+            const tag = await editorService.findExistingTag(tagName)
+           
+            if (!tag) {
+                const newTag =
+                {
+                    TagName: tagName
+                }
+                // Nếu chưa có, thêm TagName vào bảng tag và lấy TagID
+                const ret = await editorService.insertTagGetID(newTag);
+            }
+            const getTagID = await editorService.findTagID(tagName)
+           
+            // Thêm vào bảng news_tags với NewsID và TagID
+            const newsTags =
+            {
+                TagID: getTagID.TagID,
+                NewsID: id
+            }
+            await editorService.addTagNews(newsTags)
+        }
+        // Chuyển hướng sau khi xử lý
+        res.redirect('/editor/schedule');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Có lỗi xảy ra khi xử lý dữ liệu');
     }
-    await editorService.update(changes,id)
-    res.redirect('/editor/schedule');
-   
 });
 router.post('/update-status', async function (req, res) {
    
