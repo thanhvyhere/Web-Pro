@@ -47,31 +47,61 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Khởi tạo Tagify với whitelist và dropdown
-        var input = document.querySelector('#txtTag');
-        var tagify = new Tagify(input, {
-            whitelist: ['JavaScript', 'HTML', 'CSS', 'Node.js', 'React', 'Vue.js', 'Python', 'Django', 'Flask'],
-            maxTags: 5,
-            placeholder: 'Add tags',
-            enforceWhitelist: true,
-            dropdown: {
-                maxItems: 10, // Hiển thị tối đa 10 tag
-                enabled: 0, // Hiển thị dropdown ngay khi focus
-                closeOnSelect: false // Giữ dropdown mở sau khi chọn
-            }
-        });
+    document.addEventListener('DOMContentLoaded', async function () {
+        const existingTags = JSON.parse('{{{json tags}}}').map(tag => ({ value: tag.TagName }));
+        console.log(existingTags);
+        const input = document.querySelector('#txtTag');
+        try {
+            // Gọi API để lấy danh sách tags
+            const response = await fetch('/newspaper/api/tags');
+            if (!response.ok) throw new Error('Failed to fetch tags');
+            const tags = await response.json(); // Danh sách tags từ API
+            const tagifyTags = tags.map(tag => ({ value: tag.TagName }));
+            // Kiểm tra xem dữ liệu tags có hợp lệ không
+            const tagify = new Tagify(input, {
+                whitelist: tagifyTags, // Sử dụng danh sách tags từ API
+                maxTags: 5,
+                placeholder: 'Add tags',
+                dropdown: {
+                    maxItems: 10, // Hiển thị tối đa 10 tag
+                    enabled: 0, // Hiển thị dropdown ngay khi focus
+                    closeOnSelect: true // Giữ dropdown mở sau khi chọn
+                }
+            });
 
-        // Xử lý sự kiện khi thêm tag
-        tagify.on('add', function (e) {
-            console.log('Tag added:', e.detail.data);
-        });
+            tagify.addTags(existingTags);
+            tagify.on('add', async function (e) {
+                console.log('Tag added:', e.detail.data);
 
-        // Xử lý sự kiện khi xóa tag
-        tagify.on('remove', function (e) {
-            console.log('Tag removed:', e.detail.data);
-        });
+                // Gửi tag mới lên server
+                try {
+                    const addedTag = e.detail.data.value; // Lấy giá trị tag mới
+                    const response = await fetch('/newspaper/api/tags', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ tags: [addedTag] }) // Gửi mảng tags
+                    });
+
+                    if (!response.ok) throw new Error('Failed to save tag');
+                    const result = await response.json();
+                    console.log('Tag saved successfully:', result);
+                } catch (error) {
+                    console.error('Error saving tag:', error);
+                }
+            });
+
+            // Xử lý sự kiện khi xóa tag
+            tagify.on('remove', function (e) {
+                console.log('Tag removed:', e.detail.data);
+                // Nếu cần, bạn có thể thêm logic để xóa tag khỏi cơ sở dữ liệu
+            });
+
+            
+        } catch (error) {
+            console.error('Error initializing tags:', error);
+        }
     });
+
 </script>
 <script>
     // Hiển thị hộp thoại xác nhận SweetAlert
@@ -90,7 +120,7 @@
                 // Gửi request xóa nếu người dùng xác nhận
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '/del';
+                form.action = '/newspaper/del';
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = 'newsId';
@@ -147,7 +177,7 @@
         <div class="form-group mb-3">
             <label for="txtCat">Category</label>
             <select name="CatID" id="txtCat" class="form-control txt-input" aria-describedby="helpId">
-                <option value="{{this.news.CatID}}" disabled selected>{{this.CatName}}</option>
+                <option value="{{this.categoryCha.CatID}}" disabled selected>{{this.categoryCha.CatName}}</option>
                 {{#each categories}}
                 <option value="{{CatID}}">{{CatName}}</option>
                 {{/each}}
@@ -156,14 +186,14 @@
         <div class="form-group mb-3">
             <label for="txtCatChild">Category Child</label>
             <select name="category_child_id" id="txtCatChild" class="form-control txt-input">
-                <option value="" disabled selected>Select a category child</option>
+                <option value="" disabled selected>{{this.categoryCon.CatName}}</option>
                 <!-- Các option category child sẽ được thêm vào ở đây -->
             </select>
         </div>
     </div>
     <div class="form-group mb-3">
         <label for="txtTag" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Tag</label>
-        <input type="text" id="txtTag" name="tags" class="form-control txt-input" placeholder="Add tags" autofocus>
+        <input type="text" id="txtTag" name="tags" class="form-control txt-input" placeholder="Add tags">
     </div>
     <div class="flex items-center space-x-1 mb-3">
         <label for="imageInput" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Image File</label>
@@ -171,12 +201,12 @@
     </div>
     <div class="form-group mb-3">
         <label for="txtContent">Content</label>
-        <textarea id="txtContent" name="content" value="{{this.news.Content}}"></textarea>
+        <textarea id="txtContent" name="content" value="{{{this.news.Content}}}"></textarea>
     </div>
     <div class="d-flex flex-row btn-footer">
         <button type="button" class="btn btn-danger" onclick="confirmDelete('{{this.news.NewsID}}')">
             Delete
         </button>
-        <button type="submit" class="btn btn-warning ">Update</button>
+       <button type="submit" class="btn btn-warning ">Update</button>
     </div>
 </form>

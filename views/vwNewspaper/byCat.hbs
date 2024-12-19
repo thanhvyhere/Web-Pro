@@ -3,26 +3,6 @@
 <link rel="stylesheet" href="/static/css/cssWriter/approval.css">
 {{/section}}
 {{#section "script"}}
-<script>
-    // Lấy tất cả các phần tử có class "PublishedDate"
-        const dateElements = document.querySelectorAll('.PublishedDate');
-
-        // Lặp qua từng phần tử và định dạng ngày tháng
-        dateElements.forEach(dateElement => {
-            const rawDate = dateElement.innerText;
-
-            // Định dạng ngày tháng theo kiểu Việt Nam
-            const formattedDate = new Date(rawDate).toLocaleDateString('vi-VN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-
-            // Chèn icon và ngày tháng đã định dạng vào phần tử
-            dateElement.innerHTML = `<i class="bi bi-calendar3"></i> ${formattedDate}`;
-        });
-
-</script>
 
 {{/section}}
 <div id="card-list-new">
@@ -42,7 +22,8 @@
                             <div class="header-paper small mb-2">
                                 <button class="name-category-paper" disabled="disabled">{{catName}}</button>
                                 <div class="PublishedDate">
-                                    {{PublishedDay}}
+                                    <i class="bi bi-calendar3"></i>
+                                    {{formatDate PublishedDay}}
                                 </div>
                             </div>
                             <a href="/newspaper/detail?id={{NewsID}}">

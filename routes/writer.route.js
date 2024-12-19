@@ -26,6 +26,15 @@ async function renderNewsByStatus(req, res, status, viewName) {
     const paginatedNews = allNews.slice(offset, offset + limit);
 
     const newsWithCategories = await getNewsWithCategories(paginatedNews);
+    
+    // Sửa lại từ 'new' thành 'allNews'
+    const updatedList = await Promise.all(allNews.map(async (news) => {
+        const category = await newsService.findCatByCatId(news.CatID);  // Sử dụng 'news' thay vì 'new'
+        return {
+            ...news, // Giữ nguyên tất cả các thuộc tính của allNews
+            catName: category ? category.CatName : 'Chưa có danh mục', // Thêm catName vào đối tượng
+        };
+    }));
 
     // Pagination calculation
     const totalNews = allNews.length;
@@ -37,7 +46,7 @@ async function renderNewsByStatus(req, res, status, viewName) {
 
     // Render the view
     res.render(viewName, {
-        newsList: newsWithCategories,
+        newsList: updatedList,
         empty: newsWithCategories.length === 0,
         pageNumbers,
         current_page
@@ -59,7 +68,7 @@ router.get('/create_article', async (req, res) => {
 });
 
 router.post('/create_article', async (req, res) => {
-    const { title, author, abstract, content, image_url, is_premium, category_child_id, CatID} = req.body;
+    const { title, abstract, content, category_child_id } = req.body;
     const entity = {
         Title: title,
         AuthorName: req.session.authUser.name,
@@ -69,35 +78,49 @@ router.post('/create_article', async (req, res) => {
         Premium: 0,
         CreatedDate: new Date(),
         Status: 2
-    }
-    await newsService.add(entity);
-    const [result] = await newsService.getIdNewEntity();
-    const newsID = result[0].NewsID;
-    const { tags } = req.body; // Lấy danh sách tags từ request body
-    console.log(tags);
+    };
+
     try {
-        const savedTags = [];
-        for (const tag of tags) {
-            // Kiểm tra nếu tag đã tồn tại
-            let existingTag = await newsService.findTagByTagName(tag.value);
+        await newsService.add(entity);
+        const [result] = await newsService.getIdNewEntity();
+        const newsID = result[0].id;
+        const { tags } = req.body;
+
+        let parsedTags = tags;
+        if (typeof tags === 'string') {
+            parsedTags = JSON.parse(tags);
+        }
+        for (let tag of parsedTags) {
+            let tagValue = tag.value;
+
+            // Kiểm tra nếu tag đã tồn tại trong cơ sở dữ liệu
+            let existingTag = await newsService.findTagByTagName(tagValue); 
             if (!existingTag) {
+                let newTag = {
+                    TagName: tagValue
+                };
                 // Lưu tag mới vào database
-                ret = await newsService.addNewTag(tag);
-                existingTag = tag;
-                savedTags.push(existingTag);
+                await newsService.addNewTag(newTag);
+                existingTag = await newsService.findTagByTagName(tagValue);
             }
+
+            // Tạo mối quan hệ giữa tag và bài viết
             const tagNewsEntity = {
                 TagID: existingTag.TagID,
                 NewsID: newsID
             };
-            ret = await newsService.addTagIdAndNewsId(tagNewsEntity);
+
+            await newsService.addTagIdAndNewsId(tagNewsEntity);
         }
-        res.status(201).json({ message: 'Tags saved successfully', tags: savedTags });
-        res.redirect('/writer/pending_approval');
+
+        // Chuyển hướng với thông báo thành công
+        res.redirect('/writer/pending_approval?success=Upload%20successful!');
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to save tags' });
     }
 });
+
 
 // Get category children
 router.get('/categories/children/:CatID', async (req, res) => {
@@ -109,6 +132,6 @@ router.get('/categories/children/:CatID', async (req, res) => {
 router.get('/approved', (req, res) => renderNewsByStatus(req, res, 1, 'vwWriter/approved'));
 router.get('/published', (req, res) => renderNewsByStatus(req, res, 3, 'vwWriter/approved'));
 router.get('/rejected', (req, res) => renderNewsByStatus(req, res, 4, 'vwWriter/rejected'));
-router.get('/pending_approval', (req, res) => renderNewsByStatus(req, res, 2, 'vwWriter/rejected'));
+router.get('/pending_approval', (req, res) => renderNewsByStatus(req, res, 2, 'vwWriter/pending_approval'));
 
 export default router;

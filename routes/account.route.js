@@ -42,6 +42,7 @@ router.post('/login', async function (req, res) {
         rolename: role.RoleName
     };
     const retUrl = req.session.retUrl || '/'
+    console.log('Redirecting to:', retUrl); 
     res.redirect(retUrl);
 })
 router.get('/register', function(req, res){

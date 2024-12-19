@@ -282,7 +282,7 @@ CREATE TABLE `comment` (
   `Comment` text COLLATE utf8_unicode_ci NOT NULL, -- Nội dung bình luận
   `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
   `UserID` int(11) unsigned NOT NULL, -- ID người dùng bình luận
-  `CreatedDate` DATE DEFAULT CURRENT_DATE, -- Ngày tạo bình luận, mặc định là ngày hiện tại
+  `CreatedDate` DATETIME DEFAULT CURRENT_DATE, -- Ngày tạo bình luận, mặc định là ngày hiện tại
   PRIMARY KEY (`CommentID`),
   FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Tham chiếu đến bảng news và xóa bình luận khi bài viết bị xóa
   FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE CASCADE -- Tham chiếu đến bảng users, xóa bình luận nếu người dùng bị xóa
@@ -329,7 +329,7 @@ CREATE TABLE `comment` (
   `Comment` text COLLATE utf8_unicode_ci NOT NULL, -- Nội dung bình luận
   `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
   `UserID` int(11) unsigned NOT NULL, -- ID người dùng bình luận
-  `CreatedDate` DATE DEFAULT CURRENT_DATE, -- Ngày tạo bình luận, mặc định là ngày hiện tại
+  `CreatedDate` DATETIME DEFAULT CURRENT_DATE, -- Ngày tạo bình luận, mặc định là ngày hiện tại
   PRIMARY KEY (`CommentID`),
   FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Tham chiếu đến bảng news và xóa bình luận khi bài viết bị xóa
   FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE CASCADE -- Tham chiếu đến bảng users, xóa bình luận nếu người dùng bị xóa
