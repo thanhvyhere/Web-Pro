@@ -86,6 +86,10 @@ export default
     },
     getIdNewEntity() {
         return db.raw('SELECT LAST_INSERT_ID() as NewsID');
+    },
+    countByNews()
+    {
+        return db('news').count('* as total');
     }
        
 }
