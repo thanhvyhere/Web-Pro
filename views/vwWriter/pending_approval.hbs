@@ -2,9 +2,30 @@
 <link rel="stylesheet" href="/static/css/cssWriter/writer.css">
 <link rel="stylesheet" href="/static/css/cssWriter/approval.css">
 {{/section}}
+{{#section "script"}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Kiểm tra xem có thông báo thành công từ backend không
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMessage = urlParams.get('success'); // Lấy thông báo thành công từ query string
+
+            if (successMessage) {
+                // Hiển thị thông báo SweetAlert
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successful!',
+                    text: successMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+    </script>
+{{/section}}
+{{sec}}
 <div id="card-list-new">
     <div class="header-create tw-mt-5">
-        <h4>BỊ TỪ CHỐI</h4>
+        <h4>CHƯA ĐƯỢC DUYỆT</h4>
         <hr>
     </div>
     <div class="row">
@@ -18,20 +39,20 @@
                             <button class="name-category-paper" disabled="disabled">{{catName}}</button>
                             <div class="PublishedDate">
                                 <i class="bi bi-calendar3"></i>
-                                {{PublishedDate}}
+                                {{formatDate PublishedDate}}
                             </div>
                             <i class="bi bi-clock-history pending-icon"></i>
                         </div>
-                        <a href="/newspaper/edit?id={{NewsID}}">
+                        <h3 href="">
                             <h5 class="card-title tw-mb-2">{{Title}}</h5>
-                        </a>
+                        </h3>
                         <p class="abstract-font">{{Abstract}}</p>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary">
+                <a type="button" class="btn btn-primary" href="/newspaper/edit?id={{NewsID}}">
                     <i class="bi bi-pencil-square"></i>
                     Review and edit
-                </button>
+                </a>
             </div>
         </div>
         {{/each}}

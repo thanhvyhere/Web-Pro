@@ -1,0 +1,33 @@
+{{#section "css"}}
+<link rel="stylesheet" href="/static/css/cssWriter/writer.css">
+<link rel="stylesheet" href="/static/css/cssWriter/approval.css">
+{{/section}}
+<div id="card-list-new">
+    <div class="header-create tw-mt-5">
+        <h4>ĐÃ ĐĂNG</h4>
+        <hr>
+    </div>
+    <div class="row">
+        {{#each this.newsList}}
+        <div class="col-sm-6 mb-3">
+            <div class="card">
+                <div class="card-body card-news d-flex flex-row">
+                    <img src="{{ImageCover}}" alt="..." class="img-title-paper">
+                    <div class="paper-small">
+                        <div class="header-paper small mb-2">
+                            <button class="name-category-paper" disabled="disabled">{{catName}}</button>
+                            <div>
+                                <i class="bi bi-calendar3"></i>
+                                {{formatDate PublishedDate}}
+                            </div>
+                            <i class="bi bi-clock-history pending-icon"></i>
+                        </div>
+                        <a href="/newspaper/detail?id={{NewsID}}">
+                            <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                        </a>
+                        <p class="abstract-font">{{Abstract}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}

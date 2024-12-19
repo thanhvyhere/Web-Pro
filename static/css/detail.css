@@ -33,3 +33,20 @@ img{
     font-size: 20pt;
     font-weight: 600;
 }
+
+.abstract-font{
+    font-size: 10pt;
+}
+
+.inf-comment{
+    font-size: 12pt;
+}
+.txtcomment{
+    width: 100%;
+    background-color: rgb(240, 236, 236);
+    font-size: 12pt;
+    padding:10px;
+    padding-left: 20px;
+    border-radius: 10px;
+ 
+}

@@ -3,40 +3,43 @@
 <link rel="stylesheet" href="/static/css/detail.css">
 {{/section}}
 {{#section "script"}}
-<script>
-    // Lấy tất cả các phần tử có class "PublishedDate"
-    const dateElements = document.querySelectorAll('.PublishedDate');
-
-    // Lặp qua từng phần tử và định dạng ngày tháng
-    dateElements.forEach(dateElement => {
-        const rawDate = dateElement.innerText;
-
-        // Định dạng ngày tháng theo kiểu Việt Nam
-        const formattedDate = new Date(rawDate).toLocaleDateString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
+    <script>
+        $(document).ready(function () {
+            // Kiểm tra nếu người dùng đã đăng nhập
+            if (!{{auth}}) {  // Kiểm tra nếu auth là false
+                // Nếu chưa đăng nhập, hiển thị thông báo SweetAlert khi nhấn vào #toggleNavleft
+                $('#txtComment').on('click', function () {
+                    Swal.fire({
+                        title: 'Bạn chưa đăng nhập',
+                        text: 'Bạn cần đăng nhập để bình luận',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Đăng nhập',
+                        cancelButtonText: 'Hủy',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/account/login';  // Điều hướng đến trang đăng nhập
+                        }
+                    });
+                });
+            }
         });
+    </script>
 
-        // Chèn icon và ngày tháng đã định dạng vào phần tử
-        dateElement.innerHTML = `<i class="bi bi-calendar3"></i> ${formattedDate}`;
-    });
-
-</script>
-    
 {{/section}}
 
 <div class="card-contain">
     <div class="title">
         <h1 class="mb-3">{{this.news.Title}}</h1>
-        <p class="mb-3">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quasi expedita sed inventore assumenda voluptas officiis error repellendus iste totam non sequi, commodi a fugiat. Qui fugiat placeat ea hic quibusdam.</p>
+        <p class="mb-3 abstract-font">{{this.news.Abstract}}</p>
         <div class="des">
             <div>
                 <i class="bi bi-book"></i>
                 Tác giả: {{this.news.AuthorName}}
             </div>
-            <div class="PublishedDate">
-                {{this.news.PublishedDay}}
+            <div>
+                <i class="bi bi-calendar3"></i>
+                {{formatDate this.news.PublishedDay}}
             </div>
         </div>
         <hr>
@@ -54,15 +57,38 @@
     </div>
     <p class="mb-3">{{{this.news.Content}}}</p>
     <hr>
+    
     <div class="comment">
-        <div class="form-group">
-          <label for="txtComment">Ý kiến (25)</label>
-          <textarea type="text" name="comment" id="txtComment" class="form-control" placeholder="Nêu cảm nghĩ của bạn tại đây"></textarea>
-        </div>
-    </div>
+        <form action="/newspaper/comment" method="post">
+            <input type="hidden" name="id" value="{{NewsID}}">
+            <div class="form-group">
+                <label for="txtComment">Ý kiến ({{countComment}})</label>
+                <textarea name="comment" id="txtComment" class="form-control" placeholder="Nêu cảm nghĩ của bạn tại đây"></textarea>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
 
-    {{!-- {{#each comment}}
-       
-    {{/each}} --}}
+        
+        
+        {{#each comments}}
+        <div class="card-body tw-h-100">
+            <div class=" tw-flex tw-flex-row">
+                <img src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle tw-h-[50px] tw-w-[50px]">
+                <div class="tw-mx-5">
+                    <span class="inf-comment tw-mr-10">
+                        {{username}}
+                    </span>
+                    <span class="abstract-font">
+                        <i class="bi bi-clock"></i>
+                        {{formatDate CreatedDate}}
+                    </span>
+                    <div class="txtcomment">{{Comment}}</div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
 </div>
 

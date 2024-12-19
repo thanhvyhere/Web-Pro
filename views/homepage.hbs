@@ -2,26 +2,71 @@
 {{#section "css"}}
     <link href="/static/css/homepage.css" rel="stylesheet">
 {{/section}}
+{{#section "script"}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                // Lấy tất cả các phần tử carousel-item
+                const items = document.querySelectorAll('#carouselExampleCaptions .carousel-item');
 
+                // Xóa lớp active khỏi tất cả các phần tử
+                items.forEach(item => {
+                    item.classList.remove('active');
+                });
 
-<div class="feature-paper mb-5" style="--bg-image: url('/static/imgs/Trump.jpg')">
-    <div class="paper-infor">
-        <div class="header-paper">
-            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-            <h6>
-                <i class="bi bi-calendar3"></i>
-                Nov 20th, 2024
-            </h6>
-        </div>
-        <h1>Donald Trump đắc cử tổng thống Mỹ</h1>
-        <div class="status-paper">
-            <h6><i class="bi bi-pencil-square"></i>admin</h6>
-            <h6><i class="bi bi-eye-fill"></i>1000</h6>
-            <h6><i class="bi bi-hearts"></i>500</h6>
-            <h6><i class="bi bi-chat-dots"></i>1000</h6>
-        </div>
+                // Thêm lại lớp active vào phần tử đầu tiên
+                if (items.length > 0) {
+                    items[0].classList.add('active');
+                }
+            });
+
+    </script>
+{{/section}}
+<div id="carouselExampleCaptions" class="carousel slide">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+            aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+            aria-label="Slide 3"></button>
     </div>
+    <div class="carousel-inner">
+        {{#each topNews}}
+        <div class="carousel-item {{#if @first}}active{{/if}}">
+            <div class="feature-paper mb-5" style="--bg-image: url('{{this.ImageCover}}')">
+                <div class="paper-infor">
+                    <div class="header-paper">
+                        <button class="name-category-paper" disabled="disabled">{{this.CatName}}</button>
+                        <h6>
+                            <i class="bi bi-calendar3"></i>
+                            {{formatDate this.PublishedDay}}
+                        </h6>
+                    </div>
+                    <a href="/newspaper/detail?id={{this.NewsID}}">
+                        <h1 class="card-title tw-mb-2">{{this.Title}}</h1>
+                    </a>
+                    <div class="status-paper">
+                        <h6><i class="bi bi-pencil-square"></i>{{this.AuthorName}}</h6>
+                        <h6><i class="bi bi-eye-fill"></i>{{this.Views}}</h6>
+                        <h6><i class="bi bi-hearts"></i>500</h6>
+                        <h6><i class="bi bi-chat-dots"></i>{{this.countComment}}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
+
+
 <div class="title-paper-list mb-3">
     <h1>Trending News</h1>
     <div class="container-fluid">

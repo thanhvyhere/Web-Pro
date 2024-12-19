@@ -93,9 +93,13 @@ app.engine('hbs', engine({
                 default:
                     return 'black'; // Màu mặc định
             }
-        },eq: function (a, b) {
+        },
+        eq: function (a, b) {
             return a === b;
         },
+        json: function (context) {
+            return JSON.stringify(context);
+        }
     }
 }));
 
@@ -136,10 +140,22 @@ app.use(async (req, res, next) => {
 
 
 app.get('/', async function (req, res) {
-     if (!req.session.auth || !req.session.authUser) {
-         return res.render('homepage', {
-        }); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+   if (!req.session.auth || !req.session.authUser) {
+        const topNews = await newsService.getTop3NewsByView();
+
+        // Đếm số lượng bình luận cho từng bài báo trong top3 và lấy tên danh mục
+       const updatedList = await Promise.all(topNews.map(async (item) => {
+           const count = await newsService.countCommentBynewsId(item.NewsID);
+           return {
+               ...item,
+               countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
+           }
+       }));
+
+        // Truyền dữ liệu vào view
+        return res.render('homepage', { topNews: updatedList });
     }
+
     if (req.session.views) {
         req.session.views++;
     } else req.session.views = 1;

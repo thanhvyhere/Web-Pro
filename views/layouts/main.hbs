@@ -31,7 +31,6 @@
                     <img class="search-icon" src="/imgs/btn-search.png" alt="Search">
                 </form>
             </div>
-            <button class="btn-subcribe" type="submit">Subcribe</button>
             <i id="btn-bell" class="bi bi-bell-fill" role="button"></i>
             {{#if auth}}
                 <a class="nav-link dropdown-toggle" href="#" id="navbarAccount" role="button" data-toggle="dropdown"
@@ -78,7 +77,9 @@
                 <div class="container-fluid">
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav">
-
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
                             {{#each limitCate}}
                             {{#if children.length}}
                             <!-- Dropdown menu nếu có danh mục con -->
