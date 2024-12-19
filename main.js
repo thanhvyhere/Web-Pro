@@ -92,7 +92,10 @@ app.engine('hbs', engine({
             }
         },eq: function (a, b) {
             return a === b;
-        },
+        },or:function (...args) {
+            args.pop(); // Xóa `options` của Handlebars
+            return args.some(Boolean); // Trả về `true` nếu bất kỳ giá trị nào trong args là `true`
+        }
     }
 }));
 

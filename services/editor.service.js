@@ -71,27 +71,72 @@ export default
     update(entity, id) {
         return db('news').where('NewsID', id).update(entity);
     },
-    findANews(id)
-    {
-        return db('news').join('categories as child', 'news.CatID', '=', 'child.CatID') // Join danh mục con
-        .leftJoin('categories as parent', 'child.parent_id', '=', 'parent.CatID') // Join danh mục cha
-        .join('status', 'news.Status', '=', 'status.StatusID') // Join bảng trạng thái
-        .leftJoin('news_tags', 'news.NewsID', '=', 'news_tags.NewsID') // Join bảng news_tags
-        .leftJoin('tag', 'news_tags.TagID', '=', 'tag.TagID') // Join bảng tag
-        .where('status.StatusName', 'Đã duyệt') // Chỉ lấy bài báo có trạng thái 'Đã duyệt'
-        .where('news.NewsID', id) // Chỉ lấy bài báo với NewsID tương ứng với 'id'
+    findANews(id) {
+        return db('news')
+        .join('categories as child', 'news.CatID', '=', 'child.CatID')
+        .leftJoin('categories as parent', 'child.parent_id', '=', 'parent.CatID')
+        .join('status', 'news.Status', '=', 'status.StatusID')
+        .where('status.StatusName', 'Đã duyệt')
+        .where('news.NewsID', id)
         .select(
             'news.*',
             'child.CatName as ChildCatName',
             'parent.CatName as ParentCatName',
-            'child.CatID as ChildCatID',
-            'parent.CatID as ParentCatID',
-            'status.StatusName as StatusName',
-            db.raw('GROUP_CONCAT(tag.TagName) as Tags') // Gộp tất cả các thẻ thành một chuỗi
+            'status.StatusName as StatusName'
         )
-        .groupBy('news.NewsID') // Gộp theo NewsID để tránh trùng lặp kết quả
         .then(results => {
             return results;
         });
+    },
+    
+    findNewsByID(id)
+    {
+        return db('news')
+        .join('status', 'news.Status', '=', 'status.StatusID')
+        .where('NewsID', id)
+        .select('news.*', 'status.StatusName');
+    },
+    findTags(id)
+    {
+        return db('news_tags')
+        .join('tag', 'news_tags.TagID', '=', 'tag.TagID')  // Kết nối bảng news_tags với bảng tag
+        .where('news_tags.NewsID', id)  // Lọc theo NewsID
+        .select('tag.TagName')  // Chọn TagName từ bảng tag
+        .then(results => {
+            // Trả về danh sách các TagName
+            return results.map(row => row.TagName);
+        });
+    },
+    deleteTag(newsID)
+    {
+        return db('news_tags').where('NewsID', newsID).del();
+
+    },
+    findExistingTag(tagName)
+    {
+        return db('tag').where('TagName', tagName).first();
+    },
+    insertTagGetID(entity)
+    {
+        return db('tag').insert(entity);
+    },
+    findTagID(tagName)
+    {
+        return db('tag').where('TagName',tagName).first();
+    },
+    addTagNews(entity)
+    {
+        return db('news_tags').insert(entity);
+    },
+    findPageById(limit, offset){
+        return db('news').join('status', 'news.Status', '=', 'status.StatusID')
+        .orderByRaw(`
+            FIELD(status.StatusName, 'Đang chờ', 'Đã chỉnh sửa', 'Đã duyệt', 'Đã nhận xét', 'Đã từ chối', 'Đã đăng', 'Đã xóa')
+        `)
+        .select('news.*', 'status.StatusName').limit(limit).offset(offset);
+    },
+    countByNews()
+    {
+        return db('news').count('* as total').first();
     }
 }
