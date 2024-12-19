@@ -1,51 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View User</title>
-    <link rel="stylesheet" href="/static/css/cssAdministrator/users/detail.css"> <!-- Link to external CSS file -->
-</head>
-<body>
-    <div class="container"> <!-- Added container class for consistent layout -->
-        <header class="header">
-            <h1 class="title">User Details</h1>
-            <a href="/administrator/manage_users" class="btn btn-back">Back to Users</a> <!-- Button to go back to user list -->
-        </header>
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAdministrator/users/detail.css">
+{{/section}}
 
-        <main>
-            <div class="user-details">
-                <table class="user-details-table"> <!-- Added a specific table class for styling -->
-                    <tbody>
-                        <tr>
-                            <th>ID:</th>
-                            <td>{{user.id}}</td>
-                        </tr>
-                        <tr>
-                            <th>Username:</th>
-                            <td>{{user.username}}</td>
-                        </tr>
-                        <tr>
-                            <th>Name:</th>
-                            <td>{{user.name}}</td>
-                        </tr>
-                        <tr>
-                            <th>Email:</th>
-                            <td>{{user.email}}</td>
-                        </tr>
-                        <tr>
-                            <th>Permission:</th>
-                            <td>{{user.permission}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<div class="container"> <!-- Added container class for consistent layout -->
+    <header class="header">
+        <h1 class="title">User Details</h1>
+        <a href="/administrator/manage_users" class="btn btn-back">Back to Users</a> <!-- Button to go back to user list -->
+    </header>
 
-            <div class="actions">
-                <a href="/administrator/manage_users/update/{{user.id}}" class="btn btn-update">Edit</a>
-                <a href="/administrator/manage_users/delete/{{user.id}}" class="btn btn-delete">Delete</a>
-            </div>
-        </main>
-    </div>
-</body>
-</html>
+    <main>
+        <div class="user-details">
+            <table class="user-details-table"> <!-- Added a specific table class for styling -->
+                <tbody>
+                    <tr>
+                        <th>ID:</th>
+                        <td>{{user.id}}</td>
+                    </tr>
+                    <tr>
+                        <th>Username:</th>
+                        <td>{{user.username}}</td>
+                    </tr>
+                    <tr>
+                        <th>Name:</th>
+                        <td>{{user.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>{{user.email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Permission:</th>
+                        <td>{{user.permission}}</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth:</th>
+                        <td>{{user.dob}}</td> <!-- Hiển thị ngày sinh -->
+                    </tr>
+                    <tr>
+                        <th>Followers:</th>
+                        <td>{{user.NoOfFollower}}</td> <!-- Hiển thị số người theo dõi -->
+                    </tr>
+                    <tr>
+                        <th>Following:</th>
+                        <td>{{user.NoOfFollowing}}</td> <!-- Hiển thị số người đang theo dõi -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <a href="/administrator/manage_users/update/{{user.id}}" class="btn btn-update">Edit</a>
+            <a href="/administrator/manage_users/delete/{{user.id}}" class="btn btn-delete">Delete</a>
+        </div>
+    </main>
+</div>

@@ -14,25 +14,29 @@ router.get('/', async function (req,res) {
 });
 
 // Route: View all tags
-router.get('/manage_tags', async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 20;
+router.get('/manage_tags', (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1
+    const limit = 20; // Số mục mỗi trang
     const offset = (page - 1) * limit;
-
-    try {
-        const { tags, total } = await administratorService.getTagsWithPagination(offset, limit);
+    const searchQuery = req.query.search || ''; // Từ khóa tìm kiếm, mặc định rỗng
+  
+    administratorService.getTagsWithPagination(offset, limit, searchQuery)
+      .then(({ tags, total }) => {
         const totalPages = Math.ceil(total / limit);
-
+  
+        // Render kết quả
         res.render('vwAdministrator/tags/tags', {
-            tags,
-            currentPage: page,
-            totalPages,
+          tags,
+          currentPage: page,
+          totalPages,
+          query: { search: searchQuery },
         });
-    } catch (err) {
-        console.error(err);
+      })
+      .catch(err => {
+        console.error('Error fetching tags:', err.message);
         res.status(500).send('Error fetching tags');
-    }
-});
+      });
+  });  
 
 // Route: Render Add Tag Page
 router.get('/manage_tags/add', async (req, res) => {
@@ -99,42 +103,41 @@ router.post('/manage_tags/delete/:id', async (req, res) => {
         res.status(500).send('Error deleting tag');
     }
 });
-router.get('/manage_categories', async (req, res) => {
-    const page = parseInt(req.query.page) || 1; // Current page, default to 1
-    const limit = 20; // Number of items per page
+router.get('/manage_categories', (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1
+    const limit = 20; // Số mục mỗi trang
     const offset = (page - 1) * limit;
-    const searchQuery = req.query.search || ''; // Lấy từ khóa tìm kiếm, mặc định rỗng
+    const searchQuery = req.query.search || ''; // Từ khóa tìm kiếm, mặc định rỗng
   
-    try {
-      // Gọi service với offset, limit và searchQuery
-      const { categories, total } = await administratorService.findAllWithPagination(offset, limit, searchQuery);
-      const totalPages = Math.ceil(total / limit);
+    administratorService.findAllWithPagination(offset, limit, searchQuery)
+      .then(({ categories, total }) => {
+        const totalPages = Math.ceil(total / limit);
   
-      // Kiểm tra và render kết quả
-      if (categories.length === 0) {
-        res.render('vwAdministrator/categories/categories', {
-          categories: [],
-          currentPage: page,
-          totalPages,
-          query: { search: searchQuery },
-          message: searchQuery
-            ? `No categories found for search term "${searchQuery}"`
-            : 'No categories found', // Thông báo tùy thuộc vào có từ khóa tìm kiếm hay không
-        });
-      } else {
-        res.render('vwAdministrator/categories/categories', {
-          categories,
-          currentPage: page,
-          totalPages,
-          query: { search: searchQuery },
-        });
-      }
-    } catch (err) {
-      console.error('Error fetching categories:', err);
-      res.status(500).send('Error fetching categories');
-    }
+        if (categories.length === 0) {
+          res.render('vwAdministrator/categories/categories', {
+            categories: [],
+            currentPage: page,
+            totalPages,
+            query: { search: searchQuery },
+            message: searchQuery
+              ? `No categories found for search term "${searchQuery}"`
+              : 'No categories found', // Thông báo tùy thuộc vào có từ khóa tìm kiếm hay không
+          });
+        } else {
+          res.render('vwAdministrator/categories/categories', {
+            categories,
+            currentPage: page,
+            totalPages,
+            query: { search: searchQuery },
+          });
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching categories:', err.message);
+        res.status(500).send('Error fetching categories');
+      });
   });
-
+  
 // Route: Render Add Category Page
 router.get('/manage_categories/add', async (req, res) => {
     try {
@@ -213,29 +216,24 @@ router.post('/manage_categories/delete/:id', async (req, res) => {
 
 // manage_users
 // Route: View all users with pagination
-router.get('/manage_users', async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 20;
+router.get('/manage_users', (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1
+    const limit = 20; // Số mục mỗi trang
     const offset = (page - 1) * limit;
-
-    try {
-        // Lấy dữ liệu người dùng với tên quyền (permission) từ bảng roles
-        const { users, total } = await administratorService.findAllWithPaginationUsers(offset, limit);
-
-        // Tính tổng số trang
+  
+    administratorService.findAllWithPaginationUsers(offset, limit)
+      .then(({ users, total }) => {
         const totalPages = Math.ceil(total / limit);
-
+  
         // Render trang với dữ liệu người dùng và phân trang
         res.render('vwAdministrator/users/users', {
-            users,
-            currentPage: page,
-            totalPages,
+          users,
+          currentPage: page,
+          totalPages,
         });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error fetching users');
-    }
-});
+      })
+  });
+  
 
 // Route: Render Add User Page
 router.get('/manage_users/add', async (req, res) => {

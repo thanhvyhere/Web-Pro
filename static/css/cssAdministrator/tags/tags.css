@@ -152,12 +152,29 @@ body {
     color: #fff;
 }
 
-.search-box {
-    padding: 8px;
-    margin-right: 10px;
+.search-container {
+    margin-bottom: 1rem;
+}
+
+.search-container input {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    width: 250px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 200px;
+}
+
+.search-container button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
 }
   
 /* Media Queries */

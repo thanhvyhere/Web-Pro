@@ -1,70 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Tags</title>
+{{#section "css"}}
   <link rel="stylesheet" href="/static/css/cssAdministrator/tags/tags.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
+{{/section}}
 
-<body id="tags-body">
-  <div id="tags-container" class="container">
-    <header id="tags-header" class="header">
-      <h1 id="tags-title" class="title">Manage Tags</h1>
-      <div id="tags-actions">
-        <input type="text" id="search-tag-name" class="search-box" placeholder="Search by Tag Name">
-        <a href="/administrator/manage_tags/add" id="tags-add-btn" class="btn btn-primary">Add New Tag</a>
-        <a href="#" id="tags-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
-        <a href="#" id="tags-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
-      </div>
-    </header>
-
-    <div class="table-container">
-      <table class="tag-table">
-        <thead>
-          <tr>
-            <th><input type="checkbox" id="select-all-tags" /></th> <!-- Checkbox để chọn tất cả -->
-            <th>ID</th>
-            <th>Tag Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each tags}}
-          <tr id="tags-row-{{this.TagID}}">
-            <td><input type="checkbox" class="tag-checkbox" data-id="{{this.TagID}}" /></td> <!-- Checkbox để chọn từng hàng -->
-            <td>{{this.TagID}}</td>
-            <td>{{this.TagName}}</td>
-          </tr>
-          {{else}}
-          <tr>
-            <td colspan="3">No tags found</td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-
-    {{!-- Pagination --}}
-    <div class="pagination">
-      {{#if (gt currentPage 1)}}
-      <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
-      {{/if}}
-
-      {{#each (range 1 totalPages)}}
-      <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
-        {{this}}
-      </a>
-      {{/each}}
-
-      {{#if (lt currentPage totalPages)}}
-      <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
-      {{/if}}
-    </div>
-  </div>
-  
-  <!-- Đặt mã JavaScript vào thẻ <script> dưới đây -->
+{{#section "script"}}
+<!-- Đặt mã JavaScript vào thẻ <script> dưới đây -->
   <script>
   // JavaScript to handle tag name search
   document.getElementById('search-tag-name').addEventListener('input', function () {
@@ -80,41 +19,104 @@
       }
     });
   });
-    // JavaScript to handle select/deselect all checkboxes
-    document.getElementById('select-all-tags').addEventListener('change', function () {
-      const checkboxes = document.querySelectorAll('.tag-checkbox');
-      checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-      });
+  // JavaScript to handle select/deselect all checkboxes
+  document.getElementById('select-all-tags').addEventListener('change', function () {
+    const checkboxes = document.querySelectorAll('.tag-checkbox');
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = this.checked;
     });
+  });
 
-    // JavaScript to handle delete selected tags
-    document.getElementById('tags-delete-btn').addEventListener('click', function () {
-      const selectedTags = [];
-      document.querySelectorAll('.tag-checkbox:checked').forEach(checkbox => {
-        selectedTags.push(checkbox.dataset.id);
-      });
-      if (selectedTags.length > 0) {
-        alert('Deleting tags with IDs: ' + selectedTags.join(', '));
-        // Add your delete logic here, e.g., make a POST request to the server
-      } else {
-        alert('Please select at least one tag to delete.');
-      }
+  // JavaScript to handle delete selected tags
+  document.getElementById('tags-delete-btn').addEventListener('click', function () {
+    const selectedTags = [];
+    document.querySelectorAll('.tag-checkbox:checked').forEach(checkbox => {
+      selectedTags.push(checkbox.dataset.id);
     });
+    if (selectedTags.length > 0) {
+      alert('Deleting tags with IDs: ' + selectedTags.join(', '));
+      // Add your delete logic here, e.g., make a POST request to the server
+    } else {
+      alert('Please select at least one tag to delete.');
+    }
+  });
 
-    // JavaScript to handle edit selected tags
-    document.getElementById('tags-edit-btn').addEventListener('click', function () {
-      const selectedTags = [];
-      document.querySelectorAll('.tag-checkbox:checked').forEach(checkbox => {
-        selectedTags.push(checkbox.dataset.id);
-      });
-      if (selectedTags.length === 1) {
-        window.location.href = '/administrator/manage_tags/update/' + selectedTags[0];
-      } else {
-        alert('Please select exactly one tag to edit.');
-      }
+  // JavaScript to handle edit selected tags
+  document.getElementById('tags-edit-btn').addEventListener('click', function () {
+    const selectedTags = [];
+    document.querySelectorAll('.tag-checkbox:checked').forEach(checkbox => {
+      selectedTags.push(checkbox.dataset.id);
     });
-  </script>
-</body>
+    if (selectedTags.length === 1) {
+      window.location.href = '/administrator/manage_tags/update/' + selectedTags[0];
+    } else {
+      alert('Please select exactly one tag to edit.');
+    }
+  });
+</script>
+{{/section}}
 
-</html>
+<div id="tags-container" class="container">
+  <header id="tags-header" class="header">
+    <h1 id="tags-title" class="title">Manage Tags</h1>
+    <div class="search-container">
+      <form id="search-tag" method="GET" action="/administrator/manage_tags">
+        <input 
+          type="text" 
+          name="search" 
+          id="search-tag-name" 
+          class="search-box" 
+          placeholder="Search by Tag Name" 
+          value="{{query.search}}">
+        <button type="submit" class="btn btn-secondary">Search</button>
+      </form>
+    </div>
+    <div id="tags-actions">
+      <a href="/administrator/manage_tags/add" id="tags-add-btn" class="btn btn-primary">Add New Tag</a>
+      <a href="#" id="tags-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
+      <a href="#" id="tags-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
+    </div>
+  </header>
+
+  <div class="table-container">
+    <table class="tag-table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="select-all-tags" /></th> <!-- Checkbox để chọn tất cả -->
+          <th>ID</th>
+          <th>Tag Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each tags}}
+        <tr id="tags-row-{{this.TagID}}">
+          <td><input type="checkbox" class="tag-checkbox" data-id="{{this.TagID}}" /></td> <!-- Checkbox để chọn từng hàng -->
+          <td>{{this.TagID}}</td>
+          <td>{{this.TagName}}</td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="3">No tags found</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{!-- Pagination --}}
+  <div class="pagination">
+    {{#if (gt currentPage 1)}}
+    <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+    {{/if}}
+
+    {{#each (range 1 totalPages)}}
+    <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
+      {{this}}
+    </a>
+    {{/each}}
+
+    {{#if (lt currentPage totalPages)}}
+    <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+    {{/if}}
+  </div>
+</div>
