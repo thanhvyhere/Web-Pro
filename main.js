@@ -99,6 +99,9 @@ app.engine('hbs', engine({
         },
         json: function (context) {
             return JSON.stringify(context);
+        },or:function (...args) {
+            args.pop(); // Xóa `options` của Handlebars
+            return args.some(Boolean); // Trả về `true` nếu bất kỳ giá trị nào trong args là `true`
         }
     }
 }));
