@@ -262,6 +262,7 @@ router.get('/login/githubAuth/callback',
 
       // Đánh dấu người dùng đã đăng nhập
     const role = await accountService.findRoleById(user.permission);
+    console.log(user.permission)
     req.session.auth = true;
     req.session.authUser = {
         username: user.username,

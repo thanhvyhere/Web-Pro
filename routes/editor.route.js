@@ -135,7 +135,7 @@ router.post('/modify', async (req, res) => {
         const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm');
         const id = req.body.NewsID;
         const tags = req.body.tags || []; // Nhãn gửi lên từ form
-        console.log(tags);
+        
         // Bước 1: Xóa tất cả các nhãn cũ của bài viết này
         await editorService.deleteTag(id);
 
@@ -150,7 +150,7 @@ router.post('/modify', async (req, res) => {
         for (const tagName of tags) {
             // Kiểm tra xem TagName đã tồn tại trong bảng tag chưa
             const tag = await editorService.findExistingTag(tagName)
-            console.log(tag);
+           
             if (!tag) {
                 const newTag =
                 {
@@ -160,7 +160,7 @@ router.post('/modify', async (req, res) => {
                 const ret = await editorService.insertTagGetID(newTag);
             }
             const getTagID = await editorService.findTagID(tagName)
-            console.log(getTagID.TagID)
+           
             // Thêm vào bảng news_tags với NewsID và TagID
             const newsTags =
             {
