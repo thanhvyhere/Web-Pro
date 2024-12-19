@@ -164,20 +164,20 @@
 
 <form class="formCreate" action="/writer/create_article" method="post" enctype="multipart/form-data">
   <div class="header-create">
-    <h4>UPLOAD NEWSPAPER</h4>
+    <h4>TẠO BÁO MỚI</h4>
     <hr>
   </div>
   <div class="form-group mb-3">
-    <label for="txtTitle">Title</label>
+    <label for="txtTitle">Tiêu đề</label>
     <input type="text" name="title" id="txtTitle" class="form-control txt-input" placeholder="" required>
   </div>
   <div class="form-group mb-3">
-    <label for="txtAbstract">Abstract</label>
+    <label for="txtAbstract">Sơ lược</label>
     <input type="text" name="abstract" id="txtAbstract" class="form-control txt-input" placeholder="" required>
   </div>
   <div>
     <div class="form-group mb-3">
-      <label for="txtCat">Category</label>
+      <label for="txtCat">Danh mục cha</label>
       <select name="CatID" id="txtCat" class="form-control txt-input" required>
         <option value="" disabled selected>Select a category</option>
         {{#each categories}}
@@ -186,7 +186,7 @@
       </select>
     </div>
     <div class="form-group mb-3">
-      <label for="txtCatChild">Category Child</label>
+      <label for="txtCatChild">Danh mục con</label>
       <select name="category_child_id" id="txtCatChild" class="form-control txt-input"
         disabled>
         <option value="" disabled selected>Select a category child</option>
@@ -195,7 +195,7 @@
     </div>
   </div>
   <div class="form-group mb-3">
-    <label for="txtTag" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Tag</label>
+    <label for="txtTag" class="bg-white text-black font-semibold p-2.5 rounded ml-2 w-40">Nhãn</label>
     <input type="text" id="txtTag" name="tags" class="form-control txt-input" placeholder="Add tags">
   </div>
   <div class="flex items-center space-x-1 mb-3">
@@ -213,13 +213,13 @@
 </div>
 <!-- File input -->
 <div id="fileInputContainer" class="form-group flex items-center space-x-1 mb-3">
-    <label for="imageInput" class="bg-white text-black font-semibold p-2.5 rounded ml-2">Image File</label>
+    <label for="imageInput" class="bg-white text-black font-semibold p-2.5 rounded ml-2">Tải ảnh lên</label>
     <input type="file" id="imageFile" name="ImageFile" class="mb-4 p-2 border rounded text-black">
 </div>
 
 <!-- URL input -->
 <div id="urlInputContainer" class="form-group input-group" style="display: none;">
-    <span class="input-group-text" id="basic-addon3">Image URL</span>
+    <span class="input-group-text" id="basic-addon3">URL ảnh</span>
     <input type="url" id="imageUrl" name="ImageUrl" aria-describedby="basic-addon3 basic-addon4" class="form-control" placeholder="https://example.com/image.jpg">
   </div>
 
@@ -228,6 +228,6 @@
     <textarea id="txtContent" name="content" required>Hello World</textarea>
   </div>
   <div class="d-flex flex-row btn-footer">
-    <button type="submit" class="btn btn-warning">Upload</button>
+    <button type="submit" class="btn btn-warning">TẠO BÀI MỚI</button>
   </div>
 </form>

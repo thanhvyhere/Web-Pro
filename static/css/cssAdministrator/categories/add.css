@@ -1,0 +1,147 @@
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f7f9fc;
+  color: #333;
+}
+
+/* Add Category Container */
+#add-category-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+#add-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+#add-category-title {
+  font-size: 2rem;
+  color: #333;
+}
+
+#back-to-categories-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+#back-to-categories-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Form Container */
+#add-category-form-container {
+  padding: 20px 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Form Actions */
+#form-actions-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Khoảng cách giữa các nút */
+}
+
+#submit-category-btn,
+#cancel-btn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+
+/* Submit Button */
+#submit-category-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+}
+
+#submit-category-btn:hover {
+  background-color: #45a049;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Cancel Button */
+#cancel-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+}
+
+#cancel-btn:hover {
+  background-color: #c0392b;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #add-category-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  #add-category-title {
+    font-size: 1.5rem;
+  }
+
+  #back-to-categories-btn {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #submit-category-btn,
+  #cancel-btn {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}

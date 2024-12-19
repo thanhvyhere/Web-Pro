@@ -18,6 +18,7 @@ router.get('/login', function (req, res) {
         layout: 'account-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
     });
 });
+
 router.post('/login', async function (req, res) {
     const user = await accountService.findByUsername(req.body.username);
     if(!user){
@@ -45,11 +46,13 @@ router.post('/login', async function (req, res) {
     console.log('Redirecting to:', retUrl); 
     res.redirect(retUrl);
 })
+
 router.get('/register', function(req, res){
     res.render('vwAccount/register', {
         layout: 'account-layout'
     });
 });
+
 router.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
     const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
@@ -115,8 +118,6 @@ router.get('/forgot-password', function (req, res) {
         layout: 'account-layout',
     });
 });
-
-
 
 router.post('/forgot-password', async function(req, res) {
     const email = req.body.email || '';
@@ -217,7 +218,6 @@ router.post('/otp', async function (req, res) {
         res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
     }
 });
-
 
 // Route POST reset-password (to handle resetting the password)
 router.get('/reset-password', function (req, res) {

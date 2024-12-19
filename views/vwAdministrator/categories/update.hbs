@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{{#section "css"}}
+    <link rel="stylesheet" href="/static/css/cssAdministrator/categories/update.css">
+{{/section}}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Update Category</title>
-  <link rel="stylesheet" href="/static/css/cssAdministrator/update.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
 
-<body>
+
   <div id="category-update-container">
     <header id="category-update-header">
       <h1 id="category-update-title">Update Category</h1>
-      <a href="/categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
+      <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
     </header>
 
     <div id="category-update-form-container">
-      <form action="/categories/update/{{category.CatID}}" method="POST" id="category-update-form">
+      <form action="/administrator/manage_categories/update/{{category.CatID}}" method="POST" id="category-update-form">
         <div class="form-group">
           <label for="CatName" id="label-catname">Category Name</label>
           <input type="text" id="CatName" name="CatName" value="{{category.CatName}}" required>
@@ -35,11 +29,9 @@
 
         <div id="category-update-buttons">
           <button type="submit" id="update-category-btn" class="btn btn-update">Update Category</button>
-          <a href="/categories" id="cancel-update-btn" class="btn btn-cancel">Cancel</a>
+          <a href="/administrator/manage_categories" id="cancel-update-btn" class="btn btn-cancel">Cancel</a>
         </div>
       </form>
     </div>
   </div>
-</body>
 
-</html>
