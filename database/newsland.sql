@@ -348,3 +348,19 @@ CREATE TABLE `news_tags` (
   FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Liên kết với bảng news
   FOREIGN KEY (`TagID`) REFERENCES `tag`(`TagID`) ON DELETE CASCADE -- Liên kết với bảng tag
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `status` (
+  `StatusID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID trạng thái
+  `StatusName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên trạng thái
+  PRIMARY KEY (`StatusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Chèn dữ liệu vào bảng status
+INSERT INTO `status` (`StatusName`) VALUES 
+  ('Đã duyệt'),
+  ('Đang chờ'),
+  ('Đã đăng'),
+  ('Đã từ chối'),
+  ('Đã xóa'),
+  ('Đã nhận xét'),
+  ('Đã chỉnh sửa');
