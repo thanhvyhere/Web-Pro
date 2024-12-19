@@ -1,0 +1,60 @@
+{{#section "css"}}
+    <link rel="stylesheet" href="/static/css/cssAdministrator/users/users.css">
+{{/section}}
+
+
+    <div class="container"> <!-- Added container class for consistent layout -->
+        <header class="header">
+            <h1 class="title">Manage Users</h1>
+            <a href="/administrator/manage_users/add" class="btn btn-update">Add New User</a> <!-- Button to add new user -->
+        </header>
+
+        <main>
+            <div class="table-container">
+                <table class="users-table"> <!-- Added a specific table class for styling -->
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Permission</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each users}}
+                            <tr>
+                                <td>{{this.id}}</td>
+                                <td>{{this.username}}</td>
+                                <td>{{this.name}}</td>
+                                <td>{{this.email}}</td>
+                                <td>{{this.permission}}</td> <!-- Hiển thị tên quyền -->
+                            <td>
+                                <a href="/administrator/manage_users/detail/{{this.id}}" class="btn btn-view">View</a> <!-- New View button -->
+                                <a href="/administrator/manage_users/update/{{this.id}}" class="btn btn-update">Edit</a>
+                                <a href="/administrator/manage_users/delete/{{this.id}}" class="btn btn-delete">Delete</a>
+                            </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                {{#if (gt currentPage 1)}}
+                <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+                {{/if}}
+
+                {{#each (range 1 totalPages)}}
+                <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
+                {{this}}
+                </a>
+                {{/each}}
+                {{#if (lt currentPage totalPages)}}
+                <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+                {{/if}}
+            </div>
+        </main>
+    </div>
+

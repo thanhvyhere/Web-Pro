@@ -17,10 +17,8 @@ import newspaperRouter from './routes/news.route.js';
 import subcriberRouter from './routes/subcriber.route.js';
 import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
-import categoriesRoute from './routes/categories.route.js';
 import newsService from './services/news.service.js';
 import fnMySQLStore from 'express-mysql-session';
-import db from './utils/db.js';
 
 const app = express();
 app.use(express.urlencoded({
@@ -35,7 +33,8 @@ app.use(session({
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
-  }));
+}));
+
 app.engine('hbs', engine({
     extname: 'hbs',
     defaultLayout: 'main',
@@ -43,16 +42,19 @@ app.engine('hbs', engine({
         format_number(value) {
             return numeral(value).format('0,0') + ' đ'
         },
+
         section: hbs_sections(),
         formatDate: function (date) {
             return moment(date).format('YYYY-MM-DD HH:mm:ss'); // Định dạng ngày theo YYYY-MM-DD
         },
+
         skipFirst(array) {
             if (Array.isArray(array)) {
                 return array.slice(1); // Bỏ phần tử đầu tiên
             }
             return []; // Nếu không phải mảng, trả về mảng rỗng
         },
+
         getFirstItem(array) {
             if (Array.isArray(array) && array.length > 0) {
                 return array[0];
@@ -99,10 +101,40 @@ app.engine('hbs', engine({
         },
         json: function (context) {
             return JSON.stringify(context);
-        },or:function (...args) {
+        }, 
+        or: function (...args) {
             args.pop(); // Xóa `options` của Handlebars
             return args.some(Boolean); // Trả về `true` nếu bất kỳ giá trị nào trong args là `true`
-        }
+        },
+
+        eq: function (a, b) {
+            return a === b;  // So sánh a và b, trả về true nếu bằng nhau
+        },
+
+        gt: function (a, b) {
+            return a > b;
+        },
+          
+        lt: function (a, b) {
+            return a < b;
+        },
+          
+        // Helper: Phép cộng và trừ
+        add: function (a, b) {
+            return a + b;
+        },
+          
+        sub: function (a, b) {
+            return a - b;
+        },
+
+        range: function (start, end) {
+            let result = [];
+            for (let i = start; i <= end; i++) {
+              result.push(i);
+            }
+            return result;
+        },
     }
 }));
 
@@ -118,6 +150,7 @@ configurePassportGoogle();
 app.use(passport.initialize());
 app.use(passport.session());
 // passport.use('github', configurePassport);
+
 app.use(async function (req, res, next){
     if(!req.session.auth)
     {
@@ -178,6 +211,7 @@ app.get('/', async function (req, res) {
             return res.redirect('/editor');
         case 5: // Admin
             return res.redirect('/administrator');
+            return res.redirect('/administrator');
         default: // Guest or invalid permission
             return res.redirect('/');
     }
@@ -215,22 +249,17 @@ app.use(async function (req, res, next) {
 app.use('/account', accountRouter);
 app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
-app.use('/categories', categoriesRoute);
-//
+// Khởi động server
+// app.use('/artist', artistRouter);
+
 
 app.use('/role', editorRouter);
-app.get('/login', function (req, res) {
-    res.render('account/login', { layout: 'blank-bg' }); 
-});
-
-app.get('/register', function (req, res) {
-    res.render('account/register', { layout: 'blank-bg' }); 
-});
 
 
 app.use('/editor', editorRouter);
 app.use('/subscriber', subcriberRouter);
 app.use('/administrator', administratorRouter);
+
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
 });

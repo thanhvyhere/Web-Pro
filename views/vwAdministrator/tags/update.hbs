@@ -1,0 +1,16 @@
+{{!-- vwAdministrator/tags/update.hbs --}}
+{{#section "css"}}
+    <link href="/static/css/cssAdministrator/tags/update.css" rel="stylesheet">
+{{/section}}
+
+<h1 id="page-title">Update Tag</h1>
+
+<form id="update-form" action="/administrator/manage_tags/update/{{tag.TagID}}" method="post">
+  <div id="form-group" class="form-group">
+    <label for="TagName" id="label-tag-name">Tag Name</label>
+    <input type="text" id="tag-name-input" name="TagName" class="form-control" value="{{tag.TagName}}" required>
+  </div>
+  
+  <button id="btn-update" type="submit" class="btn btn-primary">Update Tag</button>
+  <a id="btn-cancel" href="/administrator/manage_tags" class="btn btn-secondary">Cancel</a>
+</form>

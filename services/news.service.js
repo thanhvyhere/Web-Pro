@@ -140,10 +140,10 @@ export default
     },
 
     getTop3NewsByView() {
-            return db('news')
-            .join('categories', 'news.CatID', '=', 'categories.CatID') 
-            .orderBy('news.Views', 'desc')  
-            .limit(3);  
+        return db('news')
+        .join('categories', 'news.CatID', '=', 'categories.CatID') 
+        .orderBy('news.Views', 'desc')  
+        .limit(3);  
 
     }
 }
