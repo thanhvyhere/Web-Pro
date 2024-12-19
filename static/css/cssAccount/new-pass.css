@@ -27,7 +27,6 @@
 
 .card-header span {
     font-size: 40px; /* Increase font size */
-    font-family: 'League Spartan', sans-serif; /* Sử dụng font League Spartan */
     font-weight: bold; /* Nếu cần chữ đậm */
     display: block;
 }
@@ -35,13 +34,12 @@
 /* Card Body Styling */
 .card-body {
     background-color: white;
-    font-family: 'League Spartan', sans-serif; /* Sử dụng font League Spartan */
     font-weight: bold; /* Nếu cần chữ đậm */
     font-size: 20px; /* Kích thước chữ */
     margin-bottom: 20px;
 }
 
-.form-changepass .form-control {
+.form-newpass .form-control {
     width: 100%; /* Đặt chiều rộng của text box bằng 100% */
     height: 50px;
     font: bold;
@@ -55,7 +53,6 @@
     padding: 12px 20px; /* Giảm padding để nút vừa vặn hơn */
     display: block;
     width: 100%; /* Nút chiếm toàn bộ chiều rộng */
-    font-family: 'League Spartan', sans-serif; /* Font chữ League Spartan */
     font-weight: 700; /* Chữ đậm */
     font-size: 18px; /* Font size vừa phải */
     color: #4a154b; /* Chữ màu tím đậm để tương phản */
