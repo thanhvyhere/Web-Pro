@@ -34,7 +34,7 @@ export default function configurePassport() {
               googleId: profile.id,
               username: profile.displayName,
               email: email,
-              permission: 2
+              permission: 1
             });
           }
           // Xác thực thành công

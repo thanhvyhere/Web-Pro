@@ -31,6 +31,7 @@ router.get('/byCat', async function (req, res) {
     const updatedList = await Promise.all(list.map(async (item) => {
         let is_premium;
         const auth = req.session.auth;
+        const tag = await newsService.getTagByNewsId(item.NewsID);
         if (item.Premium === 1)
             is_premium = true;
         else
@@ -39,7 +40,8 @@ router.get('/byCat', async function (req, res) {
             ...item,
             catName: category.CatName,
             is_premium,
-            auth
+            auth,
+            tag
         }
     }));
 
@@ -49,6 +51,51 @@ router.get('/byCat', async function (req, res) {
         empty: list.length === 0,
         pageNumbers: pageNumbers,
         catId: catId
+    });
+});
+
+router.get('/byTag', async function (req, res) {
+    const tagId = req.query.id || 0;
+    const limit = 6;
+    const nRows = await newsService.countByTagId(tagId);
+    const nPages = Math.ceil(nRows.total / limit);
+    const current_page = Math.max(1, Math.min(req.query.page || 1, nPages)); // Đảm bảo từ 1 đến nPages
+    const offset = (current_page - 1) * limit;
+
+    // Tạo danh sách số trang
+    const pageNumbers = [];
+    for (let i = 0; i < nPages; i++) {
+        pageNumbers.push({
+            value: i + 1,
+            active: (i + 1) === +current_page
+        });
+    }
+    const list = await newsService.findPageByTagId(tagId, limit, offset);
+    // Lấy danh sách bản tin theo trang
+    const updatedList = await Promise.all(list.map(async (item) => {
+        let is_premium;
+        const auth = req.session.auth;
+        const tag = await newsService.getTagByNewsId(item.NewsID);
+        if (item.Premium === 1)
+            is_premium = true;
+        else
+            is_premium = false;
+        const category = await newsService.findCatByCatId(item.CatID);
+        return{
+            ...item,
+            catName: category.CatName,
+            is_premium,
+            auth,
+            tag
+        }
+    }));
+
+    // Render view
+    res.render('vwNewspaper/byTag', {
+        news: updatedList,
+        empty: list.length === 0,
+        pageNumbers: pageNumbers,
+        tagId: tagId
     });
 });
 
@@ -88,7 +135,7 @@ router.get('/edit', async function (req, res) {
     });
 });
 
-router.post('/del', async function (req, res) {
+router.post('/del',  async function (req, res) {
     try {
         await newsService.del(req.body.newsId);
         res.redirect('/?message=success'); // Thêm thông báo vào query string
@@ -153,6 +200,22 @@ router.get('/api/tags', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch tags' });
     }
 });
+router.get('/api/search', async (req, res) => {
+    const keyword = req.query.keyword;
+
+    if (!keyword.trim()) {
+        return res.json([]); // Trả về mảng rỗng nếu không có từ khóa
+    }
+    try {
+        const results = await newsService.searchArticle(keyword);
+        console.log(results);
+        res.json(results); // Trả về kết quả dưới dạng JSON
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error fetching search results');
+    }
+});
+
 
 router.post('/comment', auth, async function (req, res) {
     const entity = {

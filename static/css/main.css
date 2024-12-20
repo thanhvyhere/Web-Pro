@@ -304,3 +304,61 @@ hr {
     background-color: #007bff; /* Màu nền khi hover */
     color: #fff; /* Màu chữ khi hover */
 }
+#searchResults {
+    display: block;
+    position: absolute; 
+    top: 100%; 
+    left: 0;
+    z-index: 100000000000000; 
+    background-color: white;
+    border: 1px solid #ddd; 
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 580px;
+    max-height: 500px; 
+    overflow-y: auto; 
+}
+
+#searchInput {
+    width: 580px;
+    height: 45px;
+}
+
+#searchResults .dropdown-menu {
+    background: #fff;
+    border: 1px solid #ccc;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000000000000000;
+}
+
+#searchResults .dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 20px; /* Optional: space between items */
+    z-index: 1000000000000000;
+    word-wrap: break-word; /* Ensure long words wrap */
+    overflow-wrap: break-word; /* Ensure long words wrap */
+    white-space: normal; /* Ensure text wraps normally */
+}
+
+#searchResults .dropdown-item:hover {
+    background: #f1f1f1;
+    z-index: 1000000000000000;
+}
+
+#searchResults a {
+    color: black;
+    z-index: 1000000000000000;
+}
+
+#searchResults p .font-abstract {
+    margin-top: 5px; 
+    display: block; 
+    white-space: normal; 
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+    max-width: 100%; 
+    box-sizing: border-box;
+}
+

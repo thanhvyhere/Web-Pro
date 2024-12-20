@@ -19,7 +19,8 @@ import administratorRouter from './routes/administrator.route.js'
 import accountService from './services/account.service.js';
 import newsService from './services/news.service.js';
 import fnMySQLStore from 'express-mysql-session';
-
+import readerRouter from './routes/reader.route.js';
+import { checkPremium } from './middleware/auth.mdw.js';
 const app = express();
 app.use(express.urlencoded({
     extended: true
@@ -151,15 +152,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 // passport.use('github', configurePassport);
 
-app.use(async function (req, res, next){
-    if(!req.session.auth)
-    {
+app.use(async function (req, res, next) {
+    if (!req.session.auth) {
         req.session.auth = false;
     }
     res.locals.auth = req.session.auth;
-    res.locals.authUser = req.session.authUser;
+    res.locals.authUser = req.session.authUser || null; // Đảm bảo authUser luôn có giá trị
+    if (req.session.authUser && req.session.authUser.permission > 1) {
+        res.locals.authPremium = true;
+    } else {
+        res.locals.authPremium = false;
+    }
+    // Kiểm tra authUser trước khi truy cập thuộc tính permission
+   
+
     next();
-})
+});
 
 app.use(async (req, res, next) => {
     // Lấy tất cả categories và limitCate (8 cái đầu tiên)
@@ -176,20 +184,30 @@ app.use(async (req, res, next) => {
 
 app.use(async (req, res, next) => {
     const topNews = await newsService.getTop3NewsByView();
-
+    
         // Đếm số lượng bình luận cho từng bài báo trong top3 và lấy tên danh mục
        const updatedList = await Promise.all(topNews.map(async (item) => {
            const count = await newsService.countCommentBynewsId(item.NewsID);
+           let is_premium;
+            const tag = await newsService.getTagByNewsId(item.NewsID);
+            if (item.Premium === 1)
+                is_premium = true;
+            else
+                is_premium = false;
+           const authPremium = res.locals.authPremium;
            return {
                ...item,
-               countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
+               is_premium,
+                tag,
+               countComment: count.total,
+               authPremium
            }
        }));
     res.locals.topNews = updatedList;
     next();
 })
 
-app.get('/', async function (req, res) {
+app.get('/', checkPremium, async function (req, res) {
    if (!req.session.auth || !req.session.authUser) {
         // Truyền dữ liệu vào view
         return res.render('homepage');
@@ -199,10 +217,13 @@ app.get('/', async function (req, res) {
         req.session.views++;
     } else req.session.views = 1;
 
+    
     const permission = req.session.authUser.permission;
 
     // Redirect users to their respective dashboards
     switch (permission) {
+        case 1: 
+            return res.redirect('/reader')
         case 2: // Subscriber
             return res.redirect('/subscriber');
         case 3: // Writer
@@ -210,7 +231,6 @@ app.get('/', async function (req, res) {
         case 4: // Editor
             return res.redirect('/editor');
         case 5: // Admin
-            return res.redirect('/administrator');
             return res.redirect('/administrator');
         default: // Guest or invalid permission
             return res.redirect('/');
@@ -251,13 +271,13 @@ app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
 // Khởi động server
 // app.use('/artist', artistRouter);
-
+app.use('/reader', readerRouter)
 
 app.use('/role', editorRouter);
 
 
 app.use('/editor', editorRouter);
-app.use('/subscriber', subcriberRouter);
+app.use('/subscriber', checkPremium, subcriberRouter);
 app.use('/administrator', administratorRouter);
 
 app.listen(3000, function () {
