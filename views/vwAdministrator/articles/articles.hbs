@@ -26,7 +26,7 @@
         <td>
             {{#if this.Premium}}
                 <span class="premium-status">
-                    <i class="fas fa-star"></i>
+                    <i class="bi bi-star-fill"></i>
                 </span>
             {{else}}
                 <span class="premium-status">-</span>
@@ -36,6 +36,7 @@
           <a href="/administrator/manage_articles/detail/{{this.NewsID}}" class="btn btn-view">View</a>
           <a href="/administrator/manage_articles/update/{{this.NewsID}}" class="btn btn-edit">Update Premium</a>
         </td>
+        
       </tr>
       {{/each}}
     </tbody>

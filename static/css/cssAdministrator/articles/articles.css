@@ -159,20 +159,25 @@ body {
     color: #fff;
 }
 
-.premium-status {
-    font-size: 24px; /* Tăng kích thước ngôi sao */
-    color: #FFD700;  /* Màu vàng sáng cho ngôi sao */
-  }  
-  
-  .premium-status i {
-    color: #FFD700; /* Màu vàng cho ngôi sao */
+.articles-table select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
   }
   
-  .premium-status {
-    font-size: 16px; /* Mặc định hiển thị dấu - */
-    color: #555; /* Màu xám cho dấu - */
+  .articles-table .btn-update {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
   }
-
+  
+  .articles-table .btn-update:hover {
+    background-color: #218838;
+  }
+  
 /* Responsive Design */
 @media (max-width: 768px) {
     .header {

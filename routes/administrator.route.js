@@ -370,32 +370,34 @@ router.get('/manage_articles', (req, res) => {
     });
 
 // Xem chi tiết bài viết
-router.get('/manage_articles/detail/:id', async (req, res) => {
+router.get('/manage_articles/detail/:id', (req, res) => {
     const newsID = req.params.id;
-    try {
-      const article = await administratorService.findByIdArticles(newsID);
   
-      // Nếu không tìm thấy bài viết, trả về lỗi 404
-      if (!article) {
-        return res.status(404).send('Article not found');
-      }
+    administratorService.findByIdArticles(newsID)  // Gọi service để lấy thông tin bài viết
+      .then((article) => {  
+        // Render view và truyền dữ liệu bài viết
+        res.render('vwAdministrator/articles/detail', { article });
+      })
+  });
   
-      // Render view và truyền dữ liệu bài viết
-      res.render('vwAdministrator/articles/detail', { article });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Server Error');
+  router.get('/manage_articles/update/:id', async (req, res) => {
+    const newsID = req.params.id;
+    const article = await administratorService.findByIdArticles(newsID);
+    if (!article) {
+      return res.status(404).send('Article not found');
     }
+    res.render('vwAdministrator/articles/update', { article });
   });
   
   // Cập nhật trạng thái Premium
-  router.get('/manage_articles/update/:id', async (req, res) => {
-    const newsID = req.params.id;
-    const success = await administratorService.togglePremium(newsID);
-    if (!success) {
-      return res.status(500).send('Failed to update premium status');
-    }
-    res.redirect('/administrator/manage_articles');
+  router.post('/manage_articles/update/:id', (req, res) => {
+    const newsId = req.params.id;
+    const premiumStatus = req.body.premiumStatus; // Lấy giá trị từ form
+    // Chuyển đổi giá trị từ chuỗi 'true' / 'false' sang boolean
+    const isPremium = premiumStatus === 'true';  
+    administratorService.updatePremium(newsId, isPremium) // Gọi service để cập nhật
+      .then(() => {
+        res.redirect('/administrator/manage_articles'); // Quay lại trang quản lý bài viết
+      })
   });
-  
 export default router;
