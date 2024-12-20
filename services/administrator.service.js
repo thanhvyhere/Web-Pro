@@ -222,28 +222,34 @@ updateCategoryParent(categoryIds, newParentId) {
   findByIdArticles(newsID) {
     return db('news')
       .select(
-        'NewsID',
-        'CreatedDate',
-        'Title',
-        'Content',
-        'Abstract',
-        'CatID',
-        'AuthorName',
-        'ImageCover',
-        'Status',
-        'PublishedDay',
-        'Feedback',
-        'Views',
-        'Premium'
+        'news.NewsID',
+        'news.CreatedDate',
+        'news.Title',
+        'news.Content',
+        'news.Abstract',
+        'news.CatID',
+        'news.AuthorName',
+        'news.ImageCover',
+        'news.Status',
+        'news.PublishedDay',
+        'news.Feedback',
+        'news.Views',
+        'news.Premium',
+        'status.StatusName'  // Lấy tên trạng thái từ bảng status
       )
-      .where('NewsID', newsID)
-      .first();
-  },
-  // Cập nhật trạng thái Premium
-  togglePremium(newsID) {
-    return db('news')
-      .where('NewsID', newsID)
-      .update({ Premium: db.raw('NOT Premium') });
-  },
+      .leftJoin('status', 'news.Status', 'status.StatusID')
+      .where('news.NewsID', newsID)
+      .first()
+      .then((article) => {
+        return article;
+      });
+  },  
 
+  // Cập nhật trạng thái Premium của bài viết
+  updatePremium(newsId, premium) {
+    const isPremium = premium === true || premium === 'true'; // Chuyển đổi sang boolean  
+    return db('news')
+      .where('NewsID', newsId)
+      .update({ Premium: isPremium })
+  },
 };
