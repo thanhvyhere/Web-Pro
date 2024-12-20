@@ -44,7 +44,7 @@ export default function configurePassport() {
               username: profile.username,
               name: profile.displayName || profile.username || 'No Name',
               email: email,
-              permission: 2
+              permission: 1
             });
           }
 

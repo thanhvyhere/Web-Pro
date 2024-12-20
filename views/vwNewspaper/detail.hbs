@@ -47,7 +47,7 @@
     </div>
     <div class="mb-5">
         {{#each tags}}
-            <button type="button" class="btn btn-outline-primary disable">{{TagName}}</button>
+            <a type="button" class="btn btn-outline-primary tag" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
         {{/each}}
     </div>
     <div class="d-flex flex-row justify-content-start align-items-start mb-3">

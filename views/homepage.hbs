@@ -19,6 +19,41 @@
             });
 
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const premiumLinks = document.querySelectorAll(".premium-link");
+
+            premiumLinks.forEach(link => {
+                link.addEventListener("click", (event) => {
+                    const isPremium = link.getAttribute("data-premium") === "true";
+                    const auth = {{auth}};
+                    let text = 'Đăng nhập';
+                    let href = "/account/login";
+                    if (auth){
+                        text = 'Đăng ký Premium';
+                        href = "/account/premium"
+                    }
+                    if (isPremium) {
+                        event.preventDefault(); // Ngăn chặn chuyển hướng
+                        Swal.fire({
+                            title: "Thông báo",
+                            text: "Bạn không được cấp quyền để xem nội dung này.",
+                            icon: "warning",
+                            showCancelButton: true,
+                            
+                            confirmButtonText: text,
+                            cancelButtonText: "Hủy"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Chuyển hướng đến trang đăng nhập
+                                window.location.href = href;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 {{/section}}
 <div id="carouselExampleCaptions" class="carousel slide">
     <div class="carousel-indicators">
@@ -41,9 +76,24 @@
                             {{formatDate this.PublishedDay}}
                         </h6>
                     </div>
-                    <a href="/newspaper/detail?id={{this.NewsID}}">
-                        <h1 class="card-title tw-mb-2">{{this.Title}}</h1>
-                    </a>
+                    {{#if authPremium}}
+                        <!-- Người dùng đã đăng nhập -->
+                        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+                            <h1 class="card-title tw-mb-2">{{Title}}</h1>
+                        </a>
+                    {{else}}
+                        {{#if this.is_premium}}
+                            <!-- Bài viết Premium nhưng chưa đăng nhập -->
+                            <a href="javascript:void(0);" class="premium-link" data-premium="true">
+                                <h1 class="card-title tw-mb-2">{{Title}}</h1>
+                            </a>
+                        {{else}}
+                            <!-- Bài viết không phải Premium -->
+                            <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+                                <h1 class="card-title tw-mb-2">{{Title}}</h1>
+                            </a>
+                        {{/if}}
+                    {{/if}}
                     <div class="status-paper">
                         <h6><i class="bi bi-pencil-square"></i>{{this.AuthorName}}</h6>
                         <h6><i class="bi bi-eye-fill"></i>{{this.Views}}</h6>

@@ -55,11 +55,24 @@ export default {
     },
     findRoleById(roleId) {
         return db('roles').where('RoleID', roleId).first();
+    },
+    addPremium(entity) {
+        return db('premium_accounts').insert(entity);
+    },
+    updatePermission(id, permission) {
+        return db('users').where('id', id).update({ 'permission': permission });
+    },
+    findPremiumByUserId(id)
+    {
+        return db('premium_accounts').where('id', id).first();
+    },
+
+    delPremium(id)
+    {
+        return db('premium_accounts').where('id', id).del();
+    },
+    updatePremium(id, day) {
+        return db('premium_accounts').where('id', id).update({'expiration_date': day});
     }
+
 };
-
-    // findSong(entity)
-    // {
-    //     return db('songs').where(entity).first();
-    // }
-

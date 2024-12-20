@@ -4,11 +4,12 @@ import moment from 'moment'; // format month day
 import multer from 'multer';
 import dotenv from 'dotenv';
 import accountService from '../services/account.service.js';
-import auth from '../middleware/auth.mdw.js';
+import auth, { checkPremium } from '../middleware/auth.mdw.js';
 import configurePassportGithub from '../controllers/passportGithub.config.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
 import passport from 'passport';
 import nodemailer from 'nodemailer';
+import newsService from '../services/news.service.js';
 
 const router = express.Router();
 dotenv.config();
@@ -42,6 +43,7 @@ router.post('/login', async function (req, res) {
         permission: user.permission,
         rolename: role.RoleName
     };
+
     const retUrl = req.session.retUrl || '/'
     console.log('Redirecting to:', retUrl); 
     res.redirect(retUrl);
@@ -251,7 +253,7 @@ configurePassportGithub();
 router.get('/login/githubAuth',
     passport.authenticate('github'));
 
-router.get('/login/githubAuth/callback', 
+router.get('/login/githubAuth/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   async function (req, res) {
     // Lấy thông tin user từ session do passport tự lưu
@@ -272,7 +274,6 @@ router.get('/login/githubAuth/callback',
         permission: user.permission,
         rolename: role.RoleName
     };
-
     // Chuyển hướng về trang chủ hoặc nơi khác
     res.redirect('/subscriber');
   }
@@ -281,7 +282,7 @@ configurePassportGoogle();
 router.get('/login/googleAuth',
   passport.authenticate('google'));
 
-router.get('/login/googleAuth/callback', 
+router.get('/login/googleAuth/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   async function (req, res) {
     // Lấy thông tin user từ session do passport tự lưu
@@ -299,7 +300,73 @@ router.get('/login/googleAuth/callback',
         permission: user.permission,
         rolename: role.RoleName
     };
-
     res.redirect('/subscriber');
-  })
+    })
+  
+router.post('/premium', async function (req, res) {
+    try {
+        // Lấy ID của người dùng hiện tại từ session
+        const userId = req.session.authUser.userid;
+        const account = await accountService.findPremiumByUserId(userId) || 0;
+
+        let expirationDate;
+
+        if (account === 0) {
+            // Nếu tài khoản chưa có, đặt ngày hết hạn là 7 phút từ bây giờ
+            expirationDate = new Date();
+            expirationDate.setMinutes(expirationDate.getMinutes() + 7);
+
+            const entity = {
+                id: userId, // ID người dùng
+                expiration_date: expirationDate, // Ngày hết hạn
+                created_at: new Date(), // Ngày tạo
+            };
+
+            await accountService.addPremium(entity);
+            await accountService.updatePermission(userId, 2);
+
+            // Cập nhật session với quyền mới
+            req.session.authUser.permission = 2;
+            req.session.authPremium = true;
+        } else {
+            // Nếu tài khoản đã có, kiểm tra expiration_date
+            if (!account.expiration_date) {
+                throw new Error("Missing expiration_date in account.");
+            }
+
+            expirationDate = new Date(account.expiration_date);
+
+            // Kiểm tra nếu expiration_date không hợp lệ
+            if (isNaN(expirationDate)) {
+                throw new Error("Invalid expiration_date format in database.");
+            }
+
+            // Cộng thêm 7 phút
+            expirationDate.setMinutes(expirationDate.getMinutes() + 7);
+
+            // Cập nhật ngày hết hạn
+            await accountService.updatePremium(userId, expirationDate);
+        }
+
+        // Cập nhật session với quyền mới (nếu cần)
+        req.session.authUser.permission = 2;
+        req.session.authPremium = true;
+
+        // Phản hồi thành công
+        res.json({
+            message: 'Đăng kí gói Premium thành công!',
+            expiration_date: expirationDate,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            message: 'Failed to activate premium account.',
+            error: err.message,
+        });
+    }
+});
+
+
+
+
 export default router;

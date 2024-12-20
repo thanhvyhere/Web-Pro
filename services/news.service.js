@@ -68,7 +68,7 @@ export default
         },
 
         getAllTags() {
-            return db('tag').select('TagName'); // Chỉ lấy cột TagName
+            return db('tag').select('TagName'); 
         },
 
 
@@ -112,7 +112,13 @@ export default
         return db('tag as t')
             .join('news_tags as nt', 't.TagID', '=', 'nt.TagID')
             .where('nt.NewsID', newId)
-            .select('t.TagName'); // Chỉ chọn cột TagName từ bảng tag
+        },
+    
+    getNewsByTagId(id) {
+        return db('news_tags') // Bắt đầu từ bảng news_tags
+            .join('news', 'news_tags.NewsID', '=', 'news.NewsID') // Kết hợp với bảng news qua NewsID
+            .join('tag', 'news_tags.TagID', '=', 'tag.TagID') // Kết hợp với bảng tags qua TagID
+            .where('tag.TagID', id); // Lọc theo TagID
     },
 
     getAllCommentById(id) {
@@ -135,8 +141,8 @@ export default
     incrementViewCount(newsId) {
         // Tăng cột view lên 1
         return db('news')
-            .where('NewsID', newsId)  // Điều kiện lọc theo NewsID
-            .increment('Views', 1); // Tăng giá trị cột 'view' lên 1
+            .where('NewsID', newsId)  
+            .increment('Views', 1); 
     },
 
     getTop3NewsByView() {
@@ -145,5 +151,40 @@ export default
         .orderBy('news.Views', 'desc')  
         .limit(3);  
 
-    }
+    },
+    findNewsByTagAndCategory(keyword) {
+        return db('news')
+                    .join('news_tags', 'news.NewsID', '=', 'news.NewsID')
+                    .join('tag', 'tag.TagID', '=', 'news.TagID')
+                    .join('categories', 'news.CatID', '=', 'categories.CatID')
+                    .where('news.title', 'like', `%${keyword}%`)
+                    .orWhere('tag.TagName', 'like', `%${keyword}%`)
+                    .orWhere('categories.CatName', 'like', `%${keyword}%`)
+                    .select('news.title', 'tag.TagName', 'categories.CatName', 'tag.TagID', 'categories.CatID');
+    },
+    findPageByTagId(id, limit, offset) {
+        return db('news_tags') // Bắt đầu từ bảng news_tags
+            .join('news', 'news_tags.NewsID', '=', 'news.NewsID') // Kết hợp với bảng news qua NewsID
+            .join('tag', 'news_tags.TagID', '=', 'tag.TagID') // Kết hợp với bảng tags qua TagID
+            .where('tag.TagID', id) 
+            .limit(limit) 
+            .offset(offset); 
+    },
+    countByTagId(tagId) {
+        return db('news_tags')
+            .join('news', 'news.NewsID', '=', 'news_tags.NewsID')
+            .where({ 'TagID': tagId, 'Status': 3 })
+            .count('* as total')
+            .first();
+        },
+    
+    searchArticle(query) {
+        // Thực hiện một truy vấn duy nhất
+       return db('news')
+            .where('Title', 'like', `%${query}%`)
+            .orWhere('Abstract', 'like', `%${query}%`)
+            .orWhere('Content', 'like', `%${query}%`);
+}
+
+
 }
