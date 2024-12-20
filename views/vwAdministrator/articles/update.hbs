@@ -1,0 +1,21 @@
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAdministrator/articles/update.css">
+{{/section}}
+
+<div class="container">
+  <header>
+    <h1 class="title">Update Article Premium Status</h1>
+  </header>
+
+  <form action="/administrator/manage_articles/update/{{article.NewsID}}" method="POST">
+    <div class="form-group">
+      <label for="premiumStatus">Premium Status</label>
+      <select name="premiumStatus" id="premiumStatus" class="form-control">
+        <option value="true" {{#if article.Premium}}selected{{/if}}>Premium</option>
+        <option value="false" {{#unless article.Premium}}selected{{/unless}}>Normal</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-submit">Update</button>
+  </form>
+</div>

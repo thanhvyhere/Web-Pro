@@ -36,6 +36,35 @@ export default {
     return db('categories').where('CatID', id).del();
   },
 
+// Hàm cập nhật parent_id cho các danh mục
+updateCategoryParent(categoryIds, newParentId) {
+  // Kiểm tra nếu newParentId là null, không cho phép cập nhật thành null
+  if (newParentId === null) {
+    return Promise.reject(new Error('Không thể cập nhật parent_id thành null.'));
+  }
+
+  // Kiểm tra xem parent_id có tồn tại trong cơ sở dữ liệu không
+  return db('categories')
+    .where('CatID', newParentId)  // Kiểm tra xem parent_id mới có tồn tại không
+    .first()
+    .then(parentCategory => {
+      if (!parentCategory) {
+        return Promise.reject(new Error('Danh mục cha không tồn tại.'));
+      }
+
+      // Cập nhật parent_id cho các danh mục
+      return db('categories')
+        .whereIn('CatID', categoryIds)  // Cập nhật tất cả các danh mục có trong categoryIds
+        .update({ parent_id: newParentId || null })  // Cập nhật parent_id
+        .then(updatedRows => {
+          return updatedRows;  // Trả về số lượng dòng được cập nhật
+        });
+    })
+    .catch(error => {
+      throw new Error('Có lỗi khi cập nhật danh mục: ' + error.message);
+    });
+},
+
   // Tags methods
   getAllTags() {
     return db('tag');
@@ -167,5 +196,54 @@ export default {
         const total = countResult[0]?.total || 0;
         return { categories, total };
       })
-  }
+  },
+
+  findAllWithPaginationArticles(offset, limit) {
+    return db('news')
+      .select(
+        'NewsID',
+        'CreatedDate',
+        'Title',
+        'AuthorName',
+        'Status',
+        'Views',
+        'Premium'
+      )
+      .offset(offset)
+      .limit(limit)
+      .then((articles) => {
+        return db('news')
+          .count('NewsID as total')
+          .first()
+          .then(({ total }) => ({ articles, total }));
+      });
+  },
+  // Lấy thông tin chi tiết bài viết
+  findByIdArticles(newsID) {
+    return db('news')
+      .select(
+        'NewsID',
+        'CreatedDate',
+        'Title',
+        'Content',
+        'Abstract',
+        'CatID',
+        'AuthorName',
+        'ImageCover',
+        'Status',
+        'PublishedDay',
+        'Feedback',
+        'Views',
+        'Premium'
+      )
+      .where('NewsID', newsID)
+      .first();
+  },
+  // Cập nhật trạng thái Premium
+  togglePremium(newsID) {
+    return db('news')
+      .where('NewsID', newsID)
+      .update({ Premium: db.raw('NOT Premium') });
+  },
+
 };

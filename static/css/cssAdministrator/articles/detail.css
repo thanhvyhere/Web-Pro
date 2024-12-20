@@ -1,0 +1,43 @@
+/* Thêm kiểu dáng cho nút Back */
+.btn-back-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    background-color: #007bff; /* Màu xanh dương */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .btn-back:hover {
+    background-color: #0056b3; /* Màu xanh dương đậm khi hover */
+    transform: translateY(-2px); /* Hiệu ứng nâng lên */
+  }
+  
+  .btn-back i {
+    margin-right: 8px; /* Khoảng cách giữa biểu tượng và văn bản */
+    font-size: 18px; /* Kích thước biểu tượng */
+  }
+  
+  .btn-back:focus {
+    outline: none; /* Xóa viền khi nhấn vào nút */
+  }
+  
+  .btn-back:active {
+    transform: translateY(2px); /* Hiệu ứng khi nhấn vào nút */
+  }
+  
+  .btn-back-container {
+    margin-top: 20px;
+    text-align: right;
+  }
+  

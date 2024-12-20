@@ -185,6 +185,25 @@ router.post('/manage_categories/update/:id', async (req, res) => {
     }
 });
 
+router.post('/administrator/manage_categories/update_parent', (req, res) => {
+    const { categoryIds, newParentId } = req.body;
+  
+    // Gọi service để thực hiện cập nhật parent_id cho các danh mục
+    administratorService.updateCategoryParent(categoryIds, newParentId)
+      .then(updatedRows => {
+        // Kiểm tra số lượng dòng được cập nhật
+        if (updatedRows > 0) {
+          res.json({ success: true });
+        } else {
+          res.json({ success: false, message: 'Không có danh mục nào được cập nhật.' });
+        }
+      })
+      .catch(error => {
+        console.error('Error updating categories:', error);
+        res.json({ success: false, message: 'Có lỗi xảy ra khi cập nhật danh mục.' });
+      });
+  });
+
 // Route: Render Delete Category Confirmation Page
 router.get('/manage_categories/delete/:id', async (req, res) => {
     const categoryId = req.params.id;
@@ -234,7 +253,6 @@ router.get('/manage_users', (req, res) => {
       })
   });
   
-
 // Route: Render Add User Page
 router.get('/manage_users/add', async (req, res) => {
     try {
@@ -328,4 +346,56 @@ router.get('/manage_users/detail/:id', async (req, res) => {
     }
 });
 
+// Route: View all articles with pagination
+router.get('/manage_articles', (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Current page, default is 1
+    const limit = 20; // Number of items per page
+    const offset = (page - 1) * limit;
+  
+    administratorService.findAllWithPaginationArticles(offset, limit)
+        .then(({ articles, total }) => {
+        const totalPages = Math.ceil(total / limit);
+
+        // Render the articles view with data and pagination
+        res.render('vwAdministrator/articles/articles', {
+            articles,
+            currentPage: page,
+            totalPages,
+        });
+        })
+        .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error fetching articles');
+        });
+    });
+
+// Xem chi tiết bài viết
+router.get('/manage_articles/detail/:id', async (req, res) => {
+    const newsID = req.params.id;
+    try {
+      const article = await administratorService.findByIdArticles(newsID);
+  
+      // Nếu không tìm thấy bài viết, trả về lỗi 404
+      if (!article) {
+        return res.status(404).send('Article not found');
+      }
+  
+      // Render view và truyền dữ liệu bài viết
+      res.render('vwAdministrator/articles/detail', { article });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server Error');
+    }
+  });
+  
+  // Cập nhật trạng thái Premium
+  router.get('/manage_articles/update/:id', async (req, res) => {
+    const newsID = req.params.id;
+    const success = await administratorService.togglePremium(newsID);
+    if (!success) {
+      return res.status(500).send('Failed to update premium status');
+    }
+    res.redirect('/administrator/manage_articles');
+  });
+  
 export default router;

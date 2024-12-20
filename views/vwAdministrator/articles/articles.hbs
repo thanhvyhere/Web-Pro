@@ -1,0 +1,60 @@
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAdministrator/articles/articles.css">
+{{/section}}
+
+<div class="container">
+  <header>
+    <h1 class="title">Manage Articles</h1>
+  </header>
+
+  <table class="articles-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Premium</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each articles}}
+      <tr>
+        <td>{{this.NewsID}}</td>
+        <td>{{this.Title}}</td>
+        <td>{{this.AuthorName}}</td>
+        <td>
+            {{#if this.Premium}}
+                <span class="premium-status">
+                    <i class="fas fa-star"></i>
+                </span>
+            {{else}}
+                <span class="premium-status">-</span>
+            {{/if}}
+        </td>
+        <td>
+          <a href="/administrator/manage_articles/detail/{{this.NewsID}}" class="btn btn-view">View</a>
+          <a href="/administrator/manage_articles/update/{{this.NewsID}}" class="btn btn-edit">Update Premium</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+<div class="pagination">
+  {{#if (gt currentPage 1)}}
+  <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+  {{/if}}
+
+  {{#each (range 1 totalPages)}}
+  <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
+    {{this}}
+  </a>
+  {{/each}}
+
+  {{#if (lt currentPage totalPages)}}
+  <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+  {{/if}}
+</div>
+</div>
