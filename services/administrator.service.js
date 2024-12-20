@@ -7,8 +7,8 @@ export default {
   },
 
   // Lấy một chuyên mục theo ID
-  findById(id) {
-    return db('categories').where('CatID', id).first();
+  findBfindCategoryByIdyId(categoryId) {
+    return db('categories').where('CatID', categoryId).first();
   },
 
   // Thêm chuyên mục mới
@@ -65,6 +65,13 @@ updateCategoryParent(categoryIds, newParentId) {
     });
 },
 
+// Delete selected categories
+deleteCategories(categoryIds) {
+  return db('categories')
+    .whereIn('CatID', categoryIds)
+    .del();
+},
+
   // Tags methods
   getAllTags() {
     return db('tag');
@@ -114,20 +121,27 @@ updateCategoryParent(categoryIds, newParentId) {
     return db('users').where('id', id).first();
   },
 
-  // Thêm người dùng mới
-  addUsers(user) {
-    const [newUserId] = db('users')
-      .insert({
-        username: user.username,
-        password: user.password,
-        name: user.name || null,
-        email: user.email || null,
-        dob: user.dob || null,
-        permission: user.permission || 0,
-      })
-      .returning('id');
-    return newUserId;
-  },
+// Thêm người dùng mới
+addUsers(user) {
+  return db('users')
+    .insert({
+      username: user.username,
+      password: user.password,
+      name: user.name || null,
+      email: user.email || null,
+      dob: user.dob || null,
+      permission: user.permission || 0,
+    })
+    .returning('id')
+    .then((result) => {
+      const [newUserId] = result;  // Destructure the array returned
+      return newUserId;  // Return the ID of the newly inserted user
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error;  // Rethrow the error for further handling if necessary
+    });
+},
 
   // Cập nhật thông tin người dùng
   updateUsers(id, updatedUser) {
