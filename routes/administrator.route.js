@@ -165,7 +165,7 @@ router.post('/manage_categories/add', async (req, res) => {
 router.get('/manage_categories/update/:id', async (req, res) => {
     try {
         const categoryId = req.params.id;
-        const category = await administratorService.findById(categoryId);
+        const category = await administratorService.findCategoryById(categoryId);
         res.render('vwAdministrator/categories/update', { category });
     } catch (error) {
         console.error(error);
