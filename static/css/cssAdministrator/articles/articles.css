@@ -6,6 +6,7 @@
 }
 
 body {
+    font-family: 'Roboto', sans-serif;
     background-color: #f8f9fa;
     color: #333;
     line-height: 1.6;
@@ -28,10 +29,10 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 2px solid #ff8c00; /* Màu sáng cho sự nổi bật */
+    border-bottom: 2px solid #17a2b8; /* Màu nổi bật */
     padding-bottom: 10px;
     background: #ffffff; /* Màu nền trắng */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Thêm shadow */
 }
 
 /* Title */
@@ -39,10 +40,10 @@ body {
     font-size: 32px;
     font-weight: 700;
     color: #333;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Hiệu ứng shadow */
 }
 
-/* Buttons */
+/* Button hover hiệu ứng */
 .btn {
     text-decoration: none;
     font-size: 22px;
@@ -55,20 +56,21 @@ body {
 }
 
 .btn:hover {
-    background: linear-gradient(135deg, #eeff00, #00bfff);
-    transform: translateY(-2px);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    transform: translateY(-2px); /* Chuyển động khi hover */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Shadow khi hover */
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, #007bff, #0056b3);
+/* Các nút cụ thể */
+.btn-view {
+    background: linear-gradient(135deg, #28a745, #218838);
 }
 
-.btn-warning {
+.btn-edit {
     background: linear-gradient(135deg, #ffc107, #e0a800);
 }
 
-.btn-danger {
+.btn-add {
     background: linear-gradient(135deg, #dc3545, #c82333);
 }
 
@@ -77,55 +79,61 @@ body {
     overflow-x: auto;
 }
 
-/* Table */
-.tag-table {
+/* Bảng */
+.articles-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #fff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Shadow cho bảng */
 }
 
-/* Table Header */
-.tag-table th {
-    background: linear-gradient(135deg, #007bff, #0056b3);
+/* Tiêu đề cột */
+.articles-table th {
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient cho header */
     color: #fff;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     border-bottom: 2px solid #fff;
-    text-align: center;
+    text-align: center; /* Căn giữa tiêu đề */
 }
 
-/* Table Rows */
-.tag-table tr:nth-child(even) {
+/* Dòng chẵn */
+.articles-table tr:nth-child(even) {
     background-color: #f1f1f1;
 }
 
-.tag-table tr:hover {
+/* Dòng hover */
+.articles-table tr:hover {
     background-color: #e0e0e0;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Shadow khi hover */
 }
 
-/* Table Cells */
-.tag-table td {
+/* Cell */
+.articles-table td {
     font-size: 20px;
     color: #555;
     padding: 14px 20px;
     border: 1px solid #ddd;
+    text-align: center; /* Căn giữa dữ liệu */
+}
+
+/* Hiệu ứng hover */
+.articles-table td:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+/* Hành động trong bảng */
+.articles-table td a {
+    margin: 5px;
+    font-size: 20px;
+    padding: 10px;
     text-align: center;
 }
 
-/* Checkbox Styling */
-#select-all-tags {
-    cursor: pointer;
-}
-
-.tag-checkbox {
-    cursor: pointer;
-}
-
-/* Pagination */
+/* Phân trang */
 .pagination {
     display: flex;
     justify-content: center;
@@ -151,32 +159,26 @@ body {
     color: #fff;
 }
 
-.search-container {
-    margin-bottom: 1rem;
-}
-
-.search-container input {
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-    width: 250px;
+.articles-table select {
+    padding: 5px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.search-container button {
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.search-container button:hover {
-    background-color: #0056b3;
-}
+  }
   
-/* Media Queries */
+  .articles-table .btn-update {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .articles-table .btn-update:hover {
+    background-color: #218838;
+  }
+  
+/* Responsive Design */
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
@@ -189,8 +191,8 @@ body {
         margin-bottom: 10px;
     }
 
-    .tag-table th,
-    .tag-table td {
+    .articles-table th,
+    .articles-table td {
         font-size: 13px;
         padding: 10px;
     }
@@ -202,8 +204,8 @@ body {
 }
 
 @media (max-width: 480px) {
-    .tag-table th,
-    .tag-table td {
+    .articles-table th,
+    .articles-table td {
         font-size: 11px;
         padding: 8px 10px;
     }
