@@ -4,6 +4,11 @@
 
 {{#section "script"}}
 <script>
+  document.getElementById('select-all-categories').addEventListener('change', function(e) {
+  const checkboxes = document.querySelectorAll('.category-checkbox');
+  checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+});
+
   document.addEventListener('DOMContentLoaded', function () {
     // JavaScript to handle select/deselect all checkboxes
     const selectAllCheckbox = document.getElementById('select-all-categories');
@@ -13,23 +18,6 @@
         checkboxes.forEach(checkbox => {
           checkbox.checked = this.checked;
         });
-      });
-    }
-
-    // JavaScript to handle delete selected categories
-    const deleteButton = document.getElementById('categories-delete-btn');
-    if (deleteButton) {
-      deleteButton.addEventListener('click', function () {
-        const selectedCategories = [];
-        document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
-          selectedCategories.push(checkbox.dataset.id);
-        });
-        if (selectedCategories.length > 0) {
-          alert('Deleting categories with IDs: ' + selectedCategories.join(', '));
-          // Add your delete logic here, e.g., make a POST request to the server
-        } else {
-          alert('Please select at least one category to delete.');
-        }
       });
     }
 
@@ -49,53 +37,6 @@
         }
       });
     }
-
-    // JavaScript for updating the parent category and all child categories
-    const updateParentButton = document.getElementById('update-parent-btn');
-if (updateParentButton) {
-  updateParentButton.addEventListener('click', function () {
-    const selectedCategories = [];
-    document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
-      selectedCategories.push(checkbox.dataset.id);
-    });
-
-    const newParentId = document.getElementById('new-parent-id').value; // Get the selected new parent ID
-
-    if (selectedCategories.length > 0 && newParentId) {
-      // Gửi yêu cầu cập nhật parent_id cho các danh mục con
-      alert('Đang cập nhật danh mục cha cho các danh mục có ID: ' + selectedCategories.join(', ') + ' thành danh mục cha mới với ID: ' + newParentId);
-
-      // Thực hiện yêu cầu cập nhật trên server
-      fetch('/administrator/manage_categories/update_parent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          categoryIds: selectedCategories,
-          newParentId: newParentId,
-        }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Cập nhật thành công!');
-          // Tự động reload trang hoặc cập nhật lại danh sách
-          location.reload();
-        } else {
-          alert('Có lỗi xảy ra khi cập nhật danh mục.');
-        }
-      })
-      .catch(error => {
-        console.error('Có lỗi xảy ra:', error);
-        alert('Có lỗi xảy ra trong quá trình cập nhật.');
-      });
-
-    } else {
-      alert('Vui lòng chọn ít nhất một danh mục và một danh mục cha mới.');
-    }
-  });
-}
 
     // JavaScript for search button
     const searchButton = document.getElementById('search-btn');
@@ -153,7 +94,7 @@ if (updateParentButton) {
     <div id="category-actions">
       <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
       <a href="#" id="categories-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
-      <a href="#" id="categories-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
+      <a href="/administrator/manage_categories/delete/{{this.CatID}}" class="btn btn-danger btn-sm">Delete</a>
     </div>
   </header>
 
@@ -188,6 +129,7 @@ if (updateParentButton) {
     </table>
   </div>
 </div>
+
 
 <div class="pagination">
   {{#if (gt currentPage 1)}}

@@ -205,33 +205,32 @@ router.post('/administrator/manage_categories/update_parent', (req, res) => {
   });
 
 // Route: Render Delete Category Confirmation Page
-router.get('/manage_categories/delete/:id', async (req, res) => {
-    const categoryId = req.params.id;
-    try {
-        const category = await administratorService.findById(categoryId);
-        res.render('vwAdministrator/categories/delete', { category });
-    } catch (err) {
+router.get('/manage_categories/delete/:id', function(req, res) {
+    const categoryId = req.params.id; // Get the category ID from the URL
+    administratorService.findCategoryById(categoryId) // Fetch category by ID
+      .then(function(category) {
+        // Render the delete confirmation page and pass the category data to the view
+        res.render('vwAdministrator/categories/delete', { category: category });
+      })
+      .catch(function(err) {
         console.error(err);
         res.status(500).send('Error rendering delete category page');
-    }
-});
+      });
+  });
+  
 
-// Route: Delete Category
-router.post('/manage_categories/delete/:id', async (req, res) => {
+// Route to delete a category
+router.post('/manage_categories/delete/:id', function(req, res) {
     const categoryId = req.params.id;
-    try {
-        const result = await administratorService.delete(categoryId);
-
-        if (result > 0) {
-            res.redirect('/administrator/manage_categories');
-        } else {
-            res.status(404).send('Category not found or already deleted');
-        }
-    } catch (err) {
+    administratorService.deleteCategories([categoryId])
+      .then(function() {
+        res.redirect('/administrator/manage_categories'); // Redirect back to the categories list
+      })
+      .catch(function(err) {
         console.error(err);
         res.status(500).send('Error deleting category');
-    }
-});
+      });
+  });  
 
 // manage_users
 // Route: View all users with pagination

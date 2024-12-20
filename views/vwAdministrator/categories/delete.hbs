@@ -1,34 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Delete Category</title>
+{{#section "css"}}
   <link rel="stylesheet" href="/static/css/cssAdministrator/categories/delete.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
+{{/section}}
 
-<body>
-  <div id="delete-category-container">
-    <header id="delete-category-header">
-      <h1 id="delete-category-title">Delete Category</h1>
-      <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
-    </header>
+<div id="delete-category-container">
+  <header id="delete-category-header">
+    <h1 id="delete-category-title">Delete Category</h1>
+    <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
+  </header>
 
-    <div id="delete-category-form-container" class="form-container">
-      <p id="delete-category-confirmation">
-        Are you sure you want to delete the category <strong>{{category.CatName}}</strong>?
-      </p>
+  <div id="delete-category-form-container" class="form-container">
+    <p id="delete-category-confirmation">
+      Are you sure you want to delete the category <strong>{{category.CatName}}</strong>?
+    </p>
 
-      <form id="delete-category-form" action="/administrator/manage_categories/delete/{{category.CatID}}" method="POST">
-        <div id="form-actions-container" class="form-actions">
-          <button type="submit" id="delete-category-btn" class="btn btn-delete">Yes, Delete</button>
-          <a href="/administrator/manage_categories" id="cancel-btn" class="btn btn-cancel">Cancel</a>
-        </div>
-      </form>
-    </div>
+    <form id="delete-category-form" action="/administrator/manage_categories/delete/{{category.CatID}}" method="POST">
+      <div id="form-actions-container" class="form-actions">
+        <button type="submit" id="delete-category-btn" class="btn btn-delete">Yes, Delete</button>
+        <a href="/administrator/manage_categories" id="cancel-btn" class="btn btn-cancel">Cancel</a>
+      </div>
+    </form>
   </div>
-</body>
-
-</html>
+</div>
