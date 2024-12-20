@@ -27,7 +27,7 @@ export default
 
         findPageByCatId(catId, limit, offset) {
             return db('news')
-                .where({ 'CatID': catId, 'Status': 3 }).limit(limit).offset(offset);
+                .where({ 'CatID': catId, 'Status': 3 }).orderBy('Views', 'desc').limit(limit).offset(offset);
         },
         countByCatId(catId) {
             return db('news').where({ 'CatID': catId, 'Status': 3 }).count('* as total').first();
@@ -61,8 +61,6 @@ export default
                     Status: status
                 });
         },
-
-
         findCatByCatId(catId) {
             return db('categories').where('CatID', catId).first();
         },
@@ -76,74 +74,109 @@ export default
             return db('tag').where('TagName', tagname).first();
         },
 
-    addNewTag(newTag)
-    {
-        return db('tag').insert(newTag); 
-    },
-    addTagIdAndNewsId(entity) {
-        return db('news_tags').insert(entity);
-    },
-    delTagByNewsId(newId) { 
-        return db('news_tags').where('NewsID', newId).del();
-    },
-    getIdNewEntity() {
-        return db.raw('SELECT LAST_INSERT_ID() as NewsID');
-    },
-    countByNews()
-    {
-        return db('news').count('* as total');
-    },
-       
+        addNewTag(newTag)
+        {
+            return db('tag').insert(newTag); 
+        },
+        addTagIdAndNewsId(entity) {
+            return db('news_tags').insert(entity);
+        },
+        delTagByNewsId(newId) { 
+            return db('news_tags').where('NewsID', newId).del();
+        },
+        getIdNewEntity() {
+            return db.raw('SELECT LAST_INSERT_ID() as NewsID');
+        },
+        countByNews()
+        {
+            return db('news').count('* as total');
+        },
+        
 
-    addNewTag(newTag) {
-        return db('tag').insert(newTag);
-    },
-    addTagIdAndNewsId(entity) {
-        return db('news_tags').insert(entity);
-    },
-    delTagByNewsId(newId) {
-        return db('news_tags').where('NewsID', newId).del();
-    },
-    getIdNewEntity() {
-        return db.raw('SELECT LAST_INSERT_ID() as id');
-    },
+        addNewTag(newTag) {
+            return db('tag').insert(newTag);
+        },
+        addTagIdAndNewsId(entity) {
+            return db('news_tags').insert(entity);
+        },
+        delTagByNewsId(newId) {
+            return db('news_tags').where('NewsID', newId).del();
+        },
+        getIdNewEntity() {
+            return db.raw('SELECT LAST_INSERT_ID() as id');
+        },
 
-    getTagByNewsId(newId) {
-        return db('tag as t')
-            .join('news_tags as nt', 't.TagID', '=', 'nt.TagID')
-            .where('nt.NewsID', newId)
-            .select('t.TagName'); // Chỉ chọn cột TagName từ bảng tag
-    },
+        getTagByNewsId(newId) {
+            return db('tag as t')
+                .join('news_tags as nt', 't.TagID', '=', 'nt.TagID')
+                .where('nt.NewsID', newId).limit(3)
+                .select('t.TagName'); // Chỉ chọn cột TagName từ bảng tag
+        },
 
-    getAllCommentById(id) {
-        return db('comment')
-            .join('users', 'comment.UserID', '=', 'users.id') // Hợp bảng comment với users qua UserID
-            .select('comment.*', 'users.username') // Chọn tất cả từ comment và thêm username từ users
-            .where('comment.NewsID', id) // Điều kiện lọc theo NewsID
-            .orderBy('comment.CreatedDate', 'desc'); // Sắp xếp theo ngày (CreatedDate) giảm dần
-    },
+        getAllCommentById(id) {
+            return db('comment')
+                .join('users', 'comment.UserID', '=', 'users.id') // Hợp bảng comment với users qua UserID
+                .select('comment.*', 'users.username') // Chọn tất cả từ comment và thêm username từ users
+                .where('comment.NewsID', id) // Điều kiện lọc theo NewsID
+                .orderBy('comment.CreatedDate', 'desc'); // Sắp xếp theo ngày (CreatedDate) giảm dần
+        },
 
 
 
-    addComment(entity) {
-        return db('comment').insert(entity);
-    },
-    countCommentBynewsId(newId) {
-        return db('comment').where('NewsID', newId).count('* as total').first();
-    },
+        addComment(entity) {
+            return db('comment').insert(entity);
+        },
+        countCommentBynewsId(newId) {
+            return db('comment').where('NewsID', newId).count('* as total').first();
+        },
 
-    incrementViewCount(newsId) {
-        // Tăng cột view lên 1
-        return db('news')
-            .where('NewsID', newsId)  // Điều kiện lọc theo NewsID
-            .increment('Views', 1); // Tăng giá trị cột 'view' lên 1
-    },
+        incrementViewCount(newsId) {
+            // Tăng cột view lên 1
+            return db('news')
+                .where('NewsID', newsId)  // Điều kiện lọc theo NewsID
+                .increment('Views', 1); // Tăng giá trị cột 'view' lên 1
+        },
 
-    getTop3NewsByView() {
-        return db('news')
-        .join('categories', 'news.CatID', '=', 'categories.CatID') 
-        .orderBy('news.Views', 'desc')  
-        .limit(3);  
-
-    }
+        getTop3NewsByView() {
+            return db('news')
+            .join('categories', 'news.CatID', '=', 'categories.CatID') 
+            .orderBy('news.Views', 'desc')  
+            .limit(3);  
+        },
+        getTop10NewsByDate() {
+            return db('news')
+            .join('categories', 'news.CatID', '=', 'categories.CatID') 
+            .orderBy('news.PublishedDay', 'desc')  
+            .limit(10); 
+        },
+        getTop10Cat()
+        {
+            return db('news as n')
+            .join('categories as c', 'n.CatID', '=', 'c.CatID') // Join bảng news với categories
+            .groupBy('c.CatID', 'c.CatName') // Nhóm theo CatID và tên danh mục con
+            .sum('n.Views as total_views') // Tính tổng lượt xem
+            .orderBy('total_views', 'desc') // Sắp xếp theo tổng lượt xem giảm dần
+            .limit(10) // Lấy 10 kết quả đầu tiên
+            .select('c.CatName as CatName', 'c.CatID as CatID') // Lấy tên và ID danh mục con
+            .then(results => {
+                // Thêm cột "No" để đánh số thứ tự cho từng dòng kết quả
+                return results.map((item, index) => {
+                item.No = index + 1; // Đánh số thứ tự bắt đầu từ 1
+                return item;
+                });
+            });
+        },
+        getTop10NewsByViews() {
+            return db('news')
+            .join('categories', 'news.CatID', '=', 'categories.CatID') 
+            .orderBy('Views', 'desc') // Sắp xếp theo số lượt xem giảm dần
+            .limit(10); // Lấy 10 bài báo có lượt xem cao nhất
+        },
+        getTop3NewsByRandom()
+        {
+            return db('news')
+            .join('categories', 'news.CatID', '=', 'categories.CatID')
+            .orderByRaw('RAND()') // Sắp xếp ngẫu nhiên
+            .limit(3); // Lấy 3 bài báo ngẫu nhiên
+        }
 }

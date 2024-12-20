@@ -255,6 +255,8 @@ hr {
     padding: 10px 15px; /* Khoảng cách trong cho từng mục */
     font-size: 30px; /* Kích thước chữ */
     text-decoration: none; /* Xóa gạch chân */
+    color: #000000;
+    background-color: #ffffff;
     transition: background-color 0.2s ease; /* Hiệu ứng hover mượt */
 }
 

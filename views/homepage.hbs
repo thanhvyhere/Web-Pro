@@ -19,23 +19,32 @@
             });
 
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                // Lấy tất cả các phần tử carousel-item
+                const items = document.querySelectorAll('#carouselExample2Captions .carousel-item');
+
+                // Xóa lớp active khỏi tất cả các phần tử
+                items.forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Thêm lại lớp active vào phần tử đầu tiên
+                if (items.length > 0) {
+                    items[0].classList.add('active');
+                }
+            });
+
+    </script>
 {{/section}}
-<div id="carouselExampleCaptions" class="carousel slide">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-            aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-            aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-            aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
+<div id="carouselExampleCaptions" class="carousel carousel-dark slide">
+    <div class="carousel-inner" >
         {{#each topNews}}
-        <div class="carousel-item {{#if @first}}active{{/if}}">
+        <div class="carousel-item {{#if @first}}active{{/if}}" style="opacity: 1;!important;">
             <div class="feature-paper mb-5" style="--bg-image: url('{{this.ImageCover}}')">
                 <div class="paper-infor">
                     <div class="header-paper">
-                        <button class="name-category-paper" disabled="disabled">{{this.CatName}}</button>
+                        <button class="name-category-paper tw-w-[200px]" disabled="disabled">{{this.CatName}}</button>
                         <h6>
                             <i class="bi bi-calendar3"></i>
                             {{formatDate this.PublishedDay}}
@@ -44,11 +53,16 @@
                     <a href="/newspaper/detail?id={{this.NewsID}}">
                         <h1 class="card-title tw-mb-2">{{this.Title}}</h1>
                     </a>
-                    <div class="status-paper">
+                    <div class="status-paper" style="opacity: 1;!important; color: white; font-size: 25px !important;">
                         <h6><i class="bi bi-pencil-square"></i>{{this.AuthorName}}</h6>
                         <h6><i class="bi bi-eye-fill"></i>{{this.Views}}</h6>
                         <h6><i class="bi bi-hearts"></i>500</h6>
                         <h6><i class="bi bi-chat-dots"></i>{{this.countComment}}</h6>
+                    </div>
+                    <div  class="tw-flex tw-flex-row tw-gap-2">
+                    {{#each tags}}
+                        <button class="tw-bg-yellow-200 tw-text-black" disabled="disabled">{{TagName}}</button>
+                    {{/each}}
                     </div>
                 </div>
             </div>
@@ -56,122 +70,130 @@
         {{/each}}
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
+        <span class="carousel-control-prev-icon" aria-hidden="true" ></span>
+        {{!-- <span class="visually-show"></span> --}}
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
+        <span class="carousel-control-next-icon" aria-hidden="true" ></span>
+        {{!-- <span class="visually-hidden"></span> --}}
     </button>
 </div>
 <div class="title-paper-list mb-3">
-    <h1>Trending News</h1>
+    <h1>Bài viết mới nhất</h1>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-4 feature-paper">   
-                <div class="paper-infor">
-                    <div class="header-paper">
-                        <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                        <h6>
-                            <i class="bi bi-calendar3"></i>
-                            Nov 20th, 2024
-                        </h6>
+        <div class="row tw-h-[420px]">
+            <div class="col-sm-4 ">   
+                <div id="carouselExample2Captions" class="carousel slide ">
+                    <div class="carousel-inner tw-h-[420px]">
+                        {{#each (limit newNews 7)}}
+                        <div class="carousel-item {{#if @first}}active{{/if}}" style="">
+                            <div class="feature-paper-2 mb-5" style="--bg-image: url('{{ImageCover}}');">
+                                <div class="paper-infor-2" style="">
+                                    <div class="header-paper-2">
+                                        {{!-- <button class="name-category-paper" disabled="disabled">{{CatName}}</button> --}}
+                                        <h6 style="color: black;">
+                                            <i class="bi bi-calendar3"></i>
+                                            {{formatDate this.PublishedDay}}
+                                        </h6>
+                                    </div>
+                                    <a href="/newspaper/detail?id={{NewsID}}" style="width:100%; padding:4%">
+                                        <h2 class="card-title" style="color: black;">{{Title}}</h2>
+                                    </a>
+                                    <div class="status-paper" style="font-size: 16px !important;">
+                                        <h6><i class="bi bi-pencil-square"></i>{{AuthorName}}</h6>
+                                        <h6><i class="bi bi-eye-fill"></i>{{this.Views}}</h6>
+                                        <h6><i class="bi bi-hearts"></i>500</h6>
+                                        <h6><i class="bi bi-chat-dots"></i>{{countComment}}</h6>
+                                        <button class="name-category-paper" disabled="disabled">{{CatName}}</button>
+                                    </div>
+                                    <div  class="tw-flex tw-flex-row tw-gap-2">
+                                        {{#each tags}}
+                                            <button class="tw-bg-yellow-200 tw-text-black" disabled="disabled">{{TagName}}</button>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
                     </div>
-                    <h1>Donald Trump đắc cử tổng thống Mỹ</h1>
-                    <div class="status-paper">
-                        <h6><i class="bi bi-pencil-square"></i>admin</h6>
-                        <h6><i class="bi bi-eye-fill"></i>1000</h6>
-                        <h6><i class="bi bi-hearts"></i>500</h6>
-                        <h6><i class="bi bi-chat-dots"></i>1000</h6>
-                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample2Captions" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true" ></span>
+                        {{!-- <span class="visually-show"></span> --}}
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample2Captions" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true" ></span>
+                        {{!-- <span class="visually-hidden"></span> --}}
+                    </button>
                 </div>
             </div>
 
             <div class="col-sm-4">
                 <div class="">
-                    <div class="card d-flex flex-row mb-2">
-                        <img src="/static/imgs/Trump.jpg" alt="..." class="img-title-paper">
+                    {{#each (skip newNews 7)}}
+                    <div class="card tw-h-[140px] d-flex flex-row tw-mb-2 tw-border-[#9CA3AF] tw-border-[1px] tw-p-3 tw-w-[100%]">
+                        <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
                         <div class="paper-small">
-                            <div class="header-paper small mt-2">
-                                <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                                <h6 >
-                                    <i class="bi bi-calendar3"></i>
-                                    Nov 20th, 2024
-                                </h6>
+                            <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
+                                <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatName}}</button>
+                                <p class="tw-text-l">
+                                     <i class="bi bi-calendar3"></i>
+                                    {{formatDate this.PublishedDay}}
+                                </p>
                             </div>
-                            <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                        </div>
-                    </div>
-
-                    <div class="card d-flex flex-row mb-2">
-                        <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                        <div class="paper-small">
-                            <div class="header-paper small mt-2">
-                                <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                                <h6 >
-                                    <i class="bi bi-calendar3"></i>
-                                    Nov 20th, 2024
-                                </h6>
+                            <div class="tw-flex tw-flex-row tw-justify-between">
+                            <a href="/newspaper/detail?id={{NewsID}}" >
+                                       <h6 class="tw-text-[16px] tw-ml-2 tw-text-black">{{Title}}</h6>
+                            </a>
+                               
                             </div>
-                            <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
+                            {{#each tags}}
+                            <button class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black" disabled="disabled">{{TagName}}</button>
+                            {{/each}}
                         </div>
+                      
                     </div>
-
-                    <div class="card d-flex flex-row mb-2">
-                        <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                        <div class="paper-small">
-                            <div class="header-paper small mt-2">
-                                <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                                <h6 >
-                                    <i class="bi bi-calendar3"></i>
-                                    Nov 20th, 2024
-                                </h6>
-                            </div>
-                            <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                        </div>
-                    </div>
+                    {{/each}}
                 </div>
             </div>
 
             <div id="top-chart" class="col-sm-4">
-                <h4>TOP CHART</h4>
+                <h4 class="tw-pl-3 tw-w-[60%]">CHUYÊN MỤC HÀNG DẦU</h4>
                 <hr>
                 <div class="container text-center">
                     <div class="row row-cols-1">
-                        <div class="col">
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <button class="top-chart-format" disabled="disabled">Sức khỏe</button>
-                                <button class="top-chart-format" disabled="disabled">1</button>
+                        <div id="carouselExample" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                {{#each (limit topCat 5)}}
+                                <div class="col">
+                                    <div class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[80%]  tw-pl-[10%] tw-py-[10px]">
+                                        <button class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold" style="background-color: rgb(243, 219, 142);" disabled="disabled">{{No}}</button>
+                                        <a href="/newspaper/byCat?catId={{CatID}}" class="top-chart-format">{{CatName}}</a>
+                                    </div>
+                                </div>
+                                {{/each}}
+                                </div>
+                                <div class="carousel-item">
+                                {{#each (skip topCat 5)}}
+                                    <div class="col">
+                                    <div class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[80%]  tw-pl-[10%] tw-py-[10px]">
+                                        <button class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold" style="background-color: rgb(243, 219, 142);" disabled="disabled">{{No}}</button>
+                                        <a href="/newspaper/byCat?catId={{CatID}}" class="top-chart-format">{{CatName}}</a>
+                                    </div>
+                                </div>
+                                {{/each}}
+                             </div>
+                                
                             </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <button class="top-chart-format" disabled="disabled">Sức khỏe</button>
-                                <button class="top-chart-format" disabled="disabled">1</button>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
                             </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <button class="top-chart-format" disabled="disabled">Sức khỏe</button>
-                                <button class="top-chart-format" disabled="disabled">1</button>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <button class="top-chart-format" disabled="disabled">Sức khỏe</button>
-                                <button class="top-chart-format" disabled="disabled">1</button>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <button class="top-chart-format" disabled="disabled">Sức khỏe</button>
-                                <button class="top-chart-format" disabled="disabled">1</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -179,278 +201,71 @@
     </div>
 </div>
 <div class="title-paper-list mb-3 d-flex flex-column">
-    <h1>Feature</h1>
+    <h1>Được xem nhiều nhất</h1>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row d-grids">
+            {{#each viewsNews}}
             <div class="col-sm-4">   
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
+                 <div class="card tw-h-[140px] d-flex flex-row tw-mb-2 tw-border-[#9CA3AF] tw-border-[1px] tw-p-3 tw-w-[100%]">
+                        <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
+                        <div class="paper-small">
+                            <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
+                                <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatName}}</button>
+                                <p class="tw-text-l">
+                                     <i class="bi bi-calendar3"></i>
+                                    {{formatDate this.PublishedDay}}
+                                </p>
+                            </div>
+                            <div class="tw-flex tw-flex-row tw-justify-between">
+                            <a href="/newspaper/detail?id={{NewsID}}" >
+                                       <h6 class="tw-text-[16px] tw-ml-2 tw-text-black">{{Title}}</h6>
+                            </a>
+                               
+                            </div>
+                            {{#each tags}}
+                            <button class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black" disabled="disabled">{{TagName}}</button>
+                            {{/each}}
                         </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
+                      
                     </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
             </div>
-
-            <div class="col-sm-4">
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>                
-            </div>
-
-            <div class="col-sm-4">
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-            </div>
+            {{/each}}
         </div>
     </div>
 </div>
 
 <div class="title-paper-list mb-3 d-flex flex-column">
-    <h1>Top New Weekly</h1>
+    <h1>Gợi ý cho bạn</h1>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row d-grids">
+            {{#each randomNews}}
             <div class="col-sm-4">   
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
+                 <div class="card tw-h-[140px] d-flex flex-row tw-mb-2 tw-border-[#9CA3AF] tw-border-[1px] tw-p-3 tw-w-[100%]">
+                        <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
+                        <div class="paper-small">
+                            <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
+                                <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatName}}</button>
+                                <p class="tw-text-l">
+                                     <i class="bi bi-calendar3"></i>
+                                    {{formatDate this.PublishedDay}}
+                                </p>
+                            </div>
+                            <div class="tw-flex tw-flex-row tw-justify-between">
+                            <a href="/newspaper/detail?id={{NewsID}}" >
+                                       <h6 class="tw-text-[16px] tw-ml-2 tw-text-black">{{Title}}</h6>
+                            </a>
+                               
+                            </div>
+                            {{#each tags}}
+                            <button class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black" disabled="disabled">{{TagName}}</button>
+                            {{/each}}
                         </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
+                      
                     </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
             </div>
+            {{/each}}
 
-            <div class="col-sm-4">
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
             </div>
-
-            <div class="col-sm-4">
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
-                
-                <div class="card d-flex flex-row mb-2">
-                    <img src="/imgs/Trump.jpg" alt="..." class="img-title-paper">
-                    <div class="paper-small">
-                        <div class="header-paper small mt-2">
-                            <button class="name-category-paper" disabled="disabled">Chính trị</button>
-                            <h6 >
-                                <i class="bi bi-calendar3"></i>
-                                Nov 20th, 2024
-                            </h6>
-                        </div>
-                        <h5 class="card-title">Donald Trump đắc cử tổng thống Mỹ</h5>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
