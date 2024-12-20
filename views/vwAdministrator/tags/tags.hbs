@@ -11,7 +11,7 @@
     const rows = document.querySelectorAll('.tag-table tbody tr');
     
     rows.forEach(row => {
-      const tagName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+      const tagName = row.querySelector('td:nth-child(2)').textContent.toLowerCase(); // Chỉnh lại index cột cho đúng
       if (tagName.includes(searchValue)) {
         row.style.display = ''; // Hiển thị hàng
       } else {
@@ -19,41 +19,7 @@
       }
     });
   });
-  // JavaScript to handle select/deselect all checkboxes
-  document.getElementById('select-all-tags').addEventListener('change', function () {
-    const checkboxes = document.querySelectorAll('.tag-checkbox');
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = this.checked;
-    });
-  });
-
-  // JavaScript to handle delete selected tags
-  document.getElementById('tags-delete-btn').addEventListener('click', function () {
-    const selectedTags = [];
-    document.querySelectorAll('.tag-checkbox:checked').forEach(checkbox => {
-      selectedTags.push(checkbox.dataset.id);
-    });
-    if (selectedTags.length > 0) {
-      alert('Deleting tags with IDs: ' + selectedTags.join(', '));
-      // Add your delete logic here, e.g., make a POST request to the server
-    } else {
-      alert('Please select at least one tag to delete.');
-    }
-  });
-
-  // JavaScript to handle edit selected tags
-  document.getElementById('tags-edit-btn').addEventListener('click', function () {
-    const selectedTags = [];
-    document.querySelectorAll('.tag-checkbox:checked').forEach(checkbox => {
-      selectedTags.push(checkbox.dataset.id);
-    });
-    if (selectedTags.length === 1) {
-      window.location.href = '/administrator/manage_tags/update/' + selectedTags[0];
-    } else {
-      alert('Please select exactly one tag to edit.');
-    }
-  });
-</script>
+  </script>
 {{/section}}
 
 <div id="tags-container" class="container">
@@ -73,8 +39,6 @@
     </div>
     <div id="tags-actions">
       <a href="/administrator/manage_tags/add" id="tags-add-btn" class="btn btn-primary">Add New Tag</a>
-      <a href="#" id="tags-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
-      <a href="#" id="tags-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
     </div>
   </header>
 
@@ -82,17 +46,24 @@
     <table class="tag-table">
       <thead>
         <tr>
-          <th><input type="checkbox" id="select-all-tags" /></th> <!-- Checkbox để chọn tất cả -->
           <th>ID</th>
           <th>Tag Name</th>
+          <th>Actions</th> <!-- Thêm cột Actions -->
         </tr>
       </thead>
       <tbody>
         {{#each tags}}
         <tr id="tags-row-{{this.TagID}}">
-          <td><input type="checkbox" class="tag-checkbox" data-id="{{this.TagID}}" /></td> <!-- Checkbox để chọn từng hàng -->
           <td>{{this.TagID}}</td>
           <td>{{this.TagName}}</td>
+          <td>
+            <a href="/administrator/manage_tags/update/{{this.TagID}}" class="btn btn-warning btn-sm">Edit</a>
+
+            <!-- Form xóa tag, sử dụng phương thức POST -->
+            <form action="/administrator/manage_tags/delete/{{this.TagID}}" method="POST" style="display:inline;">
+              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this tag?')">Delete</button>
+            </form>
+          </td>
         </tr>
         {{else}}
         <tr>
