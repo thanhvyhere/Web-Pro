@@ -1,0 +1,32 @@
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAdministrator/articles/detail.css">
+{{/section}}
+
+<div class="container">
+    <!-- Nút Back to Articles -->
+    <div class="btn-back-container">
+      <a href="/administrator/manage_articles" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Back to Articles
+      </a>
+    </div>
+
+  <div class="article-detail">
+    <h2>{{article.Title}}</h2>
+    <p><strong>Author:</strong> {{article.AuthorName}}</p>
+    <p><strong>Published On:</strong> {{article.PublishedDay}}</p>
+    <p><strong>Premium Status:</strong> {{#if article.Premium}}Premium{{else}}Normal{{/if}}</p>
+    <p><strong>Abstract:</strong> {{article.Abstract}}</p>
+
+    <!-- Render nội dung HTML từ trường Content -->
+    <p><strong>Content:</strong></p>
+    <div class="content-html">
+      {{{article.Content}}} <!-- Đảm bảo không có khoảng trắng hay ký tự dư thừa -->
+    </div>
+
+    <p><strong>Feedback:</strong> {{article.Feedback}}</p>
+    <p><strong>Views:</strong> {{article.Views}}</p>
+    <p><strong>Created Date:</strong> {{article.CreatedDate}}</p>
+    <p><strong>Status:</strong> {{article.Status}}</p>
+
+  </div>
+</div>

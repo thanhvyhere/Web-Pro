@@ -1,151 +1,206 @@
-<!DOCTYPE html>
-<html lang="en">
+{{#section "css"}}
+    <link href="/static/css/cssAdministrator/categories/categories.css" rel="stylesheet">
+{{/section}}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Category List</title>
-  <link rel="stylesheet" href="/static/css/cssAdministrator/categories/categories.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-
-<body>
-  <div class="container">
-    <header class="header">
-      <h1 class="title">Category List</h1>
-      <div class="search-container">
-        <form id="search-category" method="GET" action="/administrator/manage_categories">
-          <input 
-            type="text" 
-            name="search" 
-            id="search-category-name" 
-            class="search-box" 
-            placeholder="Search by Category Name" 
-            value="{{query.search}}">
-          <button type="submit" class="btn btn-secondary">Search</button>
-        </form>
-      </div>
-
-      <div id="category-actions">
-        <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
-        <a href="#" id="categories-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
-        <a href="#" id="categories-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
-      </div>
-    </header>
-
-    <div class="table-container">
-      <table class="categories-table">
-        <thead>
-          <tr>
-            <th><input type="checkbox" id="select-all-categories" /></th> <!-- Checkbox to select all -->
-            <th>ID</th>
-            <th>Category Name</th>
-            <th>Parent Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each categories}}
-          <tr id="category-row-{{this.CatID}}">
-            <td><input type="checkbox" class="category-checkbox" data-id="{{this.CatID}}" /></td>
-            <td>{{this.CatID}}</td>
-            <td>{{this.CatName}}</td>
-            <td>{{#if this.parent_id}}
-                  {{#with (lookup ../categories this.parent_id)}}
-                    {{CatName}}
-                  {{/with}}
-                {{else}}None{{/if}}</td>
-          </tr>
-          {{else}}
-          <tr>
-            <td colspan="3">No categories found</td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="pagination">
-    {{#if (gt currentPage 1)}}
-    <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
-    {{/if}}
-
-    {{#each (range 1 totalPages)}}
-    <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
-      {{this}}
-    </a>
-    {{/each}}
-
-    {{#if (lt currentPage totalPages)}}
-    <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
-    {{/if}}
-  </div>
-
-  <script>
+{{#section "script"}}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
     // JavaScript to handle select/deselect all checkboxes
-    document.getElementById('select-all-categories').addEventListener('change', function () {
-      const checkboxes = document.querySelectorAll('.category-checkbox');
-      checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
+    const selectAllCheckbox = document.getElementById('select-all-categories');
+    if (selectAllCheckbox) {
+      selectAllCheckbox.addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.category-checkbox');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = this.checked;
+        });
       });
-    });
+    }
 
     // JavaScript to handle delete selected categories
-    document.getElementById('categories-delete-btn').addEventListener('click', function () {
-      const selectedCategories = [];
-      document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
-        selectedCategories.push(checkbox.dataset.id);
+    const deleteButton = document.getElementById('categories-delete-btn');
+    if (deleteButton) {
+      deleteButton.addEventListener('click', function () {
+        const selectedCategories = [];
+        document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
+          selectedCategories.push(checkbox.dataset.id);
+        });
+        if (selectedCategories.length > 0) {
+          alert('Deleting categories with IDs: ' + selectedCategories.join(', '));
+          // Add your delete logic here, e.g., make a POST request to the server
+        } else {
+          alert('Please select at least one category to delete.');
+        }
       });
-      if (selectedCategories.length > 0) {
-        alert('Deleting categories with IDs: ' + selectedCategories.join(', '));
-        // Add your delete logic here, e.g., make a POST request to the server
-      } else {
-        alert('Please select at least one category to delete.');
-      }
-    });
+    }
 
     // JavaScript to handle edit selected categories
-    document.getElementById('categories-edit-btn').addEventListener('click', function () {
-      const selectedCategories = [];
-      document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
-        selectedCategories.push(checkbox.dataset.id);
-      });
-      if (selectedCategories.length === 1) {
-        window.location.href = '/administrator/manage_categories/update/' + selectedCategories[0];
-      } else {
-        alert('Please select exactly one category to edit.');
-      }
-    });
-
-    document.getElementById('search-btn').addEventListener('click', function () {
-    const searchTerm = document.getElementById('search-category').value.toLowerCase();
-    const rows = document.querySelectorAll('.categories-table tbody tr');
-
-    rows.forEach(row => {
-      const categoryName = row.querySelector('td:nth-child(3)'); // Cột "Category Name"
-        if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
-          row.style.display = ''; // Hiển thị dòng
+    const editButton = document.getElementById('categories-edit-btn');
+    if (editButton) {
+      editButton.addEventListener('click', function () {
+        const selectedCategories = [];
+        document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
+          selectedCategories.push(checkbox.dataset.id);
+        });
+        console.log('Danh mục đã chọn:', selectedCategories); // Debugging line
+        if (selectedCategories.length === 1) {
+          window.location.href = '/administrator/manage_categories/update/' + selectedCategories[0];
         } else {
-          row.style.display = 'none'; // Ẩn dòng
+          alert('Vui lòng chọn chính xác một danh mục để chỉnh sửa.');
         }
       });
+    }
+
+    // JavaScript for updating the parent category and all child categories
+    const updateParentButton = document.getElementById('update-parent-btn');
+if (updateParentButton) {
+  updateParentButton.addEventListener('click', function () {
+    const selectedCategories = [];
+    document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
+      selectedCategories.push(checkbox.dataset.id);
     });
 
-    // Tìm kiếm ngay khi gõ
-    document.getElementById('search-category').addEventListener('input', function () {
-      const searchTerm = this.value.toLowerCase();
-      const rows = document.querySelectorAll('.categories-table tbody tr');
+    const newParentId = document.getElementById('new-parent-id').value; // Get the selected new parent ID
 
-      rows.forEach(row => {
-        const categoryName = row.querySelector('td:nth-child(3)');
-        if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
-          row.style.display = '';
+    if (selectedCategories.length > 0 && newParentId) {
+      // Gửi yêu cầu cập nhật parent_id cho các danh mục con
+      alert('Đang cập nhật danh mục cha cho các danh mục có ID: ' + selectedCategories.join(', ') + ' thành danh mục cha mới với ID: ' + newParentId);
+
+      // Thực hiện yêu cầu cập nhật trên server
+      fetch('/administrator/manage_categories/update_parent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          categoryIds: selectedCategories,
+          newParentId: newParentId,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Cập nhật thành công!');
+          // Tự động reload trang hoặc cập nhật lại danh sách
+          location.reload();
         } else {
-          row.style.display = 'none';
+          alert('Có lỗi xảy ra khi cập nhật danh mục.');
         }
+      })
+      .catch(error => {
+        console.error('Có lỗi xảy ra:', error);
+        alert('Có lỗi xảy ra trong quá trình cập nhật.');
       });
-    });
-  </script>
-</body>
 
-</html>
+    } else {
+      alert('Vui lòng chọn ít nhất một danh mục và một danh mục cha mới.');
+    }
+  });
+}
+
+    // JavaScript for search button
+    const searchButton = document.getElementById('search-btn');
+    if (searchButton) {
+      searchButton.addEventListener('click', function () {
+        const searchTerm = document.getElementById('search-category').value.toLowerCase();
+        const rows = document.querySelectorAll('.categories-table tbody tr');
+        rows.forEach(row => {
+          const categoryName = row.querySelector('td:nth-child(3)'); // "Category Name" column
+          if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
+            row.style.display = ''; // Show row
+          } else {
+            row.style.display = 'none'; // Hide row
+          }
+        });
+      });
+    }
+
+    // Real-time search as the user types
+    const searchInput = document.getElementById('search-category');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.categories-table tbody tr');
+        rows.forEach(row => {
+          const categoryName = row.querySelector('td:nth-child(3)');
+          if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    }
+  });
+</script>
+{{/section}}
+
+<div class="container">
+  <header class="header">
+    <h1 class="title">Category List</h1>
+    <div class="search-container">
+      <form id="search-category" method="GET" action="/administrator/manage_categories">
+        <input 
+          type="text" 
+          name="search" 
+          id="search-category-name" 
+          class="search-box" 
+          placeholder="Search by Category Name" 
+          value="{{query.search}}">
+        <button type="submit" class="btn btn-secondary">Search</button>
+      </form>
+    </div>
+
+    <div id="category-actions">
+      <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
+      <a href="#" id="categories-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
+      <a href="#" id="categories-delete-btn" class="btn btn-danger btn-sm">Delete Selected</a>
+    </div>
+  </header>
+
+  <div class="table-container">
+    <table class="categories-table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="select-all-categories" /></th> <!-- Checkbox to select all -->
+          <th>ID</th>
+          <th>Category Name</th>
+          <th>Parent Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each categories}}
+        <tr id="category-row-{{this.CatID}}">
+          <td><input type="checkbox" class="category-checkbox" data-id="{{this.CatID}}" /></td>
+          <td>{{this.CatID}}</td>
+          <td>{{this.CatName}}</td>
+          <td>{{#if this.parent_id}}
+                {{#with (lookup ../categories this.parent_id)}}
+                  {{CatName}}
+                {{/with}}
+              {{else}}None{{/if}}</td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="3">No categories found</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="pagination">
+  {{#if (gt currentPage 1)}}
+  <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+  {{/if}}
+
+  {{#each (range 1 totalPages)}}
+  <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
+    {{this}}
+  </a>
+  {{/each}}
+
+  {{#if (lt currentPage totalPages)}}
+  <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+  {{/if}}
+</div>
