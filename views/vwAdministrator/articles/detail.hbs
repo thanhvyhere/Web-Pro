@@ -1,0 +1,45 @@
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAdministrator/articles/detail.css">
+{{/section}}
+
+<div class="container">
+  <!-- Nút Back to Articles -->
+  <div class="btn-back-container">
+    <a href="/administrator/manage_articles" class="btn-back">
+      <i class="bi bi-arrow-left-circle-fill"></i> Back to Articles
+    </a>
+  </div>
+
+  <div class="article-detail">
+    <!-- Thông tin chi tiết bài viết -->
+    <h2 class="article-title">{{article.Title}}</h2>
+
+    <!-- Hiển thị biểu tượng sao lấp lánh nếu bài viết là Premium -->
+    {{#if article.Premium}}
+      <div class="premium-star">
+        ★
+      </div>
+    {{/if}}
+
+    <!-- Các thông tin hiển thị ở phần trên -->
+    <div class="article-meta">
+      <p><strong>Views:</strong> {{article.Views}}</p>
+      <p><strong>Created Date:</strong> {{article.CreatedDate}}</p>
+      <p><strong>Published On:</strong> {{article.PublishedDay}}</p>
+      <p><strong>Status:</strong> {{article.StatusName}}</p>
+      <p><strong>Author:</strong> {{article.AuthorName}}</p>
+      <p><strong>Premium Status:</strong> {{#if article.Premium}}Premium{{else}}Normal{{/if}}</p>
+    </div>
+
+    <!-- Tóm tắt và nội dung -->
+    <p><strong>Abstract:</strong> {{article.Abstract}}</p>
+
+    <!-- Render nội dung HTML từ trường Content -->
+    <div class="content-html">
+      {{{article.Content}}} <!-- Nội dung HTML của bài viết -->
+    </div>
+
+    <!-- Feedback -->
+    <p><strong>Feedback:</strong> {{article.Feedback}}</p>
+  </div>
+</div>
