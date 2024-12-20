@@ -136,6 +136,15 @@ app.engine('hbs', engine({
             }
             return result;
         },
+        limit: function (array, limit) {
+            if (!Array.isArray(array)) {
+                return [];
+            }
+            return array.slice(0, limit);
+        },
+        skip: function(arr, n) {
+            return arr.slice(n); // Sử dụng slice để cắt bỏ n phần tử đầu tiên
+        },
     }
 }));
 
@@ -181,32 +190,69 @@ app.use(async (req, res, next) => {
     // Tiếp tục xử lý request
     next();
 });
-
 app.use(async (req, res, next) => {
     const topNews = await newsService.getTop3NewsByView();
     
         // Đếm số lượng bình luận cho từng bài báo trong top3 và lấy tên danh mục
        const updatedList = await Promise.all(topNews.map(async (item) => {
            const count = await newsService.countCommentBynewsId(item.NewsID);
-           let is_premium;
-            const tag = await newsService.getTagByNewsId(item.NewsID);
-            if (item.Premium === 1)
-                is_premium = true;
-            else
-                is_premium = false;
-           const authPremium = res.locals.authPremium;
+           const tags = await newsService.getTagByNewsId(item.NewsID);
            return {
                ...item,
-               is_premium,
-                tag,
-               countComment: count.total,
-               authPremium
+               countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
+               tags:tags
            }
        }));
     res.locals.topNews = updatedList;
     next();
-})
-
+});
+app.use(async (req, res, next) => {
+    const topCat = await newsService.getTop10Cat();
+    res.locals.topCat = topCat;
+    next();
+});
+app.use(async (req, res, next) => {
+    const newNews = await newsService.getTop10NewsByDate();
+       const updatedList = await Promise.all(newNews.map(async (item) => {
+           const count = await newsService.countCommentBynewsId(item.NewsID);
+           const tags = await newsService.getTagByNewsId(item.NewsID);
+           return {
+               ...item,
+               countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
+               tags:tags
+           }
+       }));
+    res.locals.newNews = updatedList;
+    next();
+});
+app.use(async (req, res, next) => {
+    const viewsNews = await newsService.getTop10NewsByViews();
+       const updatedList = await Promise.all(viewsNews.map(async (item) => {
+           const count = await newsService.countCommentBynewsId(item.NewsID);
+           const tags = await newsService.getTagByNewsId(item.NewsID);
+           return {
+               ...item,
+               countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
+               tags:tags
+           }
+       }));
+    res.locals.viewsNews = updatedList;
+    next();
+});
+app.use(async (req, res, next) => {
+    const randomNews = await newsService.getTop3NewsByRandom();
+       const updatedList = await Promise.all(randomNews.map(async (item) => {
+           const count = await newsService.countCommentBynewsId(item.NewsID);
+           const tags = await newsService.getTagByNewsId(item.NewsID);
+           return {
+               ...item,
+               countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
+               tags:tags
+           }
+       }));
+    res.locals.randomNews = updatedList;
+    next();
+});
 app.get('/', checkPremium, async function (req, res) {
    if (!req.session.auth || !req.session.authUser) {
         // Truyền dữ liệu vào view

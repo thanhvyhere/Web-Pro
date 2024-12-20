@@ -138,6 +138,14 @@
   margin-bottom: 0.5rem !important
 }
 
+.tw-ml-1 {
+  margin-left: 0.25rem !important
+}
+
+.tw-ml-2 {
+  margin-left: 0.5rem !important
+}
+
 .tw-mr-10 {
   margin-right: 2.5rem !important
 }
@@ -184,8 +192,16 @@
   height: 100px !important
 }
 
+.tw-h-\[140px\] {
+  height: 140px !important
+}
+
 .tw-h-\[180px\] {
   height: 180px !important
+}
+
+.tw-h-\[420px\] {
+  height: 420px !important
 }
 
 .tw-h-\[450px\] {
@@ -220,6 +236,10 @@
   width: 20% !important
 }
 
+.tw-w-\[200px\] {
+  width: 200px !important
+}
+
 .tw-w-\[25\%\] {
   width: 25% !important
 }
@@ -238,6 +258,14 @@
 
 .tw-w-\[60\%\] {
   width: 60% !important
+}
+
+.tw-w-\[60px\] {
+  width: 60px !important
+}
+
+.tw-w-\[80\%\] {
+  width: 80% !important
 }
 
 .tw-w-\[90\%\] {
@@ -312,8 +340,17 @@
   border-width: 0px !important
 }
 
+.tw-border-\[1px\] {
+  border-width: 1px !important
+}
+
 .tw-border-\[5px\] {
   border-width: 5px !important
+}
+
+.tw-border-\[\#9CA3AF\] {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity, 1)) !important
 }
 
 .tw-border-orange-500 {
@@ -339,6 +376,11 @@
 .tw-bg-white {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1)) !important
+}
+
+.tw-bg-yellow-200 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(254 240 138 / var(--tw-bg-opacity, 1)) !important
 }
 
 .tw-bg-yellow-300 {
@@ -397,12 +439,29 @@
   padding-bottom: 0.5rem !important
 }
 
+.tw-py-\[10px\] {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important
+}
+
+.tw-pl-3 {
+  padding-left: 0.75rem !important
+}
+
+.tw-pl-\[10\%\] {
+  padding-left: 10% !important
+}
+
 .tw-pt-2 {
   padding-top: 0.5rem !important
 }
 
 .tw-text-center {
   text-align: center !important
+}
+
+.tw-text-\[16px\] {
+  font-size: 16px !important
 }
 
 .tw-text-xl {
@@ -426,6 +485,11 @@
 .tw-text-\[\#F0B617\] {
   --tw-text-opacity: 1 !important;
   color: rgb(240 182 23 / var(--tw-text-opacity, 1)) !important
+}
+
+.tw-text-black {
+  --tw-text-opacity: 1 !important;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1)) !important
 }
 
 .tw-text-green-500 {
