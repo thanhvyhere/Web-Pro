@@ -108,11 +108,11 @@ body{
 /* Đảm bảo phần tử cha có đủ không gian để chứa dropdown */
 
 
-.dropdown-menu .dropdown-item {
+.dropdown-menu .dropdown-item a{
     font-size: 14px;
     color: black; 
 }
-.dropdown-menu .dropdown-item:hover {
+.dropdown-menu .dropdown-item a:hover {
     color: #007bff;
 }
 
@@ -221,7 +221,7 @@ hr {
 
 /* Hiển thị menu khi hover */
 .dropdown:hover .dropdown-menu {
-    display: block; /* Hiển thị menu khi hover vào dropdown */
+    display: block;
 }
 
 /* Kiểu ảnh đại diện và thông tin tài khoản */
@@ -253,8 +253,8 @@ hr {
     display: flex; /* Đặt biểu tượng và text trên cùng một hàng */
     align-items: center; /* Căn giữa biểu tượng và text */
     padding: 10px 15px; /* Khoảng cách trong cho từng mục */
-    font-size: 30px; /* Kích thước chữ */
     text-decoration: none; /* Xóa gạch chân */
+    color: #000000;
     transition: background-color 0.2s ease; /* Hiệu ứng hover mượt */
 }
 
@@ -301,8 +301,7 @@ hr {
 
 /* Hiệu ứng hover cho các mục trong submenu */
 .submenu a:hover {
-    background-color: #007bff; /* Màu nền khi hover */
-    color: #fff; /* Màu chữ khi hover */
+    color: #000000; /* Màu chữ khi hover */
 }
 #searchResults {
     display: block;
@@ -361,4 +360,3 @@ hr {
     max-width: 100%; 
     box-sizing: border-box;
 }
-

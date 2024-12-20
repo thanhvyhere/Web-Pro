@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NewsLand - New thing every days</title>
     <link rel="icon" href="/imgs/NEWSLANDlogoRmBg.png" type="image/x-icon">
-    <link rel="stylesheet" href="/css/main.css">  
+    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="/css/tailwind.css" rel="stylesheet">
-   <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=League+Spartan:wght@100..900&display=swap"
+        rel="stylesheet">
     {{{_sections.css}}}
 </head>
+
 <body>
     <div id="header-nav">
         <div id="header" class="d-flex flex-row justify-content-between align-items-center">
@@ -22,44 +26,45 @@
                 <img id="brand-logo" src="/imgs/NEWSLANDlogo.png" alt="">
                 <div class="d-flex flex-column align-items-center">
                     <h1 id="brand-name">NewsLand</h1>
-                <h6 id="brand-slogan">New thing every days</h6>
+                    <h6 id="brand-slogan">New thing every days</h6>
                 </div>
             </div>
             <div class="container-fluid">
                 <div class="d-flex search-container" role="search" id="searchForm">
                     <div class="d-flex flex-column">
-                        <input id="searchInput" class="form-control me-2 search-input" type="search" placeholder="Search" aria-label="Search">
+                        <input id="searchInput" class="form-control me-2 search-input" type="search"
+                            placeholder="Search" aria-label="Search">
                         <div id="searchResults" class="dropdown-menu" style="display: none; position: absolute;"></div>
                     </div>
-                    
+
                 </div>
             </div>
             <form id="formPre" action="/account/premium" method="post"></form>
-            <a id="activatePremiumBtn"class="btn-subcribe" href="javascript: $('#formPre').submit()">
+            <a id="activatePremiumBtn" class="btn-subcribe" href="javascript: $('#formPre').submit()">
                 <i class=""></i>
                 Premium
             </a>
-            <i id="btn-bell" class="bi bi-bell-fill" role="button"></i>
             {{#if auth}}
-                
-                <a class="nav-link dropdown-toggle" href="#" id="navbarAccount" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <img id="img-account" src="/static/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle">
-                </a>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarAccount" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img id="img-account" src="/static/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle">
+            </a>
+
+            
             {{else}}
-                <div class="d-flex flex-row justify-between g-10">
-                    <a class="btn-subcribe" href="/account/register">
-                        <i class=""></i>
-                        Sign Up
-                    </a>
-                    <a class="btn-subcribe" href="/account/login">
-                        <i class=""></i>
-                        Sign In
-                    </a>
-                </div>
+            <div class="d-flex flex-row justify-between g-10">
+                <a class="btn-subcribe" href="/account/register">
+                    <i class=""></i>
+                    Sign Up
+                </a>
+                <a class="btn-subcribe" href="/account/login">
+                    <i class=""></i>
+                    Sign In
+                </a>
+            </div>
             {{/if}}
             <div id="info-dropdown" class="dropdown-menu" aria-labelledby="navbarAccount">
-                <div id="account-inf">
+                <div id="account-inf" class="p-3 text-center">
                     <img id="img-account" src="/static/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle">
                     <h5 class="text-uppercase mt-3">{{authUser.username}}</h5>
                 </div>
@@ -67,7 +72,7 @@
                     <i class="bi bi-person-badge"></i>
                     Your Information
                 </a>
-                <a  class="dropdown-item">
+                <a class="dropdown-item" href="#">
                     <i class="bi bi-gear-fill"></i>
                     Setting
                 </a>
@@ -93,8 +98,9 @@
                             {{#if children.length}}
                             <!-- Dropdown menu nếu có danh mục con -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="/newspaper/byCat?catId={{CatID}}" id="dropdown-{{id}}" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="/newspaper/byCat?catId={{CatID}}"
+                                    id="dropdown-{{id}}" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     {{CatName}}
                                 </a>
 
@@ -113,14 +119,14 @@
                             </li>
                             {{/if}}
                             {{/each}}
-            
+
                             <li class="nav-item dropdown">
                                 <!-- Nút chính có icon -->
                                 <a class="nav-link dropdown-toggle" href="#" id="catalogDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <img class="search-icon" src="/imgs/btn-catalog.png" alt="Catalog">
                                 </a>
-            
+
                                 <!-- Dropdown menu chứa danh mục -->
                                 <ul class="dropdown-menu" aria-labelledby="catalogDropdown">
                                     <h6>TẤT CẢ DANH MỤC</h6>
@@ -146,9 +152,9 @@
             </nav>
         </div>
     </div>
-   
-     <div class="tw-flex tw-flex-row tw-min-h-screen card-body">
-    {{#if authPremium}}
+
+    <div class="tw-flex tw-flex-row tw-min-h-screen card-body">
+        {{#if authPremium}}
         <div id="nav-left" class="">
             <div class="tw-flex tw-flex-row tw-mt-5 tw-mb-10 tw-px-5">
                 <img src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle tw-h-[50px] tw-w-[50px]">
@@ -164,23 +170,23 @@
             </div>
             <nav class="nav flex-column">
                 {{#with (getFirstItem lcFeatureRoles) as |firstRole|}}
-                    <a class="nav-link active-link"  href="/{{firstRole.RoleName}}/{{firstRole.PathName}}">
-                        {{{firstRole.Icon}}}&nbsp;{{firstRole.FeatureName}}
-                    </a>
+                <a class="nav-link active-link" href="/{{firstRole.RoleName}}/{{firstRole.PathName}}">
+                    {{{firstRole.Icon}}}&nbsp;{{firstRole.FeatureName}}
+                </a>
                 {{/with}}
                 <!-- Links -->
                 {{#each (skipFirst lcFeatureRoles)}}
-                    <a class="nav-link" href="/{{RoleName}}/{{PathName}}">{{{Icon}}}&nbsp;{{FeatureName}}</a>
+                <a class="nav-link" href="/{{RoleName}}/{{PathName}}">{{{Icon}}}&nbsp;{{FeatureName}}</a>
                 {{/each}}
             </nav>
         </div>
-    {{/if}}
-    <div class="body-homepage tw-w-full">
-        {{{ body }}}
+        {{/if}}
+        <div class="body-homepage tw-w-full">
+            {{{ body }}}
+        </div>
     </div>
-    </div>
-    
-    
+
+
     <div id="footer">
         <div id="send-mail" class="d-flex flex-row justify-content-center align-items-center">
             <div class="mt-3 d-flex flex-column align-items-center">
@@ -188,7 +194,7 @@
                 <h6>ĐỪNG BỎ LỠ NHỮNG TIN TỨC MỚI NHẤT</h6>
                 <h6>Nhận thông báo tin mới nhất qua Mail</h6>
             </div>
-            <form id="txtbox-send-mail"class="mt-3 d-flex" role="search">
+            <form id="txtbox-send-mail" class="mt-3 d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Your Email" aria-label="Search">
                 <button class="btn-subcribe" type="submit">Đăng ký</button>
             </form>
@@ -213,16 +219,21 @@
                 </div>
             </div>
         </div>
-        
 
-        
+
+
     </div>
-   
+
 
     <!-- Sửa lại jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script> <!-- Phiên bản đầy đủ của jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <!-- Phiên bản đầy đủ của jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+        integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -230,67 +241,56 @@
     <script>
         $(document).ready(function () {
             // Kiểm tra nếu người dùng đã đăng nhập
-            if (!{{auth}}) {  // Kiểm tra nếu auth là false
-                // Nếu chưa đăng nhập, hiển thị thông báo SweetAlert
-                $('#toggleNavleft').on('click', function () {
-                    Swal.fire({
-                        title: 'Bạn chưa đăng nhập',
-                        text: 'Bạn cần đăng nhập để truy cập các tính năng này.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Đăng nhập',
-                        cancelButtonText: 'Hủy',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = '/account/login';  // Điều hướng đến trang đăng nhập
-                        }
-                    });
-                });
-            } 
-            else if ({{auth}} && parseInt({{authUser.permission}}) === 1) {  // Kiểm tra quyền của người dùng
-                $('#toggleNavleft').on('click', function () {
-                    Swal.fire({
-                        title: 'Bạn không đủ quyền',
-                        text: 'Bạn cần đăng ký premium để truy cập các tính năng này.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Subscribe',
-                        cancelButtonText: 'Hủy',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = '/account/subscribe';  // Điều hướng đến trang đăng ký
-                        }
-                    });
-                });
-            }
-            else {
-                // Nếu người dùng đã đăng nhập và có quyền truy cập, hiển thị menu
-                $('#toggleNavleft').on('click', function () {
-                    // Kiểm tra nếu #nav-left đang hiển thị (display: block) thì ẩn nó đi (display: none)
-                    if ($('#nav-left').css('display') === 'none') {
-                        $('#nav-left').css('display', 'block'); // Hiển thị #nav-left
-                    } else {
-                        $('#nav-left').css('display', 'none'); // Ẩn #nav-left
+            if (!{{ auth }}) {  // Kiểm tra nếu auth là false
+            // Nếu chưa đăng nhập, hiển thị thông báo SweetAlert
+            $('#toggleNavleft').on('click', function () {
+                Swal.fire({
+                    title: 'Bạn chưa đăng nhập',
+                    text: 'Bạn cần đăng nhập để truy cập các tính năng này.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đăng nhập',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/account/login';  // Điều hướng đến trang đăng nhập
                     }
                 });
-            }
+            });
+        } 
+            else if ({{ auth }} && parseInt({{ authUser.permission }}) === 1) {  // Kiểm tra quyền của người dùng
+            $('#toggleNavleft').on('click', function () {
+                Swal.fire({
+                    title: 'Bạn không đủ quyền',
+                    text: 'Bạn cần đăng ký premium để truy cập các tính năng này.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Subscribe',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/account/subscribe';  // Điều hướng đến trang đăng ký
+                    }
+                });
+            });
+        }
+            else {
+            // Nếu người dùng đã đăng nhập và có quyền truy cập, hiển thị menu
+            $('#toggleNavleft').on('click', function () {
+                // Kiểm tra nếu #nav-left đang hiển thị (display: block) thì ẩn nó đi (display: none)
+                if ($('#nav-left').css('display') === 'none') {
+                    $('#nav-left').css('display', 'block'); // Hiển thị #nav-left
+                } else {
+                    $('#nav-left').css('display', 'none'); // Ẩn #nav-left
+                }
+            });
+        }
         });
     </script>
 
 
     <script>
-        document.querySelector('#img-account').addEventListener('mouseover', function () {
-                const dropdown = document.querySelector('.dropdown-nav');
-                dropdown.classList.add('show');
-            });
-
-            document.querySelector('.nav-container').addEventListener('mouseout', function () {
-                const dropdown = document.querySelector('.dropdown-nav');
-                dropdown.classList.remove('show');
-            });
-    </script>
-    <script>
-       document.getElementById('btn-logout').addEventListener('click', function () {
+        document.getElementById('btn-logout').addEventListener('click', function () {
             // Hiển thị SweetAlert2 để xác nhận logout
             Swal.fire({
                 title: 'Are you sure?',
@@ -362,10 +362,10 @@
         }
 
         // Gọi hàm khi nhấn nút
-      document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('activatePremiumBtn').addEventListener('click', activatePremium);
         });
-        </script>
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('searchInput');
@@ -393,10 +393,10 @@
                             .map(
                                 (item) => {
                                     // Truncate abstract if it exceeds 100 characters
-                                    const truncatedAbstract = item.Abstract.length > 100 ? item.Abstract.substring(0, 100) + '...' : item.Abstract;
+                                    const truncatedAbstract = item.Abstract.length > 50 ? item.Abstract.substring(0, 100) + '...' : item.Abstract;
 
                                     return `
-                                        <div class="dropdown-item" data-id="${item.NewsID}">
+                                        <div class="dropdown-item search-item" data-id="${item.NewsID}">
                                             <a href="/newspaper/detail?id=${item.NewsID}">
                                                 <strong>${item.Title}</strong>
                                             </a><br />
@@ -407,8 +407,7 @@
                             )
                             .join('');
                     } else {
-                        searchResults.style.display = 'block';
-                        searchResults.innerHTML = '<div class="dropdown-item">No results found</div>';
+                        searchResults.innerHTML = '<div class="dropdown-item search-item">No results found</div>';
                     }
                 } catch (err) {
                     console.error('Error fetching search results:', err);
@@ -424,7 +423,7 @@
 
             // Thêm sự kiện click vào từng kết quả
             searchResults.addEventListener('click', (e) => {
-                const item = e.target.closest('.dropdown-item');
+                const item = e.target.closest('.search-item');
                 if (item) {
                     const newsId = item.getAttribute('data-id');
                     console.log(`Selected NewsID: ${newsId}`);
@@ -436,4 +435,5 @@
 
 
 </body>
+
 </html>

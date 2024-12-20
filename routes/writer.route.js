@@ -129,7 +129,7 @@ router.post('/create_article',upload.single('ImageFile'), async (req, res) => {
         await newsService.add(entity);
         const [result] = await newsService.getIdNewEntity();
         const newsID = result[0].id;
-        const { tags } = req.body;
+        const { tags } = req.body  || "0";
 
         let parsedTags = tags;
         if (typeof tags === 'string') {

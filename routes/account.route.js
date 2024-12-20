@@ -307,11 +307,11 @@ router.post('/premium', async function (req, res) {
     try {
         // Lấy ID của người dùng hiện tại từ session
         const userId = req.session.authUser.userid;
-        const account = await accountService.findPremiumByUserId(userId) || 0;
+        const account = await accountService.findPremiumByUserId(userId) || "";
 
         let expirationDate;
 
-        if (account === 0) {
+        if (account === "") {
             // Nếu tài khoản chưa có, đặt ngày hết hạn là 7 phút từ bây giờ
             expirationDate = new Date();
             expirationDate.setMinutes(expirationDate.getMinutes() + 7);
