@@ -393,7 +393,7 @@
                             .map(
                                 (item) => {
                                     // Truncate abstract if it exceeds 100 characters
-                                    const truncatedAbstract = item.Abstract.length > 50 ? item.Abstract.substring(0, 100) + '...' : item.Abstract;
+                                    const truncatedAbstract = item.Abstract.length > 100 ? item.Abstract.substring(0, 100) + '...' : item.Abstract;
 
                                     return `
                                         <div class="dropdown-item" data-id="${item.NewsID}">

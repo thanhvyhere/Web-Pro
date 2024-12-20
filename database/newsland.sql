@@ -20,6 +20,12 @@ CREATE TABLE `users` (
   UNIQUE (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE premium_accounts (
+    id INT PRIMARY KEY, -- ID người dùng
+    expiration_date DATETIME NOT NULL, -- Ngày hết hạn
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Ngày tạo
+    FOREIGN KEY (id) REFERENCES users(id) -- Khóa ngoại liên kết với bảng users
+);
 CREATE TABLE `userRefreshTokenExt` (
   `ID` int(11) NOT NULL,
   `RefreshToken` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
