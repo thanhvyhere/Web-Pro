@@ -7,7 +7,7 @@ export default {
   },
 
   // Lấy một chuyên mục theo ID
-  findBfindCategoryByIdyId(categoryId) {
+  findCategoryById(categoryId) {
     return db('categories').where('CatID', categoryId).first();
   },
 

@@ -4,40 +4,7 @@
 
 {{#section "script"}}
 <script>
-  document.getElementById('select-all-categories').addEventListener('change', function(e) {
-  const checkboxes = document.querySelectorAll('.category-checkbox');
-  checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-});
-
   document.addEventListener('DOMContentLoaded', function () {
-    // JavaScript to handle select/deselect all checkboxes
-    const selectAllCheckbox = document.getElementById('select-all-categories');
-    if (selectAllCheckbox) {
-      selectAllCheckbox.addEventListener('change', function () {
-        const checkboxes = document.querySelectorAll('.category-checkbox');
-        checkboxes.forEach(checkbox => {
-          checkbox.checked = this.checked;
-        });
-      });
-    }
-
-    // JavaScript to handle edit selected categories
-    const editButton = document.getElementById('categories-edit-btn');
-    if (editButton) {
-      editButton.addEventListener('click', function () {
-        const selectedCategories = [];
-        document.querySelectorAll('.category-checkbox:checked').forEach(checkbox => {
-          selectedCategories.push(checkbox.dataset.id);
-        });
-        console.log('Danh mục đã chọn:', selectedCategories); // Debugging line
-        if (selectedCategories.length === 1) {
-          window.location.href = '/administrator/manage_categories/update/' + selectedCategories[0];
-        } else {
-          alert('Vui lòng chọn chính xác một danh mục để chỉnh sửa.');
-        }
-      });
-    }
-
     // JavaScript for search button
     const searchButton = document.getElementById('search-btn');
     if (searchButton) {
@@ -45,7 +12,7 @@
         const searchTerm = document.getElementById('search-category').value.toLowerCase();
         const rows = document.querySelectorAll('.categories-table tbody tr');
         rows.forEach(row => {
-          const categoryName = row.querySelector('td:nth-child(3)'); // "Category Name" column
+          const categoryName = row.querySelector('td:nth-child(2)'); // "Category Name" column
           if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
             row.style.display = ''; // Show row
           } else {
@@ -62,7 +29,7 @@
         const searchTerm = this.value.toLowerCase();
         const rows = document.querySelectorAll('.categories-table tbody tr');
         rows.forEach(row => {
-          const categoryName = row.querySelector('td:nth-child(3)');
+          const categoryName = row.querySelector('td:nth-child(2)');
           if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
             row.style.display = '';
           } else {
@@ -93,8 +60,6 @@
 
     <div id="category-actions">
       <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
-      <a href="#" id="categories-edit-btn" class="btn btn-warning btn-sm">Edit Selected</a>
-      <a href="/administrator/manage_categories/delete/{{this.CatID}}" class="btn btn-danger btn-sm">Delete</a>
     </div>
   </header>
 
@@ -102,16 +67,15 @@
     <table class="categories-table">
       <thead>
         <tr>
-          <th><input type="checkbox" id="select-all-categories" /></th> <!-- Checkbox to select all -->
           <th>ID</th>
           <th>Category Name</th>
           <th>Parent Category</th>
+          <th>Actions</th> <!-- New Actions column -->
         </tr>
       </thead>
       <tbody>
         {{#each categories}}
         <tr id="category-row-{{this.CatID}}">
-          <td><input type="checkbox" class="category-checkbox" data-id="{{this.CatID}}" /></td>
           <td>{{this.CatID}}</td>
           <td>{{this.CatName}}</td>
           <td>{{#if this.parent_id}}
@@ -119,17 +83,20 @@
                   {{CatName}}
                 {{/with}}
               {{else}}None{{/if}}</td>
+          <td>
+            <a href="/administrator/manage_categories/update/{{this.CatID}}" class="btn btn-warning btn-sm">Edit</a>
+            <a href="/administrator/manage_categories/delete/{{this.CatID}}" class="btn btn-danger btn-sm">Delete</a>
+          </td> <!-- Action buttons for each row -->
         </tr>
         {{else}}
         <tr>
-          <td colspan="3">No categories found</td>
+          <td colspan="4">No categories found</td>
         </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
 </div>
-
 
 <div class="pagination">
   {{#if (gt currentPage 1)}}
