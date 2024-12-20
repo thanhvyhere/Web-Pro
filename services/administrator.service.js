@@ -11,14 +11,18 @@ export default {
     return db('categories').where('CatID', categoryId).first();
   },
 
-  // Thêm chuyên mục mới
-  add(category) {
-    const [newCategory] = db('categories').insert({
+// Thêm chuyên mục mới
+add(category) {
+  return db('categories')
+    .insert({
       CatName: category.CatName,
-      parent_id: category.parent_id || null,
-    }).returning('CatID');
-    return newCategory;
-  },
+      parent_id: category.parent_id || null
+    })
+    .returning('CatID') // Return inserted category IDs
+    .then(function(ids) {
+      return ids[0]; // Access the first element of the array (the inserted CatID)
+    });
+},
 
   // Cập nhật chuyên mục
   update(id, category) {
