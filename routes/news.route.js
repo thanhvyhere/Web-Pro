@@ -3,6 +3,9 @@ import express from 'express';
 import newsService from '../services/news.service.js';
 import moment from 'moment';
 import auth from '../middleware/auth.mdw.js';
+import multer from 'multer';
+import fs from 'fs'
+import path from 'path'
 const router = express.Router();
 
 
@@ -30,6 +33,7 @@ router.get('/byCat', async function (req, res) {
     const list = await newsService.findPageByCatId(catId, limit, offset);
     const updatedList = await Promise.all(list.map(async (item) => {
         let is_premium;
+        let tags;
         const auth = req.session.auth;
         if (item.Premium === 1)
             is_premium = true;
@@ -39,7 +43,8 @@ router.get('/byCat', async function (req, res) {
             ...item,
             catName: category.CatName,
             is_premium,
-            auth
+            auth,
+          
         }
     }));
 
@@ -48,7 +53,7 @@ router.get('/byCat', async function (req, res) {
         news: updatedList,
         empty: list.length === 0,
         pageNumbers: pageNumbers,
-        catId: catId
+        catId: catId,
     });
 });
 
@@ -72,20 +77,30 @@ router.get('/detail',  async function (req, res) {
 router.get('/edit', async function (req, res) {
     const id = +req.query.id || 0; // + o trc de chuyen kieu du lieu ve so
     const entity = await newsService.findById(id);
-    console.log(id);
     const tags = await newsService.getTagByNewsId(id);
-    console.log("tags: ", tags);
     const category_con = await newsService.findCatByCatId(entity.CatID);
+    if(entity.CatID === 0)
+    {
+        return res.status(400).send('Lỗi dữ liệu không có danh mục.');
+    }else
+    {
     const category_cha = await newsService.findCatByCatId(category_con.parent_id)
+    
+    console.log(category_cha);
+    const image = entity.ImageCover;
+    let imageFile = image; // Khởi tạo giá trị mặc định
+
     if (!entity) {
         return res.redirect('/');
     }
     res.render('vwNewspaper/edit', {
-        news: entity,
-        categoryCha: category_cha,
-        categoryCon: category_con,
-        tags: tags
+    news: entity,
+    categoryCha: category_cha,
+    categoryCon: category_con,
+    tags: tags,
+    imageFile: imageFile,
     });
+    }
 });
 
 router.post('/del', async function (req, res) {
@@ -98,8 +113,34 @@ router.post('/del', async function (req, res) {
 });
 
 
+const upload = multer({ dest: './static/imgs/news/' })
+router.post('/patch',upload.single('ImageFile'), async function (req, res) {
+    const imagePath = './static/imgs/news/';
+    const imageFile = req.file; // Lấy file upload từ multer
+    const number = await newsService.countByNews();
+    
+    let finalImages = [];
+    let coverImage;
 
-router.post('/patch', async function (req, res) {
+    // Nếu có file tải lên
+    if (imageFile) {
+        const fileName = `news_${number[0].total}.jpg`; // Tạo tên file mới
+        const newFilePath = path.join(imagePath, fileName);
+
+        // Đổi tên file để lưu đúng chuẩn
+        fs.renameSync(imageFile.path, newFilePath);
+
+        // Đường dẫn đầy đủ cho ảnh vừa tải
+        finalImages.push(`/static/imgs/news/${fileName}`);
+        coverImage = finalImages[0]; // Ảnh bìa là ảnh đầu tiên
+    } else {
+        // Không có file tải lên, giữ nguyên ImageCover từ body
+        coverImage = req.body.ImageCover; // Giá trị cũ từ form (được gửi lên từ client)
+    }
+
+    console.log('Ảnh bìa:', coverImage);
+
+    console.log('Final Images:', finalImages);
     const id = req.body.newsId;
     await newsService.delTagByNewsId(id);
     const { tags } = req.body;
@@ -108,7 +149,7 @@ router.post('/patch', async function (req, res) {
         Title: req.body.title,
         CreatedDate: date,
         CatID: req.body.CatID,
-        ImageCover: req.body.ImagePath,
+        ImageCover: coverImage,
         Content: req.body.content,
         Status: 2
     }
@@ -116,30 +157,33 @@ router.post('/patch', async function (req, res) {
     
     let parsedTags = tags;
     if (typeof tags === 'string') {
-        parsedTags = JSON.parse(tags);
+        parsedTags = JSON.parse(tags );
+        console.log(parsedTags);
+    } else {
+        console.error('Dữ liệu rỗng hoặc không hợp lệ:', data);
     }
     for (let tag of parsedTags) {
         let tagValue = tag.value;
 
-        // Kiểm tra nếu tag đã tồn tại trong cơ sở dữ liệu
-        let existingTag = await newsService.findTagByTagName(tagValue); 
-        if (!existingTag) {
-            let newTag = {
-                TagName: tagValue
-            };
-            // Lưu tag mới vào database
-            await newsService.addNewTag(newTag);
-            existingTag = await newsService.findTagByTagName(tagValue);
-        }
-
-        // Tạo mối quan hệ giữa tag và bài viết
-        const tagNewsEntity = {
-            TagID: existingTag.TagID,
-            NewsID: id
+    // Kiểm tra nếu tag đã tồn tại trong cơ sở dữ liệu
+    let existingTag = await newsService.findTagByTagName(tagValue); 
+    if (!existingTag) {
+        let newTag = {
+            TagName: tagValue
         };
-
-        await newsService.addTagIdAndNewsId(tagNewsEntity);
+        // Lưu tag mới vào database
+        await newsService.addNewTag(newTag);
+        existingTag = await newsService.findTagByTagName(tagValue);
     }
+
+    // Tạo mối quan hệ giữa tag và bài viết
+    const tagNewsEntity = {
+        TagID: existingTag.TagID,
+        NewsID: id
+    };
+
+    await newsService.addTagIdAndNewsId(tagNewsEntity);
+}
 
     res.redirect('/writer/pending_approval?success=Update%20successful!');
 });
@@ -147,7 +191,6 @@ router.post('/patch', async function (req, res) {
 router.get('/api/tags', async (req, res) => {
     try {
         const tags = await newsService.getAllTags(); // Lấy danh sách tags từ database
-        console.log(tags);
         res.json(tags); // Trả về danh sách tags
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch tags' });

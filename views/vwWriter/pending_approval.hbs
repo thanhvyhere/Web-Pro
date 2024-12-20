@@ -33,10 +33,10 @@
         <div class="col-sm-6 mb-3">
             <div class="card">
                 <div class="card-body card-news d-flex flex-row">
-                    <img src="{{ImageCover}}" alt="..." class="img-title-paper">
+                    <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
                     <div class="paper-small">
                         <div class="header-paper small mb-2">
-                            <button class="name-category-paper" disabled="disabled">{{catName}}</button>
+                            <label class="name-category-paper" disabled="disabled">{{catName}}</label>
                             <div class="PublishedDate">
                                 <i class="bi bi-calendar3"></i>
                                 {{formatDate PublishedDate}}
@@ -49,9 +49,9 @@
                         <p class="abstract-font">{{Abstract}}</p>
                     </div>
                 </div>
-                <a type="button" class="btn btn-primary" href="/newspaper/edit?id={{NewsID}}">
+                <a type="button" class="btn btn-warning" href="/newspaper/edit?id={{NewsID}}">
                     <i class="bi bi-pencil-square"></i>
-                    Review and edit
+                    Chỉnh sửa
                 </a>
             </div>
         </div>
