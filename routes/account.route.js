@@ -416,12 +416,27 @@ router.get('/user-info', (req, res) => {
             return res.status(404).send('Người dùng không tồn tại');
         }
 
-        // Render thông tin người dùng lên trang user-info.hbs và áp dụng layout 'account-layout'
-        res.render('vwAccount/user-info', {
-            layout: 'account-layout', // Chỉ định layout
-            username: user.username,
-            email: user.email,
-            dob: user.dob,
+        // Lấy tên quyền từ bảng roles
+        accountService.getRoleById(user.permission, (err, role) => {
+            if (err) {
+                console.error('Error fetching role data:', err);
+                return res.status(500).send('Lỗi server');
+            }
+
+            if (!role) {
+                return res.status(404).send('Quyền không tồn tại');
+            }
+
+            // Render thông tin người dùng lên trang user-info.hbs và áp dụng layout 'account-layout'
+            res.render('vwAccount/user-info', {
+                layout: 'account-layout', // Chỉ định layout
+                username: user.username,
+                email: user.email,
+                dob: user.dob,
+                noOfFollower: user.NoOfFollower,
+                noOfFollowing: user.NoOfFollowing,
+                permissionName: role.RoleName, // Hiển thị tên quyền
+            });
         });
     });
 });
