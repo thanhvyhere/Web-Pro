@@ -1,20 +1,16 @@
 import session from 'express-session';
-import fnMySQLStore from 'express-mysql-session';
-import { connectionInfo } from '../utils/db.js';
+import passport from 'passport';
 
 export default function (app) {
-
-  const MySQLStore = fnMySQLStore(session);
-  const sessionStore = new MySQLStore(connectionInfo);
-
-  app.set('trust proxy', 1) // trust first proxy
   app.use(session({
-    secret: 'SECRET',
-    resave: false,
-    saveUninitialized: true,
-    store: sessionStore,
-    cookie: {
-      // secure: true
-    }
+      secret: 'keyboard cat',
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24 * 7
+      }
   }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 }

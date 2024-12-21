@@ -132,18 +132,17 @@ router.get('/modify', async function (req,res)
 });
 router.post('/modify', async (req, res) => {
     try {
-        const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm');
+        const publishedDay = moment(req.body.PublishedDay, "DD/MM/YYYY H:mm").format('YYYY-MM-DD HH:mm');
         const id = req.body.NewsID;
-        const tags = req.body.tags || []; // Nhãn gửi lên từ form
+        const tags = req.body.tags || []; 
         
-        // Bước 1: Xóa tất cả các nhãn cũ của bài viết này
         await editorService.deleteTag(id);
 
-        // Bước 2: Cập nhật thông tin bài viết (PublishedDay, CatID)
         const changes = {
             PublishedDay: publishedDay,
             CatID: req.body.CatID,
         };
+        console.log(changes);
         await editorService.update(changes, id);
 
         // Bước 3: Thêm các nhãn mới vào bảng news_tags
@@ -169,6 +168,7 @@ router.post('/modify', async (req, res) => {
             }
             await editorService.addTagNews(newsTags)
         }
+
         // Chuyển hướng sau khi xử lý
         res.redirect('/editor/schedule');
     } catch (error) {
