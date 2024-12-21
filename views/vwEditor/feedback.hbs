@@ -1,0 +1,53 @@
+<div class="card">
+    <div class="card-header">
+        Nhận xét
+    </div>
+    <div class="card-body">
+    {{#each newsList}}
+    <div class="row">
+        <div class="col-sm-6">
+            <!-- Nội dung cột 1 -->
+            <div class="mb-3 tw-flex tw-justify-center tw-items-center">
+                <div class="tw-w-[350px] tw-h-[450px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-p-3"
+                        style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 1); border: 1px solid black;">
+                    <p>Thời gian: {{formatDate CreateDate}}</p>
+                    <img src="{{ImageCover}}" alt="{{Title}}"
+                            class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-2">
+                    <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis">
+                        <strong>{{Title}}</strong>
+                    </p>
+                    <div class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
+                        {{{Content}}}
+                    </div>
+
+                    <div class="tw-flex tw-flex-row tw-justify-between tw-items-center tw-w-[100%] tw-mt-auto">
+                        <p style="margin: 0;">Tác giả: <br>{{AuthorName}}</p>
+                
+                           
+                            <div 
+                                    style="color: {{getStatusColor StatusName}};
+                                        padding: 5px;
+                                        border: 2px solid {{getStatusColor StatusName}};
+                                        border-radius: 20px;">
+                                {{StatusName}}
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-sm-6">
+            <!-- Nội dung cột 2 -->
+            <form action="" method="post">
+                <input type="hidden" name="NewsID"  value="{{NewsID}}">
+                <label for="txtFeedback" class="tw-text-xl"><strong>Hãy điền góp ý cho tác giả</strong></label> <br>
+                <textarea name="Feedback" id="txtFeedback" class="tw-h-[50vh] tw-w-full">{{Feedback}}</textarea>
+                <input type="hidden" name="Status"  value="6">
+                <button  type="submit" formaction="/editor/feedback" class="tw-rounded-[20px] tw-bg-yellow-500 tw-border-0 tw-text-white tw-px-4 tw-py-2 tw-w-full
+                  hover:tw-bg-yellow-200 hover:tw-text-black transition-colors duration-300">Gửi nhận xét</button>
+            </form>
+        </div>
+    </div>
+    {{/each}}
+    </div>
+</div>

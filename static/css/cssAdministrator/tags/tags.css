@@ -1,0 +1,215 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container Styling */
+.container {
+    max-width: 1500px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff; /* Màu nền trắng */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ff8c00; /* Màu sáng cho sự nổi bật */
+    padding-bottom: 10px;
+    background: #ffffff; /* Màu nền trắng */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Title */
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Buttons */
+.btn {
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: background-color 0.4s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #eeff00, #00bfff);
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+/* Table Styling */
+.table-container {
+    overflow-x: auto;
+}
+
+/* Table */
+.tag-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header */
+.tag-table th {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #fff;
+    text-align: center;
+}
+
+/* Table Rows */
+.tag-table tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+.tag-table tr:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Cells */
+.tag-table td {
+    font-size: 20px;
+    color: #555;
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+/* Checkbox Styling */
+#select-all-tags {
+    cursor: pointer;
+}
+
+.tag-checkbox {
+    cursor: pointer;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn-pagination {
+    padding: 8px 16px;
+    margin: 0 4px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-pagination.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-pagination:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+.search-container {
+    margin-bottom: 1rem;
+}
+
+.search-container input {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-container button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
+}
+  
+/* Media Queries */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+
+    .title {
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    .tag-table th,
+    .tag-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .btn {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tag-table th,
+    .tag-table td {
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+
+    .btn {
+        font-size: 11px;
+        padding: 6px 8px;
+    }
+}

@@ -1,0 +1,45 @@
+/* Custom styles for the Update User page */
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.header {
+    background-color: #d1ecf1;
+    padding: 20px;
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+    color: #0c5460;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.btn-update {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-back {
+    background-color: #007bff;
+    color: white;
+}

@@ -1,0 +1,20 @@
+/* Ensure body takes full height of the page */
+body, html {
+    width: 100%; /* Ensure body takes full width */
+    height: 100%;
+    margin: 0;
+    font: League Spartan;
+    justify-content: center;
+    align-items: center;
+    background-color: black;  /* Set the background color to black */
+    overflow: auto; /* Enable scrolling if needed */
+}
+
+/* Logo styling (outside of the container) */
+.logo {
+    width: 15rem;  /* Adjust logo size */
+    height: auto;
+    margin: auto; /* Center the logo with margin */
+    display: block;
+}
+

@@ -1,0 +1,46 @@
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAdministrator/users/update.css">
+{{/section}}
+
+<div class="container">
+    <header class="header">
+        <h1 class="title">Update User Information</h1>
+        <a href="/administrator/manage_users" class="btn btn-back">Back to User Management</a>
+    </header>
+
+    <main>
+        <form action="/administrator/manage_users/update/{{user.id}}" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="{{user.username}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" value="{{user.name}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{user.email}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" value="{{user.dob}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="permission">Role</label>
+                <select id="permission" name="permission" required>
+                    {{#each roles}}
+                        <option value="{{this.RoleID}}" {{#eq this.RoleID user.permission}}selected{{/eq}}>{{this.RoleName}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-update">Update User</button>
+            <a href="/administrator/manage_users" class="btn btn-cancel">Cancel</a>
+        </form>
+    </main>
+</div>

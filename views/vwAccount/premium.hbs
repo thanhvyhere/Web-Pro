@@ -1,0 +1,92 @@
+<!-- premium.hbs -->
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAccount/premium.css">
+{{/section}}
+{{#section "script"}}
+    <script>
+        // Hàm để gọi API và hiển thị SweetAlert
+        async function activatePremium() {
+            try {
+                // Gửi request POST đến API
+                const response = await fetch('/account/premium', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Nếu thành công, hiển thị SweetAlert thông báo thành công
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Chào mừng bạn đến với Newsland Premium!',
+                        text: data.message, // Lấy message từ API
+                        confirmButtonText: 'OK',
+                    }).then(() => {
+                        // Chuyển trang sau khi người dùng nhấn "OK"
+                        window.location.href = '/subscriber/library';
+                    });
+                } else {
+                    // Nếu có lỗi, hiển thị thông báo lỗi
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message || 'Something went wrong.',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            } catch (error) {
+                // Nếu có lỗi khi gọi API
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to activate premium account. Please try again later.',
+                    confirmButtonText: 'OK',
+                });
+            }
+        }
+
+        // Gọi hàm khi nhấn nút
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('activatePremiumBtn').addEventListener('click', activatePremium);
+        });
+    </script>
+    {{/section}}
+<div class="premium-container">
+    <h2>Đăng ký gói Premium</h2>
+
+    <!-- Hiển thị thông báo nếu chưa đăng nhập -->
+    {{#if errorMessage}}
+        <div class="alert alert-danger" role="alert">
+            {{errorMessage}}
+        </div>
+    {{else}}
+        <!-- Hiển thị thông tin người dùng chỉ khi đã đăng nhập -->
+        <p>Thông tin tài khoản:</p>
+        <ul>
+            <li><strong>Username:</strong> {{username}}</li>
+            <li><strong>ID:</strong> {{userId}}</li>
+        </ul>
+
+        <hr>
+        
+        {{#if hasPremium}}
+            <p>Tài khoản của bạn đã có gói Premium.</p>
+            <p> Ngày hết hạn: {{expirationDate}}</p>
+        {{else}}
+            <p>Bạn chưa đăng ký gói Premium. Để nâng cấp, vui lòng nhấn vào nút dưới đây.</p>
+            <form id="formPre" action="/account/premium" method="post"></form>
+            <button id="activatePremiumBtn" class="btn btn-primary" href="javascript: $('#formPre').submit()">
+                <i class=""></i>
+                Đăng ký Premium
+            </button>
+        {{/if}}
+
+        <!-- Thêm nút Cancel để quay lại trang trước -->
+        <form action="/" method="get">
+            <button type="submit" class="btn btn-secondary">Cancel</button>
+        </form>
+    {{/if}}
+</div>

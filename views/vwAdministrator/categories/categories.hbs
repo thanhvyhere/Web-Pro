@@ -1,0 +1,115 @@
+{{#section "css"}}
+    <link href="/static/css/cssAdministrator/categories/categories.css" rel="stylesheet">
+{{/section}}
+
+{{#section "script"}}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // JavaScript for search button
+    const searchButton = document.getElementById('search-btn');
+    if (searchButton) {
+      searchButton.addEventListener('click', function () {
+        const searchTerm = document.getElementById('search-category').value.toLowerCase();
+        const rows = document.querySelectorAll('.categories-table tbody tr');
+        rows.forEach(row => {
+          const categoryName = row.querySelector('td:nth-child(2)'); // "Category Name" column
+          if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
+            row.style.display = ''; // Show row
+          } else {
+            row.style.display = 'none'; // Hide row
+          }
+        });
+      });
+    }
+
+    // Real-time search as the user types
+    const searchInput = document.getElementById('search-category');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.categories-table tbody tr');
+        rows.forEach(row => {
+          const categoryName = row.querySelector('td:nth-child(2)');
+          if (categoryName && categoryName.textContent.toLowerCase().includes(searchTerm)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    }
+  });
+</script>
+{{/section}}
+
+<div class="container">
+  <header class="header">
+    <h1 class="title">Category List</h1>
+    <div class="search-container">
+      <form id="search-category" method="GET" action="/administrator/manage_categories">
+        <input 
+          type="text" 
+          name="search" 
+          id="search-category-name" 
+          class="search-box" 
+          placeholder="Search by Category Name" 
+          value="{{query.search}}">
+        <button type="submit" class="btn btn-secondary">Search</button>
+      </form>
+    </div>
+
+    <div id="category-actions">
+      <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
+    </div>
+  </header>
+
+  <div class="table-container">
+    <table class="categories-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category Name</th>
+          <th>Parent Category</th>
+          <th>Actions</th> <!-- New Actions column -->
+        </tr>
+      </thead>
+      <tbody>
+        {{#each categories}}
+        <tr id="category-row-{{this.CatID}}">
+          <td>{{this.CatID}}</td>
+          <td>{{this.CatName}}</td>
+          <td>{{#if this.parent_id}}
+                {{#with (lookup ../categories this.parent_id)}}
+                  {{CatName}}
+                {{/with}}
+              {{else}}None{{/if}}</td>
+          <td>
+            <a href="/administrator/manage_categories/update/{{this.CatID}}" class="btn btn-warning btn-sm">Edit</a>
+            <a href="/administrator/manage_categories/delete/{{this.CatID}}" class="btn btn-danger btn-sm">Delete</a>
+          </td> <!-- Action buttons for each row -->
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="4">No categories found</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="pagination">
+  {{#if (gt currentPage 1)}}
+  <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+  {{/if}}
+
+  {{#each (range 1 totalPages)}}
+  <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
+    {{this}}
+  </a>
+  {{/each}}
+
+  {{#if (lt currentPage totalPages)}}
+  <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+  {{/if}}
+</div>
