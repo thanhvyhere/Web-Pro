@@ -367,6 +367,87 @@ router.post('/premium', async function (req, res) {
 });
 
 
+// GET /premium route
+router.get('/premium', function (req, res) {
+    const userId = req.session.authUser ? req.session.authUser.userid : null;
+    if (!userId) {
+        // Trả về thông báo yêu cầu đăng nhập
+        return res.render('vwAccount/premium', { 
+            errorMessage: 'Bạn cần đăng nhập để đăng ký gói Premium.' 
+        });
+    }
 
+    const username = req.session.authUser.username; // Lấy username từ session
 
+    accountService.findPremiumRegisterByUserId(userId)
+        .then(account => {
+            const hasPremium = account ? true : false;
+            const expirationDate = account ? account.expiration_date : null;
+
+            res.render('vwAccount/premium', { 
+                hasPremium,
+                expirationDate,
+                username,
+                userId // Truyền userId vào view
+            });
+        })
+        .catch(err => {
+            console.error('Error fetching premium account:', err);
+            res.status(500).json({ message: 'Lỗi khi truy vấn dữ liệu' });
+        });
+});
+
+// Hiển thị trang thông tin người dùng
+router.get('/user-info', (req, res) => {
+    const userId = req.session.authUser?.userid; // Lấy userId từ session
+
+    if (!userId) {
+        return res.redirect('/login'); // Nếu không có userId trong session, chuyển hướng tới trang đăng nhập
+    }
+
+    // Lấy thông tin người dùng theo userId từ cơ sở dữ liệu
+    accountService.getUserById(userId, (err, user) => {
+        if (err) {
+            console.error('Error fetching user data:', err);
+            return res.status(500).send('Lỗi server');
+        }
+
+        if (!user) {
+            return res.status(404).send('Người dùng không tồn tại');
+        }
+
+        // Render thông tin người dùng lên trang user-info.hbs và áp dụng layout 'account-layout'
+        res.render('vwAccount/user-info', {
+            layout: 'account-layout', // Chỉ định layout
+            username: user.username,
+            email: user.email,
+            dob: user.dob,
+        });
+    });
+});
+
+router.post('/update', (req, res) => {
+    const userId = req.session.authUser?.userid; // Lấy userId từ session
+
+    if (!userId) {
+        return res.redirect('/login'); // Nếu không có userId trong session, chuyển hướng tới trang đăng nhập
+    }
+
+    const { dob } = req.body; // Lấy ngày sinh từ form
+
+    // Cập nhật ngày sinh vào cơ sở dữ liệu
+    accountService.updateDOB(userId, dob, (err, success) => {
+        if (err) {
+            console.error('Error updating DOB:', err);
+            return res.status(500).send('Lỗi server');
+        }
+
+        if (!success) {
+            return res.status(400).send('Cập nhật không thành công');
+        }
+
+        // Sau khi cập nhật thành công, chuyển hướng lại trang user-info
+        res.redirect('http://localhost:3000/subscriber');
+    });
+});
 export default router;

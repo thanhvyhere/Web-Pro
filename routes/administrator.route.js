@@ -185,25 +185,6 @@ router.post('/manage_categories/update/:id', async (req, res) => {
     }
 });
 
-router.post('/administrator/manage_categories/update_parent', (req, res) => {
-    const { categoryIds, newParentId } = req.body;
-  
-    // Gọi service để thực hiện cập nhật parent_id cho các danh mục
-    administratorService.updateCategoryParent(categoryIds, newParentId)
-      .then(updatedRows => {
-        // Kiểm tra số lượng dòng được cập nhật
-        if (updatedRows > 0) {
-          res.json({ success: true });
-        } else {
-          res.json({ success: false, message: 'Không có danh mục nào được cập nhật.' });
-        }
-      })
-      .catch(error => {
-        console.error('Error updating categories:', error);
-        res.json({ success: false, message: 'Có lỗi xảy ra khi cập nhật danh mục.' });
-      });
-  });
-
 // Route: Render Delete Category Confirmation Page
 router.get('/manage_categories/delete/:id', function(req, res) {
     const categoryId = req.params.id; // Get the category ID from the URL
