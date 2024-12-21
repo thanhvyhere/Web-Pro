@@ -63,6 +63,7 @@ router.get('/byTag', async function (req, res) {
     const tagId = req.query.id || 0;
     const limit = 6;
     const nRows = await newsService.countByTagId(tagId);
+    console.log(nRows);
     const nPages = Math.ceil(nRows.total / limit);
     const current_page = Math.max(1, Math.min(req.query.page || 1, nPages)); // Đảm bảo từ 1 đến nPages
     const offset = (current_page - 1) * limit;

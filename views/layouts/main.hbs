@@ -39,8 +39,7 @@
 
                 </div>
             </div>
-            <form id="formPre" action="/account/premium" method="post"></form>
-            <a id="activatePremiumBtn" class="btn-subcribe" href="javascript: $('#formPre').submit()">
+            <a class="btn-subcribe" href="/account/premium">
                 <i class=""></i>
                 Premium
             </a>
@@ -69,13 +68,13 @@
                     <h5 class="text-uppercase mt-3">{{authUser.username}}</h5>
                     <h6>{{formatDate authUser.expiration_date}}</h6>
                 </div>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="/account/user-info?id={{authUser.userid}}">
                     <i class="bi bi-person-badge"></i>
                     Your Information
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="/account/reset-password?email={{authUser.email}}">
                     <i class="bi bi-gear-fill"></i>
-                    Setting
+                    Change Password
                 </a>
                 <form id="frmLogout" action="/account/logout" method="post"></form>
                 <a id="btn-logout" class="dropdown-item" href="javascript:void(0);">
@@ -189,17 +188,7 @@
 
 
     <div id="footer">
-        <div id="send-mail" class="d-flex flex-row justify-content-center align-items-center">
-            <div class="mt-3 d-flex flex-column align-items-center">
-                <h4>Newsland Newsletter</h4>
-                <h6>ĐỪNG BỎ LỠ NHỮNG TIN TỨC MỚI NHẤT</h6>
-                <h6>Nhận thông báo tin mới nhất qua Mail</h6>
-            </div>
-            <form id="txtbox-send-mail" class="mt-3 d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Your Email" aria-label="Search">
-                <button class="btn-subcribe" type="submit">Đăng ký</button>
-            </form>
-        </div>
+        
         <hr>
         <div>
             <div id="footer-contact" class="d-flex flex-row justify-content-between align-items-center">
@@ -317,59 +306,8 @@
             });
         });
     </script>
-    <script>
-        // Hàm để gọi API và hiển thị SweetAlert
-        async function activatePremium() {
-            try {
-                // Gửi request POST đến API
-                const response = await fetch('/account/premium', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
 
-                const data = await response.json();
 
-                if (response.ok) {
-                    // Nếu thành công, hiển thị SweetAlert thông báo thành công
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Chào mừng bạn đến với Newsland Premium!',
-                        text: data.message, // Lấy message từ API
-                        confirmButtonText: 'OK',
-                    }).then(() => {
-                        // Chuyển trang sau khi người dùng nhấn "OK"
-                        window.location.href = '/subscriber/library';
-                    });
-                } else {
-                    // Nếu có lỗi, hiển thị thông báo lỗi
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message || 'Something went wrong.',
-                        confirmButtonText: 'OK',
-                    });
-                }
-            } catch (error) {
-                // Nếu có lỗi khi gọi API
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to activate premium account. Please try again later.',
-                    confirmButtonText: 'OK',
-                });
-            }
-        }
-
-        // Gọi hàm khi nhấn nút
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('activatePremiumBtn').addEventListener('click', activatePremium);
-        });
-    </script>
-    <script>
-        
-    </script>
     <script>
         $(document).ready(function () {
             // First, bind the event listener for the search input

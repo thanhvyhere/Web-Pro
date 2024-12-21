@@ -44,7 +44,7 @@
 <div id="card-list-new">
     {{#if this.empty}}
     <div class="card-body">
-        null
+        Không có bài báo nào cho tag này
     </div>
     {{else}}
     <div class="card-body">
@@ -101,7 +101,7 @@
 
         <ul class="pagination tw-flex justify-content-center card-footer">
             <li class="page-item disabled">
-                <a class="page-link">Previous</a>
+                <a class="page-link">Trước</a>
             </li>
             {{#each this.pageNumbers}}
             {{#if active}}
@@ -110,12 +110,12 @@
             </li>
             {{else}}
             <li class="page-item">
-                <a class="page-link" href="?id={{../catId}}&page={{value}}">{{value}}</a>
+                <a class="page-link" href="?id={{../tagId}}&page={{value}}">{{value}}</a>
             </li>
             {{/if}}
             {{/each}}
             <li class="page-item">
-                <a class="page-link" href="#">Next</a>
+                <a class="page-link disabled" href="#">Sau</a>
             </li>
         </ul>
     </div> <!-- Kết thúc .card-body -->

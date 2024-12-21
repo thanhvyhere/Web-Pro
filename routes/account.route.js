@@ -56,6 +56,7 @@ router.post('/login', async function (req, res) {
     req.session.authUser = {
         username: user.username,  
         userid: user.id,  
+        email: user.email,
         name: user.name,  
         permission: user.permission,  
         rolename: role.RoleName,
@@ -64,7 +65,6 @@ router.post('/login', async function (req, res) {
 
 
     const retUrl = req.session.retUrl || '/'
-    console.log('Redirecting to:', retUrl); 
     res.redirect(retUrl);
 })
 
@@ -77,7 +77,6 @@ router.get('/register', function(req, res){
 router.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
     const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
-    const role = await accountService.findRoleById(user.permission);
     const entity = {
         username: req.body.username,
         password: hash_password, 
@@ -93,9 +92,10 @@ router.post('/register', async function (req, res) {
         username: user.username,
         userid: user.id,
         name: user.name,
+        email: user.email,
         permission: user.permission,
-        rolename: role.RoleName
-    };
+        rolename: 'guest'
+    }
     const retUrl = req.session.retUrl || '/'
     res.redirect(retUrl);
 });
@@ -155,8 +155,8 @@ router.post('/forgot-password', async function(req, res) {
         // Cấu hình gửi email qua Nodemailer
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587, // Hoặc 465 nếu sử dụng SSL
-            secure: false, // true cho 465, false cho 587
+            port: 465, 
+            secure: true,
             auth: {
                 user: process.env.MY_EMAIL,
                 pass: process.env.MY_EMAIL_PW,
@@ -288,7 +288,8 @@ router.get('/login/githubAuth/callback',
         username: user.username,
         userid: user.id,  
         name: user.name,  
-        permission: user.permission,  
+        permission: user.permission, 
+        email: user.email,
         rolename: role.RoleName,  
         expiration_date: expirationDate  
     };
@@ -315,6 +316,7 @@ router.get('/login/googleAuth/callback',
         username: user.username,
         userid: user.id,
         name: user.name,
+        email: user.email,
         permission: user.permission,
         rolename: role.RoleName
     };
@@ -330,9 +332,8 @@ router.post('/premium', async function (req, res) {
         let expirationDate;
 
         if (account === "") {
-            // Nếu tài khoản chưa có, đặt ngày hết hạn là 7 phút từ bây giờ
             expirationDate = new Date();
-            expirationDate.setMinutes(expirationDate.getMinutes() + 7);
+            expirationDate.setMinutes(expirationDate.getMinutes() + 7*24*60);
 
             const entity = {
                 id: userId, // ID người dùng
@@ -359,15 +360,10 @@ router.post('/premium', async function (req, res) {
             if (isNaN(expirationDate)) {
                 throw new Error("Invalid expiration_date format in database.");
             }
+            expirationDate.setMinutes(expirationDate.getMinutes() + 7*24*60);
 
-            // Cộng thêm 7 phút
-            expirationDate.setMinutes(expirationDate.getMinutes() + 7);
-
-            // Cập nhật ngày hết hạn
             await accountService.updatePremium(userId, expirationDate);
         }
-
-        // Cập nhật session với quyền mới (nếu cần)
         req.session.authUser.permission = 2;
         req.session.authPremium = true;
         req.session.authUser.rolename = 'subscriber';
@@ -386,9 +382,82 @@ router.post('/premium', async function (req, res) {
     }
 });
 
-router.get('/detail', )
 
+// GET /premium route
+router.get('/premium', function (req, res) {
+    const userId = req.session.authUser ? req.session.authUser.userid : null;
+    if (!userId) {
+        // Trả về thông báo yêu cầu đăng nhập
+        return res.render('vwAccount/premium', { 
+            errorMessage: 'Bạn cần đăng nhập để đăng ký gói Premium.' 
+        });
+    }
 
+    const username = req.session.authUser.username; // Lấy username từ session
 
+    accountService.findPremiumRegisterByUserId(userId)
+        .then(account => {
+            const hasPremium = account ? true : false;
+            const expirationDate = account ? account.expiration_date : null;
+
+            res.render('vwAccount/premium', { 
+                hasPremium,
+                expirationDate,
+                username,
+                userId // Truyền userId vào view
+            });
+        })
+        .catch(err => {
+            console.error('Error fetching premium account:', err);
+            res.status(500).json({ message: 'Lỗi khi truy vấn dữ liệu' });
+        });
+});
+
+// Hiển thị trang thông tin người dùng
+router.get('/user-info', async function(req, res) {
+    const userId = req.query.id; // Lấy userId từ session
+    const user = await accountService.findbyID(userId);
+    const role = await accountService.findRoleById(user.permission);
+
+    if (!user) {
+        return res.redirect('/account/login'); // Nếu không có userId trong session, chuyển hướng tới trang đăng nhập
+    }
+
+    // Định dạng ngày sinh cho input type="date"
+    const formattedDob = user.dob ? moment(user.dob).format('YYYY-MM-DD') : '';
+
+    res.render('vwAccount/user-info', {
+        layout: 'account-layout', // Chỉ định layout
+        user: { ...user, dob: formattedDob }, // Gắn ngày sinh đã định dạng vào object user
+        rolename: role.RoleName
+    });
+});
+router.post('/update', async function (req, res) {
+    const userId = req.body.id || "";
+    if (!userId) {
+        return res.redirect('/account/login');
+    }
+    const { username, name, email, dob } = req.body; // Thêm dob
+
+    if (!dob || isNaN(Date.parse(dob))) {
+        return res.status(400).send('Ngày sinh không hợp lệ');
+    }
+
+    const entity = {
+        username: username,
+        name: name,
+        email: email,
+        dob: dob // Bao gồm dob trong entity
+    };
+
+    try {
+        await accountService.updateUser(userId, entity); // Cập nhật toàn bộ thông tin
+        const retUrl = req.session.retUrl || '/';
+        res.redirect(retUrl);
+    } catch (err) {
+        console.error('Error updating user info:', err);
+        res.status(500).send('Lỗi server');
+    }
+});
 
 export default router;

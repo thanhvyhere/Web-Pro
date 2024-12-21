@@ -1,0 +1,206 @@
+{{#section "signupcss"}}
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+{{/section}}
+
+{{#section "signupjs"}}
+<script>
+    $('#txtDOB').datetimepicker(
+            {
+                timepicker: false,
+                format: 'd/m/Y',
+                mask: true
+            }
+        );
+    // Fetch user info from the server
+    fetch('/account/user-info')
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            if (data.success) {
+                // Process the data and populate the form fields
+                document.getElementById('txtUsername').value = data.user.username;
+                document.getElementById('txtEmail').value = data.user.email;
+                document.getElementById('txtNoOfFollower').value = data.user.NoOfFollower;
+                document.getElementById('txtNoOfFollowing').value = data.user.NoOfFollowing;
+
+                // Convert dob to yyyy-mm-dd format for the input field
+                const dob = new Date(data.user.dob);
+                const dobFormatted = dob.toLocaleDateString('en-CA');
+                document.getElementById('txtDOB').value = dobFormatted;
+
+                // Set role name based on permission
+                document.getElementById('txtRole').value = data.roleName;
+            } else {
+                alert('Không thể tải thông tin người dùng.');
+            }
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+</script>
+<script>
+    function checkValidEmail() {
+        const email = document.querySelector('#txtEmail').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Định dạng cơ bản cho email
+        if (email.length === 0 || !emailRegex.test(email)) {
+            document.querySelector('#txtEmail').select();
+            return false; // Trả về false nếu không hợp lệ
+        }
+        return true; // Trả về true nếu hợp lệ
+    }
+    $('#fmSignup').on('submit', function (e) {
+        e.preventDefault();
+        const username = $('#txtUsername').val();
+        const dob = $('#txtDOB').val(); // Lấy giá trị ngày sinh
+        const password = $('#txtPassword').val();
+        const confirmPassword = $('#txtConfirmPassword').val();
+
+        // Kiểm tra mật khẩu
+        if (password !== confirmPassword) {
+            Swal.fire({
+                title: 'Error',
+                text: "Passwords do not match. Please re-enter.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Kiểm tra tên người dùng
+        if (username.length === 0) {
+            Swal.fire({
+                title: 'Warning',
+                text: "Username cannot be empty. Please provide a valid username.",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        if (!checkValidEmail()) {
+            Swal.fire({
+                title: 'Error',
+                text: "Invalid email format. Please provide a valid email.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        // Kiểm tra username khả dụng qua AJAX
+        $.getJSON(`/account/is-available?username=${username}`, function (data) {
+            if (data === false) {
+                // Username không khả dụng
+                Swal.fire({
+                    title: 'Warning',
+                    text: "Your username is not available. Please choose another one.",
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // Hiển thị thông báo đăng ký thành công
+                Swal.fire({
+                    title: 'Success!',
+                    text: "You have successfully signed up. Welcome to Newsland!",
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Gửi form nếu người dùng xác nhận
+                        $('#fmSignup').off('submit').submit();
+                    }
+                });
+            }
+        }).fail(function () {
+            // Xử lý lỗi kết nối hoặc lỗi server
+            Swal.fire({
+                title: 'Error',
+                text: "Unable to verify username. Please try again later.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    });
+    $('#fmUpdate').on('submit', function (e) {
+            e.preventDefault();
+
+            const username = $('#txtUsername').val();
+            const dob = $('#txtDOB').val();
+            const email = $('#txtEmail').val();
+
+            if (!dob) {
+                Swal.fire({
+                    title: 'Warning',
+                    text: "Date of Birth cannot be empty. Please provide a valid date.",
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Kiểm tra email hợp lệ
+            if (!checkValidEmail()) {
+                Swal.fire({
+                    title: 'Error',
+                    text: "Invalid email format. Please provide a valid email.",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Gửi form
+            $(this).off('submit').submit();
+        });
+
+</script>
+{{/section}}
+
+<div id="card-contain" class="card">
+    <div id="signup-card" class="card-body">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <img id="logo-img" src="/static/imgs/NEWSLANDlogoRmBg.png" alt="" class="img-fluid rounded-circle">
+            <h1>Thông tin người dùng</h1>
+        </div>
+        <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
+            <form id="fmUpdate" action="/account/update" method="post">
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtId">ID</label>
+                    <input type="text" name="id" id="txtId" class="form-control txt-input " readonly value="{{this.user.id}}"
+                        required>
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtUsername">Tên tài khoản</label>
+                    <input type="text" name="username" id="txtUsername" class="form-control txt-input" value="{{this.user.username}}" required>
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtEmail">Email</label>
+                    <input type="text" name="email" id="txtEmail" class="form-control txt-input" value="{{this.user.email}}" required>
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtName">Tên của bạn</label>
+                    <input type="text" name="name" id="txtName" class="form-control txt-input" value="{{this.user.name}}" required>
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtRole">Vai trò</label>
+                    <input type="text" name="role" id="txtRole" class="form-control txt-input" value="{{this.rolename}}" readonly>
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtDOB">Ngày sinh</label>
+                    <input type="date" name="dob" id="txtDOB" class="form-control txt-input" value="{{this.user.dob}}" required>
+                </div>
+
+                <div class="d-flex justify-content-between w-100">
+                    <button type="submit" class="btn btn-info btn-connect mb-3">Cập nhật</button>
+                </div>
+                <div class="d-flex justify-content-between w-100">
+                    <a href="/" class="btn btn-connect mb-3">Hủy</a> <!-- Cancel button -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

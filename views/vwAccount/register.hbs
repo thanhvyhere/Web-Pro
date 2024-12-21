@@ -94,7 +94,7 @@
     <div id="signup-card" class="card-body">
         <div class="d-flex flex-column justify-content-center align-items-center">
             <img id="logo-img" src="/static/imgs/NEWSLANDlogoRmBg.png" alt="" class="img-fluid rounded-circle">
-            <h1>Đăng ký vào SoundLand</h1>
+            <h1>Đăng ký Premium</h1>
         </div>
         <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
             <form id="fmSignup" action="/account/register" method="post">
@@ -120,9 +120,9 @@
                     <input type="password" name="confirm_password" id="txtConfirmPassword"
                         class="form-control txt-input" placeholder="">
                 </div>
-                <div class="form-group">
-                    <label for="txtDOB">Day of Birth</label>
-                    <input type="text" name="raw_dob" id="txtDOB" class="form-control txt-input" placeholder="">
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtDOB">Ngày sinh</label>
+                    <input type="date" name="dob" id="txtDOB" class="form-control txt-input" required>
                 </div>
 
                 <button type="submit" class="btn btn-info btn-connect mb-3" href="#">Đăng ký</button>
