@@ -39,7 +39,7 @@
 
                 </div>
             </div>
-            <form id="formPre" action="/account/premium" method="post"></form>
+            <form id="formPre" action="/account/premium" method="get"></form>
             <a id="activatePremiumBtn" class="btn-subcribe" href="javascript: $('#formPre').submit()">
                 <i class=""></i>
                 Premium
@@ -68,7 +68,7 @@
                     <img id="img-account" src="/static/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle">
                     <h5 class="text-uppercase mt-3">{{authUser.username}}</h5>
                 </div>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="/account/user-info">
                     <i class="bi bi-person-badge"></i>
                     Your Information
                 </a>

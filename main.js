@@ -21,11 +21,15 @@ import newsService from './services/news.service.js';
 import fnMySQLStore from 'express-mysql-session';
 import readerRouter from './routes/reader.route.js';
 import { checkPremium } from './middleware/auth.mdw.js';
+
 const app = express();
+
 app.use(express.urlencoded({
     extended: true
 }));
+
 app.use(express.json()); 
+
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -62,6 +66,7 @@ app.engine('hbs', engine({
             }
             return null; // Nếu không có phần tử
         },
+
         getRoleIcon(roleName) {
             // Trả về icon HTML tương ứng với roleName
             switch (roleName) {
@@ -77,6 +82,7 @@ app.engine('hbs', engine({
                     return '<i class="bi bi-person-fill"></i>'; // Icon mặc định
             }
         },
+
         getStatusColor(status) {
             switch (status) {
                 case 'Đang chờ':
@@ -97,12 +103,15 @@ app.engine('hbs', engine({
                     return 'black'; // Màu mặc định
             }
         },
+
         eq: function (a, b) {
             return a === b;
         },
+
         json: function (context) {
             return JSON.stringify(context);
         }, 
+
         or: function (...args) {
             args.pop(); // Xóa `options` của Handlebars
             return args.some(Boolean); // Trả về `true` nếu bất kỳ giá trị nào trong args là `true`
@@ -136,12 +145,14 @@ app.engine('hbs', engine({
             }
             return result;
         },
+
         limit: function (array, limit) {
             if (!Array.isArray(array)) {
                 return [];
             }
             return array.slice(0, limit);
         },
+
         skip: function(arr, n) {
             return arr.slice(n); // Sử dụng slice để cắt bỏ n phần tử đầu tiên
         },
@@ -190,6 +201,7 @@ app.use(async (req, res, next) => {
     // Tiếp tục xử lý request
     next();
 });
+
 app.use(async (req, res, next) => {
     const topNews = await newsService.getTop3NewsByView();
     
@@ -206,11 +218,13 @@ app.use(async (req, res, next) => {
     res.locals.topNews = updatedList;
     next();
 });
+
 app.use(async (req, res, next) => {
     const topCat = await newsService.getTop10Cat();
     res.locals.topCat = topCat;
     next();
 });
+
 app.use(async (req, res, next) => {
     const newNews = await newsService.getTop10NewsByDate();
        const updatedList = await Promise.all(newNews.map(async (item) => {
@@ -225,6 +239,7 @@ app.use(async (req, res, next) => {
     res.locals.newNews = updatedList;
     next();
 });
+
 app.use(async (req, res, next) => {
     const viewsNews = await newsService.getTop10NewsByViews();
        const updatedList = await Promise.all(viewsNews.map(async (item) => {
@@ -239,6 +254,7 @@ app.use(async (req, res, next) => {
     res.locals.viewsNews = updatedList;
     next();
 });
+
 app.use(async (req, res, next) => {
     const randomNews = await newsService.getTop3NewsByRandom();
        const updatedList = await Promise.all(randomNews.map(async (item) => {
@@ -253,6 +269,7 @@ app.use(async (req, res, next) => {
     res.locals.randomNews = updatedList;
     next();
 });
+
 app.get('/', checkPremium, async function (req, res) {
    if (!req.session.auth || !req.session.authUser) {
         // Truyền dữ liệu vào view
@@ -282,6 +299,7 @@ app.get('/', checkPremium, async function (req, res) {
             return res.redirect('/');
     }
 });
+
 app.use(async function (req, res, next) {
     let roleNum = req.session.authUser ? req.session.authUser.permission : 1;
     let rolePort;
@@ -318,10 +336,7 @@ app.use('/newspaper', newspaperRouter);
 // Khởi động server
 // app.use('/artist', artistRouter);
 app.use('/reader', readerRouter)
-
 app.use('/role', editorRouter);
-
-
 app.use('/editor', editorRouter);
 app.use('/subscriber', checkPremium, subcriberRouter);
 app.use('/administrator', administratorRouter);
