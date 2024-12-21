@@ -99,27 +99,45 @@ export default {
     },
     
     // Lấy thông tin người dùng theo ID
-    getUserById(userId, callback) {
-        db('users')
-            .select('username', 'email', 'dob')
-            .where({ id: userId })
-            .first()
-            .then((user) => {
-                if (!user) {
-                    return callback(null, null);
-                }
-    
-                // Chuyển đổi ngày sinh thành định dạng yyyy-MM-dd
-                const dobFormatted = new Date(user.dob).toISOString().split('T')[0];
-    
-                callback(null, { ...user, dob: dobFormatted });
-            })
-            .catch((err) => {
-                callback(err, null);
-            });
-    },
+getUserById(userId, callback) {
+    db('users')
+        .select('id', 'username', 'email', 'dob', 'NoOfFollower', 'NoOfFollowing', 'permission')
+        .where({ id: userId })
+        .first()
+        .then((user) => {
+            if (!user) {
+                return callback(null, null);
+            }
 
-    updateDOB(userId, dob, callback) {
+            // Chuyển đổi ngày sinh thành định dạng yyyy-MM-dd
+            const dobFormatted = new Date(user.dob).toISOString().split('T')[0];
+
+            callback(null, { ...user, dob: dobFormatted });
+        })
+        .catch((err) => {
+            callback(err, null);
+        });
+},
+
+// Lấy tên quyền từ bảng roles theo permission ID
+getRoleById(permissionId, callback) {
+    db('roles')
+        .select('RoleName')
+        .where({ RoleID: permissionId })
+        .first()
+        .then((role) => {
+            if (!role) {
+                return callback(null, null);
+            }
+
+            callback(null, role);
+        })
+        .catch((err) => {
+            callback(err, null);
+        });
+},
+
+updateDOB(userId, dob, callback) {
     // Kiểm tra định dạng ngày hợp lệ
     const date = new Date(dob);
     if (isNaN(date.getTime())) {
@@ -141,7 +159,5 @@ export default {
         .catch((err) => {
             callback(err, false);
         });
-},
-
-        
+    },       
 };
