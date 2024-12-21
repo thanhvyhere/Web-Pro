@@ -1,6 +1,6 @@
 <!-- Place the first <script> tag in your HTML's <head> -->
 {{#section "css"}}
-<link rel="stylesheet" href="/static/css/detail.css">
+    <link rel="stylesheet" href="/static/css/detail.css">
 {{/section}}
 
 {{#section "script"}}
@@ -56,7 +56,40 @@
             
         </div>
     </div>
-    <div class="mb-3" >{{{this.news.Content}}}</div>
+    <div class="mb-5" >{{{this.news.Content}}}</div>
+
+    <div class="title-paper-list mb-3 d-flex flex-column">
+        <h1 class="mb-3">Gợi ý cho bạn</h1>
+        <div class="container-fluid">
+            <div class="row d-grids">
+                {{#each randomNewsCat}}
+                <div class="col-sm-12">
+                    <div
+                        class="card tw-h-[200px] d-flex flex-row tw-mb-2 tw-border-[#9CA3AF] tw-border-[1px] tw-p-3 tw-w-[100%]">
+                        <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper tw-w-[300px] tw-h-[180px]">
+                        <div class="paper-small">
+                            <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
+                                <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatName}}</button>
+                                <p class="tw-text-l">
+                                    <i class="bi bi-calendar3"></i>
+                                    {{formatDate this.PublishedDay}}
+                                </p>
+                            </div>
+                            <div class="tw-flex tw-flex-row tw-justify-between">
+                                <a href="/newspaper/detail?id={{NewsID}}">
+                                    <h4 class="tw-ml-2 tw-text-black">{{Title}}</h4>
+                                </a>
+                            </div>
+                            <p class="abstract-font">{{Abstract}}</p>
+                        </div>
+    
+                    </div>
+                </div>
+                {{/each}}
+    
+            </div>
+        </div>
+    </div>
     <hr>
     
     <div class="comment">

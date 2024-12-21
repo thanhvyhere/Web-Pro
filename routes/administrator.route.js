@@ -4,12 +4,8 @@ import newsService from '../services/news.service.js';
 
 const router = express.Router();
 
-router.get('/', async function (req,res) {
-    const categories = await newsService.getAllCategoriesWithChildren();
-    const limitCate = categories.slice(0, 8);
+router.get('/', async function (req, res) {
     res.render('homepage', {
-        categories: categories,
-        limitCate: limitCate
     });
 });
 

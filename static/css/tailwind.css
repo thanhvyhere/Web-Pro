@@ -200,6 +200,10 @@
   height: 180px !important
 }
 
+.tw-h-\[200px\] {
+  height: 200px !important
+}
+
 .tw-h-\[420px\] {
   height: 420px !important
 }
@@ -242,6 +246,10 @@
 
 .tw-w-\[25\%\] {
   width: 25% !important
+}
+
+.tw-w-\[300px\] {
+  width: 300px !important
 }
 
 .tw-w-\[350px\] {

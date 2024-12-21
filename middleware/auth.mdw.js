@@ -30,6 +30,7 @@ export async function checkPremium(req, res, next) {
                     // Cập nhật session
                     req.session.authUser.permission = 1;
                     req.session.authPremium = false;
+                    req.session.authUser.expiration_date = "";
                 } else {
                     // Nếu vẫn còn hạn, đánh dấu người dùng là Premium
                     req.session.authPremium = true;
@@ -53,4 +54,44 @@ export async function checkPremium(req, res, next) {
     }
 }
 
+export function authAdmin(req, res, next) {
+    if (req.session.auth === false) {
+        req.session.retUrl = req.originalUrl;
+        return res.redirect('/account/login');
+    }
 
+    if (req.session.authUser.permission < 5) {
+        // Render trang homepage và gửi thông báo lỗi qua locals
+        return res.render('homepage', { message: 'Không đủ quyền để truy cập.' });
+    }
+
+    next();
+}
+
+export function authWriter(req, res, next) {
+    if (req.session.auth === false) {
+        req.session.retUrl = req.originalUrl;
+        return res.redirect('/account/login');
+    }
+
+    if (req.session.authUser.permission !== 3 || req.session.authUser.permission !== 5) {
+        // Render trang homepage và gửi thông báo lỗi qua locals
+        return res.render('homepage', { message: 'Không đủ quyền để truy cập.' });
+    }
+
+    next();
+}
+
+export function authEditor(req, res, next) {
+    if (req.session.auth === false) {
+        req.session.retUrl = req.originalUrl;
+        return res.redirect('/account/login');
+    }
+
+    if (req.session.authUser.permission < 4) {
+        // Render trang homepage và gửi thông báo lỗi qua locals
+        return res.render('homepage', { message: 'Không đủ quyền để truy cập.' });
+    }
+
+    next();
+}

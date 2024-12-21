@@ -1,0 +1,39 @@
+<!-- Place the first <script> tag in your HTML's <head> -->
+{{#section "css"}}
+<link rel="stylesheet" href="/static/css/detail.css">
+{{/section}}
+
+{{#section "script"}}
+
+
+{{/section}}
+
+<div class="card-contain">
+    <div class="title">
+        <h1 class="mb-3">{{this.news.Title}}</h1>
+        <p class="mb-3 abstract-font">{{this.news.Abstract}}</p>
+        <div class="des">
+            <div>
+                <i class="bi bi-book"></i>
+                Tác giả: {{this.news.AuthorName}}
+            </div>
+            <div>
+                <i class="bi bi-calendar3"></i>
+                {{formatDate this.news.PublishedDay}}
+            </div>
+        </div>
+        <hr>
+    </div>
+    <div class="mb-5">
+        {{#each tags}}
+        <a type="button" class="btn btn-outline-primary tag" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
+        {{/each}}
+    </div>
+    <div class="d-flex flex-row justify-content-start align-items-start mb-3">
+        {{!-- <img src="{{this.news.ImageCover}}" alt="" class="img-format"> --}}
+        <div class="d-flex flex-column">
+
+        </div>
+    </div>
+    <div class="mb-3">{{{this.news.Content}}}</div>
+</div>

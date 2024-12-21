@@ -59,10 +59,7 @@ async function renderNewsByStatus(req, res, status, viewName) {
 
 // Homepage route
 router.get('/', async function (req,res) {
-    const categories = await newsService.getAllCategoriesWithChildren();
     res.render('homepage', {
-        categories: categories,
-        limitCate: categories.slice(0, 8)
     });
 });
 // Create article routes
