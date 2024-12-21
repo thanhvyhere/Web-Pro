@@ -45,8 +45,8 @@
 <div id="card-list-new">
     <h1>Top bài đăng</h1>
     {{#if this.empty}}
-    <div class="card-body">
-        null
+    <div class="card-body d-flex justify-content-center text-align-center">
+        Chưa có bài báo nào cho chuyên mục này
     </div>
     {{else}}
     <div class="card-body">
@@ -58,9 +58,8 @@
                         <img src="{{ImageCover}}" alt="..." class="img-title-paper">
                         <div class="paper-small">
                             <div class="header-paper small mb-2">
-                                <div class="tw-flex tw-flex-col tw-w-full">
-                                <button class="name-category-paper" disabled="disabled">{{catName}}</button>
-                                </div>
+                                    <button class="name-category-paper" disabled="disabled">{{catName}}</button>
+                                
                                 <div class="PublishedDate">
                                     <i class="bi bi-calendar3"></i>
                                     {{formatDate PublishedDay}}

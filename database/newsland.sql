@@ -3,7 +3,9 @@ CHARACTER SET utf8
 COLLATE utf8_unicode_ci;
 
 USE newslanddb;
-
+DROP TABLE IF EXISTS `userRefreshTokenExt`;
+DROP TABLE IF EXISTS `premium_accounts`;
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `githubId` varchar(255),
@@ -26,6 +28,7 @@ CREATE TABLE premium_accounts (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Ngày tạo
     FOREIGN KEY (id) REFERENCES users(id) -- Khóa ngoại liên kết với bảng users
 );
+
 CREATE TABLE `userRefreshTokenExt` (
   `ID` int(11) NOT NULL,
   `RefreshToken` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -33,7 +36,7 @@ CREATE TABLE `userRefreshTokenExt` (
   PRIMARY KEY (`ID`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`ID`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
+DROP TABLE IF EXISTS `otp_table`;
 CREATE TABLE `otp_table` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `email` VARCHAR(255) NOT NULL,
@@ -44,6 +47,7 @@ CREATE TABLE `otp_table` (
 -- ----------------------------
 -- Table structure for roles
 -- ----------------------------
+DROP TABLE IF EXISTS `features`;
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `RoleID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -60,11 +64,6 @@ INSERT INTO `roles` (`RoleName`) VALUES
 
 
 
-
-
-
-
-DROP TABLE IF EXISTS `features`;
 CREATE TABLE `features` (
   `FeatureID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `FeatureName` VARCHAR(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -76,7 +75,6 @@ CREATE TABLE `features` (
     ON DELETE SET NULL 
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 
 INSERT INTO `features` (`FeatureName`, `PathName`, `RoleID`, `Icon`) VALUES
@@ -274,19 +272,8 @@ INSERT INTO `categories` (`CatName`, `parent_id`) VALUES
 ('Chuyện lạ', 20),
 ('Crossword', 20);
 
-INSERT INTO `users` (`githubId`, `googleId`, `username`, `password`, `name`, `email`, `dob`, `permission`, `NoOfFollower`, `NoOfFollowing`)
-VALUES
-  (NULL, NULL, 'guest', '123', 'Guest User', 'guest@example.com', '2000-01-01', 1, 0, 0),
-  (NULL, NULL, 'subscriber', '123', 'Subscriber User', 'subscriber@example.com', '2000-01-01', 2, 0, 0),
-  (NULL, NULL, 'writer', '123', 'Writer User', 'writer@example.com', '2000-01-01', 3, 0, 0),
-  (NULL, NULL, 'editor', '123', 'Editor User', 'editor@example.com', '2000-01-01', 4, 0, 0),
-  (NULL, NULL, 'admin', '123', 'Administrator User', 'admin@example.com', '2000-01-01', 5, 0, 0);
 
-
-
-
-
-
+DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment` (
   `CommentID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của bình luận
   `Comment` text COLLATE utf8_unicode_ci NOT NULL, -- Nội dung bình luận
@@ -298,7 +285,8 @@ CREATE TABLE `comment` (
   FOREIGN KEY (`UserID`) REFERENCES `users`(`id`) ON DELETE CASCADE -- Tham chiếu đến bảng users, xóa bình luận nếu người dùng bị xóa
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `savednews` (
+DROP TABLE IF EXISTS `savedNews`;
+CREATE TABLE `savedNews` (
   `SavedID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, -- ID của mục lưu bài viết
   `NewsID` INT(11) UNSIGNED NOT NULL,                 -- ID bài viết
   `UserID` INT(11) UNSIGNED NOT NULL,                 -- ID người dùng
@@ -309,78 +297,5 @@ CREATE TABLE `savednews` (
   FOREIGN KEY (`UserID`) REFERENCES `users`(`id`) ON DELETE CASCADE -- Ràng buộc tham chiếu bảng users
 ) ENGINE=MyISAM  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `tag` (
-  `TagID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của tag
-  `TagName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên tag
-  PRIMARY KEY (`TagID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `news` ENGINE = InnoDB;
-CREATE TABLE `news_tags` (
-  `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
-  `TagID` int(11) unsigned NOT NULL, -- ID tag
-  PRIMARY KEY (`NewsID`, `TagID`),
-  FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Liên kết với bảng news
-  FOREIGN KEY (`TagID`) REFERENCES `tag`(`TagID`) ON DELETE CASCADE -- Liên kết với bảng tag
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-
-
-CREATE TABLE `status` (
-  `StatusID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID trạng thái
-  `StatusName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên trạng thái
-  PRIMARY KEY (`StatusID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
--- Chèn dữ liệu vào bảng status
-INSERT INTO `status` (`StatusName`) VALUES
-  ('Đã duyệt'),
-  ('Đang chờ'),
-  ('Đã đăng'),
-  ('Đã từ chối'),
-  ('Đã xóa'),
-  ('Đã nhận xét'),
-  ('Đã chỉnh sửa');
-
-
-CREATE TABLE `comment` (
-  `CommentID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của bình luận
-  `Comment` text COLLATE utf8_unicode_ci NOT NULL, -- Nội dung bình luận
-  `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
-  `UserID` int(11) unsigned NOT NULL, -- ID người dùng bình luận
-  `CreatedDate` DATETIME DEFAULT CURRENT_DATE, -- Ngày tạo bình luận, mặc định là ngày hiện tại
-  PRIMARY KEY (`CommentID`),
-  FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Tham chiếu đến bảng news và xóa bình luận khi bài viết bị xóa
-  FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE CASCADE -- Tham chiếu đến bảng users, xóa bình luận nếu người dùng bị xóa
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `tag` (
-  `TagID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của tag
-  `TagName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên tag
-  PRIMARY KEY (`TagID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `news` ENGINE = InnoDB;
-CREATE TABLE `news_tags` (
-  `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
-  `TagID` int(11) unsigned NOT NULL, -- ID tag
-  PRIMARY KEY (`NewsID`, `TagID`),
-  FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Liên kết với bảng news
-  FOREIGN KEY (`TagID`) REFERENCES `tag`(`TagID`) ON DELETE CASCADE -- Liên kết với bảng tag
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `status` (
-  `StatusID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID trạng thái
-  `StatusName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên trạng thái
-  PRIMARY KEY (`StatusID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Chèn dữ liệu vào bảng status
-INSERT INTO `status` (`StatusName`) VALUES 
-  ('Đã duyệt'),
-  ('Đang chờ'),
-  ('Đã đăng'),
-  ('Đã từ chối'),
-  ('Đã xóa'),
-  ('Đã nhận xét'),
-  ('Đã chỉnh sửa');

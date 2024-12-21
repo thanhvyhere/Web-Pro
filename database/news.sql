@@ -1,8 +1,31 @@
-DROP TABLE IF EXISTS `tags`;
 DROP TABLE IF EXISTS `news_tags`;
-DROP TABLE IF EXISTS `news_tags`;
+DROP TABLE IF EXISTS `tag`;
 DROP TABLE IF EXISTS `news`;
-DROP TABLE IF EXISTS `news`;
+DROP TABLE IF EXISTS `status`;
+CREATE TABLE `tag` (
+  `TagID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của tag
+  `TagName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên tag
+  PRIMARY KEY (`TagID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `status` (
+  `StatusID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID trạng thái
+  `StatusName` varchar(255) COLLATE utf8_unicode_ci NOT NULL, -- Tên trạng thái
+  PRIMARY KEY (`StatusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- Chèn dữ liệu vào bảng status
+INSERT INTO `status` (`StatusName`) VALUES
+  ('Đã duyệt'),
+  ('Đang chờ'),
+  ('Đã đăng'),
+  ('Đã từ chối'),
+  ('Đã xóa'),
+  ('Đã nhận xét'),
+  ('Đã chỉnh sửa');
+
 CREATE TABLE `news` (
   `NewsID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID bài viết
   `CreatedDate` DATE DEFAULT CURRENT_DATE, -- Lấy ngày hiện tại
@@ -20,7 +43,7 @@ CREATE TABLE `news` (
   PRIMARY KEY (`NewsID`),
   FOREIGN KEY (`Status`) REFERENCES `status`(`StatusID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
+ALTER TABLE `news` ENGINE = InnoDB;
 
 INSERT INTO `news` (
   `PublishedDay`,
@@ -397,4 +420,138 @@ INSERT INTO `news` (
   71, 
   'Mỹ Ý', 
   'https://i1-suckhoe.vnecdn.net/2024/12/15/Buoc-4-Anh-dai-dien-4-3836-171-8620-5492-1734255099.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=cKWY4eSVgzgwsmf9DgM0eA',
-  1,'Hấp rau giữ nhiều chất dinh dưỡng hơn luộc, giúp rau tươi sáng và giữ hương vị. Không hấp quá lâu để bảo vệ dưỡng chất. Thêm thảo mộc và chất béo để tăng hấp thu dinh dưỡng.',TRUE);
+  1,'Hấp rau giữ nhiều chất dinh dưỡng hơn luộc, giúp rau tươi sáng và giữ hương vị. Không hấp quá lâu để bảo vệ dưỡng chất. Thêm thảo mộc và chất béo để tăng hấp thu dinh dưỡng.',TRUE),
+  -- (`PublishedDay`,
+  -- `Title`,
+  -- `Content`,
+  -- `CatID`,
+  -- `AuthorName`,
+  -- `ImageCover`,
+  -- `Status`,
+  -- `Abstract`,
+  -- `Premium`)
+  ('2024-12-04 20:12:00', 'Có nên ăn đồ cay khi trời lạnh?', '<p>Vợ tôi hạn chế ăn đồ cay khi trời lạnh để giảm trào ngược, nhưng tôi cho rằng ăn đồ cay nóng giúp ấm bụng. Vậy trời lạnh có nên ăn cay và ăn thế nào tốt cho sức khỏe? (Hoàng, 33 tuổi, Hà Nội)</p>
+<p>
+<strong>Trả lời:</strong>
+</p>
+<p>Trào ngược dạ dày thực quản là hiện tượng trào ngược dịch vị từ dạ dày lên thực quản. Trời lạnh sẽ kích thích hàm lượng histamin trong máu tăng, acid dạ dày tăng tiết nhiều hơn làm dạ dày co bóp mạnh, tình trạng trào ngược tăng lên.</p>
+<p>Trường hợp bị trào ngược, bạn nên ăn uống khoa học, không ăn đồ cay nóng nhiều bất kể trong thời tiết nào. Khi trời lạnh, sức đề kháng bị giảm nên người có tiền sử trào ngược dạ dày thực quản dễ bị tái phát. Ăn cay nóng nhiều có thể làm tăng nguy cơ trào ngược.</p>
+<p>&nbsp;</p>
+<figure class="image">
+<img src="https://i1-suckhoe.vnecdn.net/2024/12/12/Buoc-6-6-1235-1671269525-17340-7488-5392-1734000606.jpg?w=680&amp;h=0&amp;q=100&amp;dpr=1&amp;fit=crop&amp;s=fMtnJFNVWbVael_aNjyDBQ" alt="Người bị bệnh dạ dày, trào ngược nên hạn chế ăn đồ cay, nóng. Ảnh: Bùi Thủy">
+</figure>
+<p>Người bị bệnh dạ dày, trào ngược nên hạn chế ăn đồ cay, nóng. Ảnh: <i>Bùi Thủy</i>
+</p>
+<p>Để phòng trào ngược dạ dày, nên ăn uống điều độ, khoa học, chia nhỏ bữa ăn để cơ thể hấp thu tốt. Tránh ăn quá no hay để dạ dày quá đói. Hạn chế ăn đồ ăn nóng, chua, cay. Không nên nằm ngay hoặc vận động mạnh sau khi ăn no. Hạn chế thức ăn nhiều chất béo, dầu mỡ, cà phê, bia rượu, nước uống có gas, thực phẩm có vị chua để tránh nguy cơ dạ dày tiết dịch nhiều và làm việc vất vả hơn.</p>
+<p>Nghỉ ngơi hợp lý và hạn chế thức khuya. Tránh xa khói thuốc lá, chất kích thích, rượu, bia... bởi chúng làm ảnh hưởng tới sức khỏe tim mạch, hệ tiêu hóa và hô hấp.</p>
+<p>Tăng cường tập thể dục để nâng cao sức đề kháng, không tập sáng sớm hoặc tối muộn. Trường hợp trào ngược quá nhiều, bạn nên đi khám để được bác sĩ kê đơn điều trị, cải thiện chất lượng cuộc sống.</p>
+<p>
+<br>&nbsp;</p>',71,'Mỹ Ý','https://i1-suckhoe.vnecdn.net/2024/12/12/Buoc-6-6-1235-1671269525-17340-7488-5392-1734000606.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=bafVstO9jlNBBfNR_4q45A',
+  3,'Vợ tôi hạn chế ăn đồ cay khi trời lạnh để giảm trào ngược, nhưng tôi cho rằng ăn đồ cay nóng giúp ấm bụng. Vậy trời lạnh có nên ăn cay và ăn thế nào tốt cho sức khỏe?',TRUE),
+  ('2024-12-04 20:12:00', '"Người nhàn nhã" gây bất bình vì nhận lương cao nhất Sở Cảnh sát New York', '<p>Quathisha Epps, nhân viên được trả lương cao nhất của Sở Cảnh sát New York, bị đình chỉ chức vụ khi có cuộc điều tra nội bộ về số giờ tăng ca bất thường.</p>
+<p>Theo The Post, trung úy Quathisha Epps, 51 tuổi, kiếm được 403.515 USD (hơn 10 tỷ đồng) trong năm tài chính 2024 (tính từ 1/10/2023 đến 30/9/2024). Tuy nhiên, hồ sơ bảng lương cho thấy trong đó có đến 204.000 USD là tiền làm thêm giờ cho công việc hành chính tại văn phòng Giám đốc Sở Cảnh sát New York (NYPD) Jeffrey Maddrey.</p>
+<p>Theo hồ sơ, trong năm bà Epps đã làm thêm gần 1.627 giờ ngoài các ca thường lệ, trung bình khoảng 74 giờ một tuần. Thời gian tăng ca, cộng với mức lương cơ bản 164.477 USD, đã đẩy tổng số tiền lương của bà Epps lên hơn 400.000 USD và khiến bà trở thành nhân viên NYPD được trả lương cao nhất.</p>
+<p>Trong cùng năm, cấp trên của bà, ông Maddrey, nhận được khoảng 292.000 USD.</p>
+<p>Thời gian làm thêm đáng kinh ngạc của bà Epps khiến nhiều đồng nghiệp khó chịu. "Công việc hành chính nào yêu cầu bạn phải ở Sở từ 115 đến 120 giờ mỗi tháng để nhận mức tiền đó?", một cảnh sát quận Bronx phàn nàn.</p>
+<p>Trung úy Quathisha Epps có thâm niên 19 năm công tác tại văn phòng Sở Cảnh sát New York. Ảnh: NYPD<br>Trung úy Quathisha Epps có thâm niên 19 năm công tác tại văn phòng Sở Cảnh sát New York. Ảnh: NYPD</p>
+<p>Sau báo cáo của The Post vào tháng trước về mức lương, số giờ tăng ca khổng lồ của bà Epps đã bị giới hạn, đồng thời được thông báo sẽ phải trở lại làm nhiệm vụ tuần tra đường phố. Bà cũng bị điều tra nội bộ về việc tăng ca.</p>
+<p>"Không đời nào bà ấy ra ngoài tuần tra", một nguồn tin cho biết khi so sánh công việc bàn giấy nhàn nhã bà Epps đã làm trong nhiều năm.</p>
+<p>Đối mặt với nhiệm vụ đi tuần và một cuộc điều tra, bà Epps nộp đơn xin nghỉ hưu vào ngày 16/12, sau 19 năm gắn bó với sở. Ngày làm việc cuối cùng của bà Epps sẽ là 14/1/2025, nhưng bà đã bị đình chỉ không lương vào ngày 18/12.</p>
+<p>Việc nghỉ sớm sẽ ảnh hưởng đến lương hưu, khiến bà Epps mất khoản bổ sung 12.000 USD một năm cho những cảnh sát đạt mốc hai thập kỷ cống hiến. Nhưng dự kiến bà vẫn nhận được khoảng 16.000 USD mỗi tháng.</p>
+<p>NYPD có 30 ngày để điều tra trước khi bà Epps bắt đầu hưởng chế độ hưu trí.</p>',64,'Đức Trung','https://i1-vnexpress.vnecdn.net/2024/12/19/1-6818-1734594667.png?w=680&h=0&q=100&dpr=2&fit=crop&s=VFT6lUDvMb3s3Hv934zI-A',
+  4,'Quathisha Epps, nhân viên được trả lương cao nhất của Sở Cảnh sát New York, bị đình chỉ chức vụ khi có cuộc điều tra nội bộ về số giờ tăng ca bất thường.',TRUE),
+   ('2024-12-04 20:12:00', 'Thượng viện Mỹ thông qua dự luật ngăn chính phủ đóng cửa', '<p>Thượng viện Mỹ duyệt dự luật ngân sách mới nhằm ngăn chính phủ đóng cửa ngay trước hạn chót, chấm dứt một tuần hỗn loạn của quốc hội.</p>
+<p>Các thượng nghị sĩ Mỹ ngày 21/12 thông qua dự luật với 85 phiếu thuận và 11 phiếu chống. Dự luật sẽ gia hạn gói ngân sách ở mức hiện tại tới ngày 14/3/2025, trong đó phân bổ hơn 100 tỷ USD cứu trợ cho các khu vực bị tàn phá bởi bão lũ, thiên tai và hỗ trợ kinh tế cho nông dân.</p>
+<p>Trước đó, Hạ viện Mỹ thông qua dự luật với 366 phiếu thuận, 34 phiếu chống và một phiếu trắng. Sau khi được lưỡng viện quốc hội phê duyệt, văn bản được chuyển đến cho Tổng thống Joe Biden ký thành luật.</p>
+<p>"Đây là tin tốt khi cách tiếp cận của lưỡng đảng đã thắng thế. Đây là kết quả tốt cho nước Mỹ và người dân", lãnh đạo phe Dân chủ tại Thượng viện Mỹ Chuck Schumer nhận định.</p>
+<figure class="image">
+<img src="https://i1-vnexpress.vnecdn.net/2024/12/21/5563187178137268617a-My-173476-6697-9248-1734764467.jpg?w=680&amp;h=0&amp;q=100&amp;dpr=1&amp;fit=crop&amp;s=9YTVJurtP5Yebu2rUxceCA" alt="Tòa nhà quốc hội Mỹ ở thủ đô Washington tháng 1/2021. Ảnh: AP">
+</figure>
+<p>Tòa nhà quốc hội Mỹ ở thủ đô Washington tháng 1/2021. Ảnh: <i>AP</i>
+</p>
+<p>Việc Thượng viện Mỹ thông qua dự luật giúp chính phủ Mỹ tránh phải đóng cửa và đình chỉ các hoạt động không thiết yếu. Nếu điều này xảy ra, 875.000 người sẽ phải tạm nghỉ việc và 1,4 triệu người phải làm việc không lương.</p>
+<p>Phê duyệt dự luật ngân sách ở quốc hội Mỹ luôn là nhiệm vụ đầy thách thức, do đảng Cộng hòa và Dân chủ đều không chiếm ưu thế rõ rệt ở lưỡng viện.</p>
+<p>Căng thẳng về vấn đề này gia tăng sau khi Tổng thống đắc cử Donald Trump và tỷ phú Elon Musk hồi đầu tuần gây sức ép khiến đảng Cộng hòa đã phải từ bỏ phiên bản đầu tiên của dự luật ngân sách mà họ đã thống nhất với đảng Dân chủ. Phiên bản thứ hai do đảng Cộng hòa đưa ra đã bị Hạ viện bác bỏ hôm 19/12.</p>
+<p>Phiên bản cuối cùng được thông qua gần như giống hệt dự luật bị bác hôm 19/12, điểm khác là không có điều khoản về đình chỉ trần nợ công trong hai năm mà ông Trump đề ra.</p>',71,'Mỹ Ý','https://i1-vnexpress.vnecdn.net/2024/12/21/5563187178137268617a-My-173476-6697-9248-1734764467.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=TRYAMxjMSy7TERzDLuB6Bg',
+  3,'Thượng viện Mỹ duyệt dự luật ngân sách mới nhằm ngăn chính phủ đóng cửa ngay trước hạn chót, chấm dứt một tuần hỗn loạn của quốc hội.',FALSE),
+  ('2024-12-04 20:12:00', 'Giá vàng thế giới bật tăng trở lại', '<p>Mỗi ounce vàng tăng thêm gần 30 USD khi số liệu lạm phát Mỹ tháng 11 củng cố khả năng Fed tiếp tục giảm lãi suất năm tới.</p>
+<p>Chốt phiên giao dịch hôm qua, <a href="https://vnexpress.net/chu-de/gia-vang-hom-nay-1403">giá vàng</a> thế giới giao ngay tăng 27,7 USD lên 2.622 USD một ounce. Trước đó, giá đi xuống vài phiên liên tiếp sau khi Cục Dự trữ liên bang Mỹ (Fed) ra tín hiệu muốn lãi suất giảm chậm lại trong năm 2025.</p>
+<p>Ngày 20/12, số liệu của Cục Phân tích Kinh tế thuộc Bộ Thương mại Mỹ cho thấy Chỉ số Chi tiêu Cá nhân (PCE) lõi - không tính giá thực phẩm và năng lượng - chỉ tăng 0,1% so với tháng 10. Đây là tốc độ chậm nhất kể từ tháng 5. PCE là thước đo lạm phát ưa thích của Fed.</p>
+<figure class="image">
+<img src="https://i1-kinhdoanh.vnecdn.net/2024/12/21/gold-2024-12-21T090624-347-173-5354-5926-1734746917.jpg?w=680&amp;h=0&amp;q=100&amp;dpr=1&amp;fit=crop&amp;s=H2m7PrlQ_9S_iAopCuVdRQ" alt="Giá vàng thế giới bật tăng mạnh trong phiên 20/12. Đồ thị: Kitco">
+</figure>
+<p>Giá vàng thế giới bật tăng mạnh trong phiên 20/12. Đồ thị:<i> Kitco</i>
+</p>
+<p>Đây là chỉ số mới nhất cho thấy quá trình giảm lạm phát tại Mỹ tiếp tục có tiến triển. Trong cuộc họp giữa tuần này, Fed ra tín hiệu giảm tốc độ nới lỏng tiền tệ trong năm 2025, do tình hình lạm phát chững lại vài tháng qua. Thông báo này khiến vàng bị bán tháo, mất tới hơn 60 USD chỉ trong phiên 18/12.</p>
+<p>Lợi suất trái phiếu chính phủ Mỹ và USD cùng giảm phiên cuối tuần. Việc này càng có lợi cho kim loại quý.</p>
+<p>Từ đầu năm, giá vàng đã tăng 27% và nhiều lần lập đỉnh mới. Nguyên nhân chủ yếu là lực mua của các ngân hàng trung ương, làn sóng giảm lãi suất và nhu cầu trú ẩn trong bất ổn địa chính trị trên toàn cầu.</p>
+<p>Cơn sốt vàng chững lại từ đầu tháng 11, khi việc ông Donald Trump đắc cử Tổng thống Mỹ khiến giá USD tăng mạnh. Tuy nhiên, ngân hàng Goldman Sachs kỳ vọng thị trường lập đỉnh mới năm tới, có thể lên 3.000 USD một ounce trước tháng 12/2025.</p>',50,'Mỹ Ý','https://i1-kinhdoanh.vnecdn.net/2024/12/21/gold-2024-12-21T090624-347-173-5354-5926-1734746917.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=q2meEcbmIBNBZE9nV6TzRw',
+  2,'Mỗi ounce vàng tăng thêm gần 30 USD khi số liệu lạm phát Mỹ tháng 11 củng cố khả năng Fed tiếp tục giảm lãi suất năm tới.',TRUE),
+  ('2024-12-04 20:12:00', 'Bitcoin giảm về sát 92.000 USD', '<p>Gần 680 triệu USD dòng tiền bị rút ròng từ các quỹ ETF Bitcoin khiến thị giá đồng này bốc hơi 10% về sát 92.000 USD.</p>
+<p>Bitcoin (BTC) một lần nữa mất mốc 100.000 USD và đi quanh khu vực 95.000-97.000 USD suốt chiều nay.</p>
+<p>Đến khoảng 19h10 (tức 7h10 giờ địa phương), BTC bất ngờ sụt mạnh về 92.175 USD một đơn vị, mất giá 10% chỉ sau 24 giờ. Nếu so với kỷ lục hồi 17/12, tiền số lớn nhất thế giới mất gần 16.100 USD. Vốn hóa cũng giảm theo tốc độ tương tự, khiến BTC lùi về vị trí thứ 8 trong bảng xếp hạng tài sản lớn nhất toàn cầu.</p>
+<p>Sau đó, giá thị trường cải thiện lên vùng 94.000 USD. Tuy nhiên, đây vẫn là khoảng cách lớn so với <a href="https://vnexpress.net/gia-bitcoin-hom-nay-btc-co-ky-luc-moi-gan-106-500-usd-4828266.html">đỉnh giá 106.500 USD</a> cách đây 3 ngày.</p>
+<p>Cú sập của Bitcoin diễn ra sau khi thị trường ghi nhận hiện tượng chốt lời mạnh của nhóm nhà đầu tư "cá mập".</p>
+<p>Theo số liệu từ công ty đầu tư Farside Investors có trụ sở tại Anh, các quỹ ETF Bitcoin (một loại quỹ giao dịch trên thị trường chứng khoán, đầu tư chủ yếu vào Bitcoin) giao ngay của Mỹ chứng kiến dòng tiền rút ròng lớn nhất từng được ghi nhận là 679 triệu USD. CoinTelegraph đánh giá đợt xả hàng này mang tính "thanh tẩy".</p>
+<p>Tuy nhiên, các chuyên gia cho rằng động thái trên giúp loại bỏ đầu cơ quá mức cho thị trường. Dẫu vậy, những người tham gia thị trường lâu năm vẫn lo ngại điều tồi tệ hơn còn xảy ra.</p>
+<figure class="image">
+<img src="https://i1-kinhdoanh.vnecdn.net/2024/12/20/Bitcoin-giam-jpeg-1734700459-5258-1734700723.jpg?w=680&amp;h=0&amp;q=100&amp;dpr=1&amp;fit=crop&amp;s=wfd2ei0JsxhqeZV0nCLgnw" alt="Biểu trưng Bitcoin đặt trước một biểu đồ minh họa xuống giá. Ảnh: CNBC">
+</figure>
+<p>Biểu trưng Bitcoin đặt trước một biểu đồ minh họa xuống giá. Ảnh: <i>CNBC</i>
+</p>
+<p>Khoảng 900 triệu USD tài sản số đã bị thanh lý trong vòng 24 giờ, theo dữ liệu từ CoinGlass. Những thay đổi trong chính sách vĩ mô của Mỹ khi Cục Dự trữ liên bang Mỹ (Fed) phát tín hiệu giảm tốc trong hạ lãi suất năm sau, đã cắt ngắn đợt phục hồi của các tài sản rủi ro trên diện rộng.</p>
+<p>Thêm vào đó, Chủ tịch Fed Jerome Powell nói rằng cơ quan này "không được phép sở hữu Bitcoin" theo Đạo luật Cục Dự trữ liên bang. Ông nhấn mạnh họ cũng không có ý định sửa đổi luật để tham gia vào xây dựng kho dự trữ tiền số theo ý tưởng của Tổng thống đắc cử Donald Trump.</p>
+<p>"Mặc dù rất dễ đổ lỗi cho việc bán tháo là do Fed, nhưng chúng tôi tin rằng nguyên nhân gốc rễ của sự sụp đổ bởi thị trường ở trạng thái tăng trưởng quá mức", nhóm phân tích của nền tảng tiền số QCP Capital nhấn mạnh.</p>',50,'Mỹ Ý','https://i1-kinhdoanh.vnecdn.net/2024/12/20/Bitcoin-giam-jpeg-1734700459-5258-1734700723.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=5igJPN1N_wLFyoH4Ihn7ZQ',
+  5,'Gần 680 triệu USD dòng tiền bị rút ròng từ các quỹ ETF Bitcoin khiến thị giá đồng này bốc hơi 10% về sát 92.000 USD.',TRUE),
+   ('2024-12-04 20:12:00', 'Công ty ChatGPT tiến bước dài đến siêu trí tuệ AGI', '<p>OpenAI cho biết đang thử nghiệm hai mô hình AI "có thể suy luận" o3 và o3 mini, được đánh giá giúp tiến thêm một bước dài đến AGI.</p>
+<p>Trên blog ngày 20/12, OpenAI cho biết o3 và o3 mini đang trong quá trình thử nghiệm an toàn ở quy mô nội bộ, nhưng đã đạt "điểm số cao đột phá" trong bài kiểm tra lý luận AI có tên ARC Challenge. Trong đó, mô hình đạt 87,5% ở bài ARC-AGI, vượt "trình độ con người" cũng như có tính năng "chuỗi suy nghĩ riêng tư", giúp "tự suy nghĩ" trước khi đưa ra câu trả lời.</p>
+<p>OpenAI khẳng định mô hình mới "mạnh hơn <a href="https://vnexpress.net/ai-lap-muu-phan-khang-khi-nghi-sap-bi-thay-the-4825746.html">mô hình o1</a> ra mắt trước đó" và là "bước nhảy vọt ấn tượng về hiệu suất". CEO Sam Altman khiêm tốn hơn khi nói đây là khởi đầu cho "giai đoạn tiếp theo" của AI.</p>
+<figure class="image">
+<img src="https://i1-sohoa.vnecdn.net/2024/12/21/o3-1734749921-8786-1734750062.png?w=680&amp;h=0&amp;q=100&amp;dpr=1&amp;fit=crop&amp;s=TClE9BBFx927IwEAueBkAQ" alt="Minh họa về OpenAI o3. Ảnh: VentureBeat">
+</figure>
+<p>Minh họa về OpenAI o3. Ảnh: <i>VentureBeat</i>
+</p>
+<p>OpenAI o1 <a href="https://vnexpress.net/openai-ra-sieu-ai-moi-voi-kha-nang-lap-luan-4792384.html">ra mắt</a> hồi tháng 9. Khi đó, công ty cho biết mô hình có <a href="https://vnexpress.net/openai-ra-sieu-ai-moi-voi-kha-nang-lap-luan-4792384.html">khả năng suy luận</a> thông qua các nhiệm vụ phức tạp và có thể giải quyết vấn đề khó hơn so với trước về khoa học, mã hóa và toán học. Khi đó, <i>Business Insider</i> đánh giá, sự xuất hiện của o1 khiến "ranh giới phân chia trí thông minh con người với trí thông minh nhân tạo ngày càng trở nên hẹp hơn".</p>
+<p>OpenAI đang mở quy trình nộp đơn cho các nhà nghiên cứu bên ngoài, cho phép họ thử nghiệm mô hình o3 trước khi phát hành công khai. Chương trình dự kiến kết thúc ngày 10/1/2025.</p>
+<p>Theo <i>Reuters</i>, việc <a href="https://vnexpress.net/chu-de/openai-5975">OpenAI</a> thử nghiệm o3 mạnh hơn o1 chỉ sau vài tháng cho thấy công ty đang đẩy nhanh quá trình tiến đến siêu trí tuệ <a href="https://vnexpress.net/sieu-tri-tue-nhan-tao-agi-la-gi-4681761.html">AGI</a> - cột mốc đột phá trong lĩnh vực trí tuệ nhân tạo, với viễn cảnh AI thông minh hơn con người. Trước đó, o1 được một số chuyên gia nhận định có thể <a href="https://vnexpress.net/sieu-tri-tue-nhan-tao-agi-dang-dan-hien-dien-4825386.html">tiệm cận</a> AGI.</p>
+<p>Sau thông báo của công ty đứng sau ChatGPT, Francois Chollet, chuyên gia của ARC Challenge và vừa rời Google Research, đánh giá mô hình mới "rất ấn tượng và là cột mốc lớn trên con đường hướng tới AGI", dù còn "một số lượng khá lớn" nhiệm vụ đơn giản mà o3 chưa thể giải quyết. Chollet nói thêm rằng "những khả năng này là thuộc về lĩnh vực mới, đòi hỏi sự quan tâm về khoa học một cách nghiêm túc".</p>
+<p>Arc Prize, một sáng kiến phi lợi nhuận cho thúc đẩy nghiên cứu AGI, cũng đánh giá o3 là bước tiến lớn nếu khả năng của nó mạnh hơn o1. "Đây có thể bước tiến đáng ngạc nhiên và quan trọng của <a href="https://vnexpress.net/chu-de/tri-tue-nhan-tao-ai-1980">AI</a>, cho thấy khả năng thích ứng với nhiệm vụ mới chưa từng thấy trước đây trong mô hình họ GPT", tổ chức này viết trên blog.</p>
+<p>
+<i>Fortune</i> đánh giá o3 chưa phải là AGI, nhưng mô hình mới nhiều khả năng sẽ giúp ChatGPT xử lý các truy vấn phức tạp hơn và giải quyết vấn đề từng bước. "Đặc biệt, tìm kiếm AI có thể phát triển với sự hiểu biết ngữ nghĩa được cải thiện, do chúng tìm thông tin không chỉ dựa trên từ khóa, mà còn trên ý nghĩa sâu sắc và mối quan hệ giữa các khái niệm. Các mô hình cũng có thể tạo ra câu chuyện và bài luận mạch lạc hơn, giải quyết vấn đề theo thời gian thực", trang này bình luận.</p>',81,'Mỹ Ý','https://i1-sohoa.vnecdn.net/2024/12/21/o3-1734749921-8786-1734750062.png?w=680&h=0&q=100&dpr=2&fit=crop&s=Qj_mc_4DQ6xWNzRM6uHRHA',
+  5,'OpenAI khẳng định mô hình mới "mạnh hơn mô hình o1 ra mắt trước đó" và là "bước nhảy vọt ấn tượng về hiệu suất". CEO Sam Altman khiêm tốn hơn khi nói đây là khởi đầu cho "giai đoạn tiếp theo" của AI.',TRUE);
+CREATE TABLE `news_tags` (
+  `NewsID` int(11) unsigned NOT NULL, -- ID bài viết
+  `TagID` int(11) unsigned NOT NULL, -- ID tag
+  PRIMARY KEY (`NewsID`, `TagID`),
+  FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Liên kết với bảng news
+  FOREIGN KEY (`TagID`) REFERENCES `tag`(`TagID`) ON DELETE CASCADE -- Liên kết với bảng tag
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ 
+
+ INSERT INTO `tag` (`TagName`) 
+VALUES 
+  ('Việt Nam'), 
+  ('bài viết hay');
+  INSERT INTO `news_tags` (`NewsID`, `TagID`) 
+VALUES 
+  (1, 1), (1, 2),
+  (2, 1), (2, 2),
+  (3, 1), (3, 2),
+  (4, 1), (4, 2),
+  (5, 1), (5, 2),
+  (6, 1), (6, 2),
+  (7, 1), (7, 2),
+  (8, 1), (8, 2),
+  (9, 1), (9, 2),
+  (10, 1), (10, 2),
+  (11, 1), (11, 2),
+  (12, 1), (12, 2),
+  (13, 1), (13, 2),
+  (14, 1), (14, 2),
+  (15, 1), (15, 2),
+  (16, 1), (16, 2),
+  (17, 1), (17, 2),
+  (18, 1), (18, 2),
+  (19, 1), (19, 2),
+  (20, 1), (20, 2),
+  (21, 1), (21, 2);
