@@ -14,10 +14,11 @@
                   ">
                   <p>Thời gian: {{formatDate CreatedDate}}</p>
                   <img src="{{ImageCover}}" alt="{{Title}}" 
-                        class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-2">
-                  <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis">
+                        class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-0.5">
+                  <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
                         <strong>{{Title}}</strong>
                   </p>
+                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400" style="font-style: italic; text-decoration:underline">xem trước</a>
                   <div class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
                         {{{Content}}}
                   </div>
