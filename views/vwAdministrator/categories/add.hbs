@@ -1,0 +1,34 @@
+{{#section "css"}}
+    <link href="/static/css/cssAdministrator/categories/add.css" rel="stylesheet">
+{{/section}}
+
+<div id="add-category-container">
+  <header id="add-category-header">
+    <h1 id="add-category-title">Add New Category</h1>
+    <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
+  </header>
+
+  <div id="add-category-form-container" class="form-container">
+    <form id="add-category-form" action="/administrator/manage_categories/add" method="POST">
+      <div id="category-name-container" class="form-group">
+        <label for="category-name" id="category-name-label">Category Name</label>
+        <input type="text" id="category-name" name="CatName" required placeholder="Enter category name" class="form-control">
+      </div>
+
+      <div id="parent-category-container" class="form-group">
+        <label for="parent-category" id="parent-category-label">Parent Category</label>
+        <select id="parent-category" name="parent_id" class="form-control">
+          <option value="">Select Parent Category (Optional)</option>
+          {{#each categories}}
+            <option value="{{this.CatID}}">{{this.CatName}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div id="form-actions-container" class="form-actions">
+        <button type="submit" id="submit-category-btn" class="btn btn-submit">Add Category</button>
+        <a href="/administrator/manage_categories" id="cancel-btn" class="btn btn-cancel">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>

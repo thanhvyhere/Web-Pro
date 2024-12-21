@@ -1,0 +1,59 @@
+{{#section "css"}}
+<link rel="stylesheet" href="/static/css/cssWriter/writer.css">
+<link rel="stylesheet" href="/static/css/cssWriter/approval.css">
+{{/section}}
+{{#section "script"}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Kiểm tra xem có thông báo thành công từ backend không
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMessage = urlParams.get('success'); // Lấy thông báo thành công từ query string
+
+            if (successMessage) {
+                // Hiển thị thông báo SweetAlert
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successful!',
+                    text: successMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+    </script>
+{{/section}}
+{{sec}}
+<div id="card-list-new">
+    <div class="header-create tw-mt-5">
+        <h4>CHƯA ĐƯỢC DUYỆT</h4>
+        <hr>
+    </div>
+    <div class="row">
+        {{#each this.newsList}}
+        <div class="col-sm-6 mb-3">
+            <div class="card">
+                <div class="card-body card-news d-flex flex-row">
+                    <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
+                    <div class="paper-small">
+                        <div class="header-paper small mb-2">
+                            <label class="name-category-paper" disabled="disabled">{{catName}}</label>
+                            <div class="PublishedDate">
+                                <i class="bi bi-calendar3"></i>
+                                {{formatDate PublishedDate}}
+                            </div>
+                            <i class="bi bi-clock-history pending-icon"></i>
+                        </div>
+                        <h3 href="">
+                            <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                        </h3>
+                        <p class="abstract-font">{{Abstract}}</p>
+                    </div>
+                </div>
+                <a type="button" class="btn btn-warning" href="/newspaper/edit?id={{NewsID}}">
+                    <i class="bi bi-pencil-square"></i>
+                    Chỉnh sửa
+                </a>
+            </div>
+        </div>
+        {{/each}}
+        

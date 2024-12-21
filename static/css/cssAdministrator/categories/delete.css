@@ -1,0 +1,102 @@
+
+  /* Delete Category Styles */
+  #delete-category-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #delete-category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  #delete-category-title {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  #back-to-categories-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #back-to-categories-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  #delete-category-form-container {
+    padding: 20px;
+  }
+  
+  #delete-category-confirmation {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  #form-actions-container {
+    display: flex;
+    gap: 10px;
+  }
+  
+  #delete-category-btn,
+  #cancel-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #delete-category-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+  }
+  
+  #delete-category-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  #cancel-btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+  }
+  
+  #cancel-btn:hover {
+    background-color: #2980b9;
+  }
+
+  @media (max-width: 768px) {
+    #delete-category-container {
+        width: 100%;
+        padding: 20px;
+      }
+    
+      #delete-category-title {
+        font-size: 1.5rem;
+      }
+  }
+
+  @media (max-width: 480px) {
+    #delete-category-btn,
+    #cancel-btn {
+      font-size: 0.9rem;
+      padding: 10px 15px;
+    }
+  
+    #delete-category-confirmation {
+      font-size: 1rem;
+    }
+  }

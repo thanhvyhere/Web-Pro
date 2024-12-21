@@ -1,0 +1,38 @@
+{{#section "signupcss"}}
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/css/cssAccount/change-pass.css">
+{{/section}}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <span>Đổi mật khẩu</span>
+        </div>
+        <div class="card-body">
+            <div class="form-changepass">
+                <label for="txtUsername"></label>
+                <div class="form-group">
+                    <input type="text" name="username" id="txtUsername" class="form-control"
+                        placeholder="Email or username">
+                </div>
+                <label for="txtPassword">Nhập lại mật khẩu cũ</label>
+                <div class="form-group">
+                    <input type="password" name="raw_password" id="txtPassword" class="form-control"
+                        placeholder="Old Password">
+                </div>
+                <label for="txtNewPassword">Nhập mật khẩu mới</label>
+                <div class="form-group">
+                    <input type="newpassword" name="raw_newpassword" id="txtNewPassword" class="form-control"
+                        placeholder="New Password">
+                </div>
+                <label for="txtConfirmNewPassword">Nhập lại mật khẩu mới</label>
+                <div class="form-group">
+                    <input type="newconfirmpassword" name="raw_confirmnewpassword" id="txtConfirmNewPassword"
+                        class="form-control" placeholder="Confirm New Password">
+                </div>
+                <a href="/" class="confirm-btn">Xác nhận</a>
+            </div>
+        </div>
+    </div>
+</div>

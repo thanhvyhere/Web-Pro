@@ -1,0 +1,13 @@
+{{!-- vwAdministrator/tags/delete.hbs --}}
+{{#section "css"}}
+    <link href="/static/css/cssAdministrator/tags/delete.css" rel="stylesheet">
+{{/section}}
+
+<h1 id="page-title">Delete Tag</h1>
+
+<p id="confirmation-message">Are you sure you want to delete the tag: <strong id="tag-name">{{tag.TagName}}</strong>?</p>
+
+<form id="delete-form" action="/administrator/manage_tags/delete/{{tag.TagID}}" method="post">
+  <button id="btn-delete" type="submit" class="btn btn-danger">Delete</button>
+  <a id="btn-cancel" href="/administrator/manage_tags" class="btn btn-secondary">Cancel</a>
+</form>

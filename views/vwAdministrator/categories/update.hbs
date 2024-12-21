@@ -1,0 +1,34 @@
+{{#section "css"}}
+  <link rel="stylesheet" href="/static/css/cssAdministrator/categories/update.css">
+{{/section}}
+
+<div id="category-update-container">
+  <header id="category-update-header">
+    <h1 id="category-update-title">Update Category</h1>
+    <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
+  </header>
+
+  <div id="category-update-form-container">
+    <form action="/administrator/manage_categories/update/{{category.CatID}}" method="POST" id="category-update-form">
+      <div class="form-group">
+        <label for="CatName" id="label-catname">Category Name</label>
+        <input type="text" id="CatName" name="CatName" value="{{category.CatName}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="parent_id" id="label-parent">Parent Category</label>
+        <select id="parent_id" name="parent_id">
+          <option value="null" {{#if (eq category.parent_id null)}}selected{{/if}}>None</option>
+          {{#each categories}}
+          <option value="{{this.CatID}}" {{#if (eq category.parent_id this.CatID)}}selected{{/if}}>{{this.CatName}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div id="category-update-buttons">
+        <button type="submit" id="update-category-btn" class="btn btn-update">Update Category</button>
+        <a href="/administrator/manage_categories" id="cancel-update-btn" class="btn btn-cancel">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>

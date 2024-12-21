@@ -1,0 +1,32 @@
+/* Custom styles for the Delete User page */
+.container {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    background-color: #f8d7da;
+    padding: 20px;
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+    color: #721c24;
+}
+
+form {
+    text-align: center;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    font-size: 18px;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}

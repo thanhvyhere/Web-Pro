@@ -1,0 +1,66 @@
+#card-list-new{
+    margin: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size: 12pt;
+}
+
+.abstract-font{
+    font-size: 10pt;
+}
+.img-title-paper{
+    border-radius: 5px;
+    width: 200px;
+    height: 150px;
+}
+.card-news{
+    gap: 10px;
+}
+
+.header-paper{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.name-category-paper{
+    display: inline-block;
+    background-color: rgb(239, 107, 107);
+    color: white;
+    width: 30%;
+    height: 40px;
+    padding: 1%;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: 5%;
+    border: 1px solid black
+}
+.paper-small{
+    margin-left: 10px;
+    width: 100%;
+}
+
+.tick-icon{
+    color: green;
+    font-size: 15pt;
+}
+.refuse-icon{
+    color: red;
+    font-size: 15pt;
+}
+.pending-icon{
+    color: blue;
+    font-size: 15pt;
+}
+
+a{
+    color: black;
+}
+a:hover{
+    color: black;
+}
+
+.format-premium{
+    color: rgb(234, 234, 40);
+}
