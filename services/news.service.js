@@ -89,10 +89,9 @@ export default
         },
         countByNews()
         {
-            return db('news').count('* as total');
+            return db('news').count('* as total').first();
         },
         
-
         addNewTag(newTag) {
             return db('tag').insert(newTag);
         },
@@ -207,5 +206,9 @@ export default
             .where('Title', 'like', `%${query}%`)
             .orWhere('Abstract', 'like', `%${query}%`)
             .orWhere('Content', 'like', `%${query}%`);
-}
+    },
+    countByPreNews()
+    {
+        return db('news').where('Premium','1').count('* as total').first();
+    }
 }
