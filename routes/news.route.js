@@ -19,7 +19,7 @@ router.get('/byCat', async function (req, res) {
     const nPages = Math.ceil(nRows.total / limit);
     const current_page = Math.max(1, Math.min(req.query.page || 1, nPages)); // Đảm bảo từ 1 đến nPages
     const offset = (current_page - 1) * limit;
-
+    
     // Tạo danh sách số trang
     const pageNumbers = [];
     for (let i = 0; i < nPages; i++) {
@@ -33,7 +33,7 @@ router.get('/byCat', async function (req, res) {
     const list = await newsService.findPageByCatId(catId, limit, offset);
     const updatedList = await Promise.all(list.map(async (item) => {
         let is_premium;
-        let tags;
+        const authPremium = req.session.authPremium;
         const auth = req.session.auth;
         const tag = await newsService.getTagByNewsId(item.NewsID);
         if (item.Premium === 1)
@@ -45,6 +45,7 @@ router.get('/byCat', async function (req, res) {
             catName: category.CatName,
             is_premium,
             auth,
+            authPremium,
             tag
         }
     }));
@@ -79,6 +80,7 @@ router.get('/byTag', async function (req, res) {
     const updatedList = await Promise.all(list.map(async (item) => {
         let is_premium;
         const auth = req.session.auth;
+        const authPremium = req.session.authPremium;
         const tag = await newsService.getTagByNewsId(item.NewsID);
         if (item.Premium === 1)
             is_premium = true;
@@ -89,6 +91,7 @@ router.get('/byTag', async function (req, res) {
             ...item,
             catName: category.CatName,
             is_premium,
+            authPremium,
             auth,
             tag
         }
@@ -110,13 +113,26 @@ router.get('/detail',  async function (req, res) {
     const tags = await newsService.getTagByNewsId(id);
     const comments = await newsService.getAllCommentById(id);
     const news = await newsService.findById(id);
+    const randomNewsCat = await newsService.getTop3NewsCateByRandom(news.CatID);
     const count = await newsService.countCommentBynewsId(id);
     res.render('vwNewspaper/detail', {
         news: news,
         NewsID: id,
         tags: tags,
         comments: comments,
-        countComment: count.total
+        countComment: count.total,
+        randomNewsCat
+    });
+});
+router.get('/detail-raw',  async function (req, res) {
+    const id = req.query.id || 0;
+    await newsService.incrementViewCount(id);
+    const tags = await newsService.getTagByNewsId(id);
+    const news = await newsService.findById(id);
+    res.render('vwNewspaper/detail-raw', {
+        news: news,
+        NewsID: id,
+        tags: tags,
     });
 });
 

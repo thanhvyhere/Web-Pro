@@ -10,20 +10,28 @@
         premiumLinks.forEach(link => {
             link.addEventListener("click", (event) => {
                 const isPremium = link.getAttribute("data-premium") === "true";
+                const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
+                let text = 'Đăng nhập';
+                let href = "/account/login";
+
+                if (auth) {
+                    text = 'Đăng ký Premium';
+                    href = "/account/premium";
+                }
 
                 if (isPremium) {
                     event.preventDefault(); // Ngăn chặn chuyển hướng
                     Swal.fire({
                         title: "Thông báo",
-                        text: "Bạn cần đăng nhập để xem nội dung này.",
+                        text: "Bạn không được cấp quyền để xem nội dung này.",
                         icon: "warning",
                         showCancelButton: true,
-                        confirmButtonText: "Đăng nhập",
+                        confirmButtonText: text,
                         cancelButtonText: "Hủy"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Chuyển hướng đến trang đăng nhập
-                            window.location.href = "/account/login";
+                            // Chuyển hướng đến trang đăng nhập hoặc trang Premium
+                            window.location.href = href;
                         }
                     });
                 }
@@ -57,7 +65,7 @@
                                 <i class="format-premium bi bi-star-fill"></i>
                                 {{/if}}
                             </div>
-                            {{#if auth}}
+                            {{#if authPremium}}
                             <!-- Người dùng đã đăng nhập -->
                             <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
                                 <h5 class="card-title tw-mb-2">{{Title}}</h5>

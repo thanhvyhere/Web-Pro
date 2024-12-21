@@ -34,15 +34,34 @@ router.post('/login', async function (req, res) {
             showErrors: true,
         }); 
     }
-    const role = await accountService.findRoleById(user.permission);
-    req.session.auth = true;
+    
+    const preDate = await accountService.findPremiumDate(user.id);
+    console.log(preDate);  
+
+    const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
+
+    req.session.auth = true; 
+    
+    let expirationDate = null;
+    if (preDate && preDate.expiration_date) {
+        
+        expirationDate = new Date(preDate.expiration_date);
+        
+        
+        if (isNaN(expirationDate.getTime())) {
+            expirationDate = null;
+        }
+    }
+
     req.session.authUser = {
-        username: user.username,
-        userid: user.id,
-        name: user.name,
-        permission: user.permission,
-        rolename: role.RoleName
+        username: user.username,  
+        userid: user.id,  
+        name: user.name,  
+        permission: user.permission,  
+        rolename: role.RoleName,
+        expiration_date: expirationDate  
     };
+
 
     const retUrl = req.session.retUrl || '/'
     console.log('Redirecting to:', retUrl); 
@@ -58,6 +77,7 @@ router.get('/register', function(req, res){
 router.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
     const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const role = await accountService.findRoleById(user.permission);
     const entity = {
         username: req.body.username,
         password: hash_password, 
@@ -69,35 +89,17 @@ router.post('/register', async function (req, res) {
     const ret = await accountService.add(entity);
     const user = await accountService.findByUsername(req.body.username);
     req.session.auth = true;
-    req.session.authUser = user;
+    req.session.authUser = {
+        username: user.username,
+        userid: user.id,
+        name: user.name,
+        permission: user.permission,
+        rolename: role.RoleName
+    };
     const retUrl = req.session.retUrl || '/'
     res.redirect(retUrl);
 });
 
-router.get('/profile', async function(req, res){
-    if (!req.session.authUser) {
-        return res.redirect('/account/login'); // Nếu session không tồn tại, redirect đến trang đăng nhập
-    }
-
-    try {
-        const user = req.session.authUser; // Lấy thông tin user từ session
-        const Artistlist = await userProfileService.Artist();
-        const Albumlist = await userProfileService.Album();
-        const UserDashboardlist = await userProfileService.Dashboard();
-        const UserSong = await userProfileService.FindSongOfUser(user);
-
-        res.render('vwAccount/userProfile', {
-            user: user,
-            artists: Artistlist.slice(0, 5),
-            albums: Albumlist.slice(0, 5),
-            userdashboard: UserDashboardlist,
-            userSong: UserSong,
-        });
-    } catch (error) {
-        console.error("Lỗi trong quá trình lấy dữ liệu:", error);
-        res.status(500).send("Có lỗi xảy ra. Vui lòng thử lại sau.");
-    }
-});
 
 
 router.get('/is-available', async function (req, res) {
@@ -263,18 +265,34 @@ router.get('/login/githubAuth/callback',
       return res.redirect('/login');
      }
 
-      // Đánh dấu người dùng đã đăng nhập
-    const role = await accountService.findRoleById(user.permission);
-    console.log(user.permission)
-    req.session.auth = true;
+
+    const preDate = await accountService.findPremiumDate(user.id);
+    console.log(preDate);  
+
+    const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
+
+    req.session.auth = true; 
+    
+    let expirationDate = null;
+    if (preDate && preDate.expiration_date) {
+        
+        expirationDate = new Date(preDate.expiration_date);
+        
+        
+        if (isNaN(expirationDate.getTime())) {
+            expirationDate = null;
+        }
+    }
+
     req.session.authUser = {
         username: user.username,
-        userid: user.id,
-        name: user.name,
-        permission: user.permission,
-        rolename: role.RoleName
+        userid: user.id,  
+        name: user.name,  
+        permission: user.permission,  
+        rolename: role.RoleName,  
+        expiration_date: expirationDate  
     };
-    // Chuyển hướng về trang chủ hoặc nơi khác
+
     res.redirect('/subscriber');
   }
 );
@@ -327,6 +345,7 @@ router.post('/premium', async function (req, res) {
 
             // Cập nhật session với quyền mới
             req.session.authUser.permission = 2;
+            req.session.authUser.rolename = 'subscribers';
             req.session.authPremium = true;
         } else {
             // Nếu tài khoản đã có, kiểm tra expiration_date
@@ -351,7 +370,8 @@ router.post('/premium', async function (req, res) {
         // Cập nhật session với quyền mới (nếu cần)
         req.session.authUser.permission = 2;
         req.session.authPremium = true;
-
+        req.session.authUser.rolename = 'subscriber';
+        req.session.authUser.expiration_date = expirationDate;
         // Phản hồi thành công
         res.json({
             message: 'Đăng kí gói Premium thành công!',
@@ -365,6 +385,8 @@ router.post('/premium', async function (req, res) {
         });
     }
 });
+
+router.get('/detail', )
 
 
 

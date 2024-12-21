@@ -26,7 +26,7 @@
                             </div>
                             <i class="bi bi-check2-circle tick-icon"></i>
                         </div>
-                        <a href="/newspaper/detail?id={{NewsID}}">
+                        <a href="/newspaper/detail-raw?id={{NewsID}}">
                             <h5 class="card-title tw-mb-2">{{Title}}</h5>
                         </a>
                         <p class="abstract-font">{{Abstract}}</p>
@@ -36,34 +36,5 @@
         </div>
         {{/each}}
     </div>
-    <ul class="pagination">
-        <li class="page-item disabled">
-            <a class="page-link">Previous</a>
-        </li>
-        {{#each this.pageNumbers}}
-        {{#if active}}
-        <li class="page-item active">
-            <a class="page-link" href="#">{{value}}</a>
-        </li>
-        {{else}}
-        <li class="page-item">
-            <a class="page-link" href="?id={{../status}}&page={{value}}">{{value}}</a>
-        </li>
-        {{/if}}
-        {{!-- {{#if value === 1}}
-        <li class="page-item disable">
-            <a class="page-link" href="#">{{value}}</a>
-        </li>
-        {{#elif value === }}
-        <li class="page-item">
-            <a class="page-link" href="?id={{../catId}}&page={{value}}">{{value}}</a>
-        </li>
-        {{else}}
-        {{/if}} --}}
-        {{/each}}
     
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
-    </ul>
 </div>

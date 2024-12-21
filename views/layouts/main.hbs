@@ -67,6 +67,7 @@
                 <div id="account-inf" class="p-3 text-center">
                     <img id="img-account" src="/static/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle">
                     <h5 class="text-uppercase mt-3">{{authUser.username}}</h5>
+                    <h6>{{formatDate authUser.expiration_date}}</h6>
                 </div>
                 <a class="dropdown-item" href="#">
                     <i class="bi bi-person-badge"></i>
@@ -367,69 +368,100 @@
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        
+    </script>
+    <script>
+        $(document).ready(function () {
+            // First, bind the event listener for the search input
+            $('#searchInput').on('input', function () {
+                // Check if the user is logged in
+                if (!{{ auth }}) {  // If the user is not logged in
+                Swal.fire({
+                    title: 'Bạn chưa đăng nhập',
+                    text: 'Bạn cần đăng nhập để truy cập các tính năng này.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đăng nhập',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/account/login';  // Redirect to login page
+                    }
+                });
+            } else if ({{ auth }} && parseInt({{ authUser.permission }}) === 1) {  // If logged in but doesn't have premium
+            Swal.fire({
+                title: 'Bạn không đủ quyền',
+                text: 'Bạn cần đăng ký premium để truy cập các tính năng này.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Subscribe',
+                cancelButtonText: 'Hủy',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/account/subscribe';  // Redirect to subscribe page
+                }
+            });
+        } else {  // If the user is logged in and has the required permission
             const searchInput = document.getElementById('searchInput');
             const searchResults = document.getElementById('searchResults');
+            const keyword = searchInput.value.trim();
 
-            // Xử lý khi người dùng nhập từ khóa
-            searchInput.addEventListener('input', async (e) => {
-                const keyword = e.target.value.trim();
+            if (!keyword) {
+                searchResults.style.display = 'none';
+                searchResults.innerHTML = '';
+                return;
+            }
 
-                if (!keyword) {
-                    searchResults.style.display = 'none';
-                    searchResults.innerHTML = '';
-                    return;
-                }
-
-                try {
-                    // Gửi yêu cầu tới API
-                    const response = await fetch(`/newspaper/api/search?keyword=${encodeURIComponent(keyword)}`);
-                    const results = await response.json();
-
-                    // Hiển thị kết quả trong dropdown
+            // Perform the search via API
+            fetch(`/newspaper/api/search?keyword=${encodeURIComponent(keyword)}`)
+                .then(response => response.json())
+                .then(results => {
+                    // Display the search results in the dropdown
                     if (results.length > 0) {
                         searchResults.style.display = 'block';
                         searchResults.innerHTML = results
-                            .map(
-                                (item) => {
-                                    // Truncate abstract if it exceeds 100 characters
-                                    const truncatedAbstract = item.Abstract.length > 50 ? item.Abstract.substring(0, 100) + '...' : item.Abstract;
+                            .map(item => {
+                                // Truncate abstract if it exceeds 100 characters
+                                const truncatedAbstract = item.Abstract.length > 50 ? item.Abstract.substring(0, 100) + '...' : item.Abstract;
 
-                                    return `
-                                        <div class="dropdown-item search-item" data-id="${item.NewsID}">
-                                            <a href="/newspaper/detail?id=${item.NewsID}">
-                                                <strong>${item.Title}</strong>
-                                            </a><br />
-                                            <p class="font-abstract">${truncatedAbstract}</p>
-                                        </div>
-                                    `;
-                                }
-                            )
+                                return `
+                                            <div class="dropdown-item search-item" data-id="${item.NewsID}">
+                                                <a href="/newspaper/detail?id=${item.NewsID}">
+                                                    <strong>${item.Title}</strong>
+                                                </a><br />
+                                                <p class="font-abstract">${truncatedAbstract}</p>
+                                            </div>
+                                        `;
+                            })
                             .join('');
                     } else {
                         searchResults.innerHTML = '<div class="dropdown-item search-item">No results found</div>';
                     }
-                } catch (err) {
+                })
+                .catch(err => {
                     console.error('Error fetching search results:', err);
-                }
+                });
+        }
             });
 
-            // Ẩn dropdown khi người dùng nhấn ra ngoài
-            document.addEventListener('click', (e) => {
-                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                    searchResults.style.display = 'none';
-                }
-            });
+        // Hide search results when clicking outside the search input
+        document.addEventListener('click', function (e) {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
 
-            // Thêm sự kiện click vào từng kết quả
-            searchResults.addEventListener('click', (e) => {
-                const item = e.target.closest('.search-item');
-                if (item) {
-                    const newsId = item.getAttribute('data-id');
-                    console.log(`Selected NewsID: ${newsId}`);
-                    // Điều hướng hoặc xử lý thêm tại đây
-                }
-            });
+        // Add click event to search results
+        document.getElementById('searchResults').addEventListener('click', function (e) {
+            const item = e.target.closest('.search-item');
+            if (item) {
+                const newsId = item.getAttribute('data-id');
+                console.log(`Selected NewsID: ${newsId}`);
+                // Handle further actions for selected news
+            }
+        });
         });
     </script>
 

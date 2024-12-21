@@ -184,7 +184,13 @@ export default
             .orderByRaw('RAND()') // Sắp xếp ngẫu nhiên
             .limit(3); // Lấy 3 bài báo ngẫu nhiên
         },
-        
+        getTop3NewsCateByRandom(catId) {
+            return db('news')
+                .join('categories', 'news.CatID', '=', 'categories.CatID')
+                .where('news.CatID', catId)
+                .orderByRaw('RAND()') // Sắp xếp ngẫu nhiên
+                .limit(3); // Lấy 3 bài báo ngẫu nhiên
+        },
          findPageByTagId(id, limit, offset) {
         return db('news_tags') // Bắt đầu từ bảng news_tags
             .join('news', 'news_tags.NewsID', '=', 'news.NewsID') // Kết hợp với bảng news qua NewsID
@@ -207,5 +213,8 @@ export default
             .where('Title', 'like', `%${query}%`)
             .orWhere('Abstract', 'like', `%${query}%`)
             .orWhere('Content', 'like', `%${query}%`);
-}
+    },
+    findExpirById(id) {
+        return db('premium_accounts')
+    }
 }

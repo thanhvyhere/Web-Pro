@@ -50,3 +50,17 @@ img{
     border-radius: 10px;
  
 }
+.name-category-paper{
+    background-color: rgb(231, 130, 130);
+    color: white;
+    font-weight: 600;
+    border-radius: 5px;
+}
+
+.abstract-font{
+    font-size: 10pt;
+}
+
+.paper-small{
+    margin-left: 10px;
+}

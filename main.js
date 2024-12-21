@@ -20,7 +20,7 @@ import accountService from './services/account.service.js';
 import newsService from './services/news.service.js';
 import fnMySQLStore from 'express-mysql-session';
 import readerRouter from './routes/reader.route.js';
-import { checkPremium } from './middleware/auth.mdw.js';
+import { checkPremium , authAdmin, authEditor, authWriter} from './middleware/auth.mdw.js';
 const app = express();
 app.use(express.urlencoded({
     extended: true
@@ -168,10 +168,14 @@ app.use(async function (req, res, next) {
     res.locals.auth = req.session.auth;
     res.locals.authUser = req.session.authUser || null; // Đảm bảo authUser luôn có giá trị
     if (req.session.authUser && req.session.authUser.permission > 1) {
+        req.session.authPremium = true;
         res.locals.authPremium = true;
     } else {
         res.locals.authPremium = false;
+        req.session.authPremium = false;
     }
+     console.log('Auth Premium:', res.locals.authPremium); // Kiểm tra giá trị authPremium
+
     // Kiểm tra authUser trước khi truy cập thuộc tính permission
    
 
@@ -197,10 +201,19 @@ app.use(async (req, res, next) => {
        const updatedList = await Promise.all(topNews.map(async (item) => {
            const count = await newsService.countCommentBynewsId(item.NewsID);
            const tags = await newsService.getTagByNewsId(item.NewsID);
+           const authPremium = req.session.authPremium;
+           console.log(authPremium);
+           let is_premium;
+            if (item.Premium === 1)
+                is_premium = true;
+            else
+                is_premium = false;
            return {
                ...item,
                countComment: count.total, // Đảm bảo trả về đúng số lượng bình luận
-               tags:tags
+               tags:tags,
+               authPremium,
+               is_premium
            }
        }));
     res.locals.topNews = updatedList;
@@ -253,7 +266,7 @@ app.use(async (req, res, next) => {
     res.locals.randomNews = updatedList;
     next();
 });
-app.get('/', checkPremium, async function (req, res) {
+app.get('/', checkPremium,async function (req, res) {
    if (!req.session.auth || !req.session.authUser) {
         // Truyền dữ liệu vào view
         return res.render('homepage');
@@ -313,18 +326,18 @@ app.use(async function (req, res, next) {
 });
 
 app.use('/account', accountRouter);
-app.use('/writer', writerRouter);
+app.use('/writer',authWriter, writerRouter);
 app.use('/newspaper', newspaperRouter);
 // Khởi động server
 // app.use('/artist', artistRouter);
-app.use('/reader', readerRouter)
+app.use('/reader', checkPremium, readerRouter)
 
 app.use('/role', editorRouter);
 
 
-app.use('/editor', editorRouter);
+app.use('/editor', authEditor, editorRouter);
 app.use('/subscriber', checkPremium, subcriberRouter);
-app.use('/administrator', administratorRouter);
+app.use('/administrator', authAdmin, administratorRouter);
 
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');

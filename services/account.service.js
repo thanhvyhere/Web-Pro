@@ -73,6 +73,10 @@ export default {
     },
     updatePremium(id, day) {
         return db('premium_accounts').where('id', id).update({'expiration_date': day});
+    },
+    findPremiumDate(id)
+    {
+        return db('premium_accounts').where('id', id).first();
     }
 
 };
