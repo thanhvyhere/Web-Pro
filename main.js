@@ -174,7 +174,6 @@ app.use(async function (req, res, next) {
         res.locals.authPremium = false;
         req.session.authPremium = false;
     }
-     console.log('Auth Premium:', res.locals.authPremium); // Kiểm tra giá trị authPremium
 
     // Kiểm tra authUser trước khi truy cập thuộc tính permission
    
@@ -202,7 +201,6 @@ app.use(async (req, res, next) => {
            const count = await newsService.countCommentBynewsId(item.NewsID);
            const tags = await newsService.getTagByNewsId(item.NewsID);
            const authPremium = req.session.authPremium;
-           console.log(authPremium);
            let is_premium;
             if (item.Premium === 1)
                 is_premium = true;

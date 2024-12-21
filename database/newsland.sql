@@ -59,6 +59,11 @@ INSERT INTO `roles` (`RoleName`) VALUES
 ('administrator');
 
 
+
+
+
+
+
 DROP TABLE IF EXISTS `features`;
 CREATE TABLE `features` (
   `FeatureID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -77,9 +82,8 @@ CREATE TABLE `features` (
 INSERT INTO `features` (`FeatureName`, `PathName`, `RoleID`, `Icon`) VALUES
 -- Features của subscriber
 ('Thư viện', 'library', 2, '<i class="bi bi-book"></i>'),
-('Đã tải xuống', 'downloaded', 2, '<i class="bi bi-stars"></i>'),
-('Premium', 'premium', 2, '<i class="bi bi-crown"></i>'),
-('Yêu thích', 'favorites', 2, '<i class="bi bi-heart"></i>'),
+('Đã lưu', 'saved', 2, '<i class="bi-bookmark-fill"></i>'),
+('Premium', 'premium', 2, '<i class="bi bi-file-earmark-ppt"></i>'),
 
 -- Features của writer
 ('Tạo bài viết', 'create_article', 3, '<i class="bi bi-pencil"></i>'),
@@ -291,9 +295,19 @@ CREATE TABLE `comment` (
   `CreatedDate` DATETIME DEFAULT CURRENT_DATE, -- Ngày tạo bình luận, mặc định là ngày hiện tại
   PRIMARY KEY (`CommentID`),
   FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Tham chiếu đến bảng news và xóa bình luận khi bài viết bị xóa
-  FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE CASCADE -- Tham chiếu đến bảng users, xóa bình luận nếu người dùng bị xóa
+  FOREIGN KEY (`UserID`) REFERENCES `users`(`id`) ON DELETE CASCADE -- Tham chiếu đến bảng users, xóa bình luận nếu người dùng bị xóa
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE `savednews` (
+  `SavedID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, -- ID của mục lưu bài viết
+  `NewsID` INT(11) UNSIGNED NOT NULL,                 -- ID bài viết
+  `UserID` INT(11) UNSIGNED NOT NULL,                 -- ID người dùng
+  `CreatedDate` DATETIME DEFAULT CURRENT_TIMESTAMP,   -- Ngày lưu bài viết, mặc định là thời gian hiện tại
+  UNIQUE(`UserID`, `NewsID`),                         -- Mỗi người dùng chỉ lưu một bài một lần
+  PRIMARY KEY (`SavedID`),                            -- Khóa chính
+  FOREIGN KEY (`NewsID`) REFERENCES `news`(`NewsID`) ON DELETE CASCADE, -- Ràng buộc tham chiếu bảng news
+  FOREIGN KEY (`UserID`) REFERENCES `users`(`id`) ON DELETE CASCADE -- Ràng buộc tham chiếu bảng users
+) ENGINE=MyISAM  AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `tag` (
   `TagID` int(11) unsigned NOT NULL AUTO_INCREMENT, -- ID của tag
