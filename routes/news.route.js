@@ -63,7 +63,6 @@ router.get('/byTag', async function (req, res) {
     const tagId = req.query.id || 0;
     const limit = 6;
     const nRows = await newsService.countByTagId(tagId);
-    console.log(nRows);
     const nPages = Math.ceil(nRows.total / limit);
     const current_page = Math.max(1, Math.min(req.query.page || 1, nPages)); // Đảm bảo từ 1 đến nPages
     const offset = (current_page - 1) * limit;
@@ -148,8 +147,6 @@ router.get('/edit', async function (req, res) {
     }else
     {
     const category_cha = await newsService.findCatByCatId(category_con.parent_id)
-    
-    console.log(category_cha);
     const image = entity.ImageCover;
     let imageFile = image; // Khởi tạo giá trị mặc định
 
@@ -157,13 +154,14 @@ router.get('/edit', async function (req, res) {
         return res.redirect('/');
     }
     res.render('vwNewspaper/edit', {
-    news: entity,
-    categoryCha: category_cha,
-    categoryCon: category_con,
-    tags: tags,
-    imageFile: imageFile,
-    });
+        news: entity,
+        categoryCha: category_cha,
+        categoryCon: category_con,
+        tags: tags,
+        imageFile: imageFile,
+        });
     }
+
 });
 
 router.post('/del',  async function (req, res) {
@@ -200,10 +198,6 @@ router.post('/patch',upload.single('ImageFile'), async function (req, res) {
         // Không có file tải lên, giữ nguyên ImageCover từ body
         coverImage = req.body.ImageCover; // Giá trị cũ từ form (được gửi lên từ client)
     }
-
-    console.log('Ảnh bìa:', coverImage);
-
-    console.log('Final Images:', finalImages);
     const id = req.body.newsId;
     await newsService.delTagByNewsId(id);
     const { tags } = req.body || "";
@@ -246,11 +240,10 @@ router.post('/patch',upload.single('ImageFile'), async function (req, res) {
             };
 
             await newsService.addTagIdAndNewsId(tagNewsEntity);
+           
         }
+         res.redirect('/writer/pending_approval?success=Update%20successful!');
     }
-    
-
-        
     }
 );
 

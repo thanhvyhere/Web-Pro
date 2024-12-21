@@ -36,7 +36,6 @@ router.post('/login', async function (req, res) {
     }
     
     const preDate = await accountService.findPremiumDate(user.id);
-    console.log(preDate);  
 
     const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
 
@@ -195,7 +194,6 @@ router.post('/otp', async function (req, res) {
     const otp = req.body.otp || '';
     try {
         const otpRecord = await accountService.findOTPByEmail(email);
-        console.log(otpRecord);
         if (!otpRecord) {
             return res.render('vwAccount/otp', {
                 layout: 'account-layout',
@@ -206,8 +204,6 @@ router.post('/otp', async function (req, res) {
 
         // Kiểm tra thời gian hết hạn
         if (otp !== otpRecord.otp) {
-            console.log(otp);
-            console.log(otpRecord.otp);
             return res.render('vwAccount/otp', {
                 layout: 'account-layout',
                 email: email,
@@ -267,8 +263,6 @@ router.get('/login/githubAuth/callback',
 
 
     const preDate = await accountService.findPremiumDate(user.id);
-    console.log(preDate);  
-
     const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
 
     req.session.auth = true; 
