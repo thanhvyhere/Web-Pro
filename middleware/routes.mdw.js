@@ -1,51 +1,61 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-import categoryRoute from '../routes/category.route.js';
-import productRoute from '../routes/product.route.js';
-import productUserRoute from '../routes/product-user.route.js';
-import accountRoute from '../routes/account.route.js';
-import cartRoute from '../routes/cart.route.js';
-import miscRoute from '../routes/misc.route.js';
-
-import auth from './auth.mdw.js';
-
+import express from 'express';
+import session from 'express-session';
+import administratorRouter from '../routes/administrator.route.js'
+import editorRouter from '../routes/editor.route.js';
+import writerRouter from '../routes/writer.route.js';
+import newspaperRouter from '../routes/news.route.js';
+import subcriberRouter from '../routes/subcriber.route.js';
+import readerRouter from '../routes/reader.route.js';
+import accountRouter from '../routes/account.route.js';
+import { checkPremium , authAdmin, authEditor, authWriter} from './auth.mdw.js';
 export default function (app) {
-  app.get('/', function (req, res) {
-    // res.send('Hello World!');
-    res.render('home');
+  
+  app.get('/', checkPremium, async function (req, res) {
+     if (!req.session.auth || !req.session.authUser) {
+          // Truyền dữ liệu vào view
+          return res.render('homepage');
+      }
+  
+      if (req.session.views) {
+          req.session.views++;
+      } else req.session.views = 1;
+  
+      
+      const permission = req.session.authUser.permission;
+  
+      // Redirect users to their respective dashboards
+      switch (permission) {
+          case 1: 
+              return res.redirect('/reader')
+          case 2: // Subscriber
+              return res.redirect('/subscriber');
+          case 3: // Writer
+              return res.redirect('/writer');
+          case 4: // Editor
+              return res.redirect('/editor');
+          case 5: // Admin
+              return res.redirect('/administrator');
+          default: // Guest or invalid permission
+              return res.redirect('/');
+      }
   });
 
-  app.get('/about', function (req, res) {
-    res.render('about', {
-      layout: 'main.hbs'
-    });
-  });
+  
+app.use('/account', accountRouter);
+app.use('/writer', writerRouter);
+app.use('/newspaper', newspaperRouter);
+// Khởi động server
+// app.use('/artist', artistRouter);
+app.use('/reader', readerRouter)
 
-  app.get('/bs4', function (req, res) {
-    res.sendFile(__dirname + '/bs4.html');
-  });
+app.use('/role', editorRouter);
 
-  app.get('/err', function (req, res) {
-    throw new Error('Error!');
-  });
 
-  app.use('/admin/categories', categoryRoute);
-  app.use('/admin/products', productRoute);
-  app.use('/products', productUserRoute);
-  app.use('/account', accountRoute);
-  app.use('/cart', auth, cartRoute);
-  app.use('/misc', miscRoute);
+app.use('/editor', editorRouter);
+app.use('/subscriber', checkPremium, subcriberRouter);
+app.use('/administrator', authAdmin, administratorRouter);
 
-  app.use(function (req, res, next) {
-    res.render('404', { layout: false });
-  });
-
-  app.use(function (err, req, res, next) {
-    console.error(err.stack)
-    // res.status(500).send('Something broke!')
-    res.render('500', { layout: false });
-  });
 }
 
