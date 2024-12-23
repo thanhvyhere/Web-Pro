@@ -16,9 +16,11 @@
                     <p>Thời gian: {{formatDate CreateDate}}</p>
                     <img src="{{ImageCover}}" alt="{{Title}}"
                             class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-2">
-                    <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis">
+                    <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
                         <strong>{{Title}}</strong>
                     </p>
+                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400" style="font-style: italic; text-decoration:underline">xem trước</a>
+
                     <div class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
                         {{{Content}}}
                     </div>
@@ -101,7 +103,7 @@
         format: 'd/m/Y H:i',  // Định dạng ngày giờ, H là giờ (24 giờ), i là phút
         mask: false,
         minDate: 0,  // Ngày hiện tại là ngày sớm nhất có thể chọn
-        step:15,
+        step:1,
         onSelectDate: function (currentDate) {
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Xóa giờ để so sánh chỉ ngày

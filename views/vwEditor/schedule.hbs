@@ -12,6 +12,11 @@
     </tr>
   </thead>
   <tbody>
+    {{#if this.empty}}
+    <tr class="tw-my-auto">
+        <th scope="row">Chưa có bài viết mới được duyệt</th>
+    </tr>
+    {{else}}
     {{#each news}}
     <tr class="tw-my-auto">
         <th scope="row">{{No}}</th>
@@ -43,5 +48,6 @@
     </tr>
     </form>
     {{/each}}
+    {{/if}}
 </tbody>
 </table>
