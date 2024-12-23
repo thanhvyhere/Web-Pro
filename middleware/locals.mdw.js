@@ -4,6 +4,7 @@ import administratorService from "../services/administrator.service.js";
 import editorService from "../services/editor.service.js";
 import subcriberService from "../services/subcriber.service.js";
 import session from 'express-session';
+
 export default function (app) {
     
 
@@ -144,5 +145,5 @@ export default function (app) {
         }
         next();
     });
-
+    
 }

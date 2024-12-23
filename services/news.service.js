@@ -143,13 +143,15 @@ export default
 
         getTop3NewsByView() {
             return db('news')
-            .join('categories', 'news.CatID', '=', 'categories.CatID') 
+            .join('categories', 'news.CatID', '=', 'categories.CatID')
+            .where('Status',3) 
             .orderBy('news.Views', 'desc')  
-            .limit(3);  
+            .limit(5);  
         },
         getTop10NewsByDate() {
             return db('news')
-            .join('categories', 'news.CatID', '=', 'categories.CatID') 
+            .join('categories', 'news.CatID', '=', 'categories.CatID')
+            .where('Status',3)  
             .orderBy('news.PublishedDay', 'desc')  
             .limit(10); 
         },
@@ -173,6 +175,7 @@ export default
         getTop10NewsByViews() {
             return db('news')
             .join('categories', 'news.CatID', '=', 'categories.CatID') 
+            .where('Status',3)
             .orderBy('Views', 'desc') // Sắp xếp theo số lượt xem giảm dần
             .limit(10); // Lấy 10 bài báo có lượt xem cao nhất
         },
@@ -180,21 +183,22 @@ export default
         {
             return db('news')
             .join('categories', 'news.CatID', '=', 'categories.CatID')
+            .where('Status',3)
             .orderByRaw('RAND()') // Sắp xếp ngẫu nhiên
             .limit(3); // Lấy 3 bài báo ngẫu nhiên
         },
         getTop3NewsCateByRandom(catId) {
             return db('news')
                 .join('categories', 'news.CatID', '=', 'categories.CatID')
-                .where('news.CatID', catId)
+                .where({'news.CatID': catId, 'news.Status':3})
                 .orderByRaw('RAND()') // Sắp xếp ngẫu nhiên
                 .limit(3); // Lấy 3 bài báo ngẫu nhiên
         },
-         findPageByTagId(id, limit, offset) {
+        findPageByTagId(id, limit, offset) {
         return db('news_tags') // Bắt đầu từ bảng news_tags
             .join('news', 'news_tags.NewsID', '=', 'news.NewsID') // Kết hợp với bảng news qua NewsID
             .join('tag', 'news_tags.TagID', '=', 'tag.TagID') // Kết hợp với bảng tags qua TagID
-            .where('tag.TagID', id) 
+            .where({'tag.TagID': id, 'news.Status': 3}) 
             .limit(limit) 
             .offset(offset); 
     },
@@ -215,10 +219,19 @@ export default
     },
     countByPreNews()
     {
-        return db('news').where('Premium','1').count('* as total').first();
+        return db('news').where({'Premium':'1', 'Status':3}).count('* as total').first();
     },
     
     findExpirById(id) {
         return db('premium_accounts')
+    }, 
+    updateStatus()
+    {
+        return db('news')
+            .where('status', 1)
+            .andWhere('PublishedDay', '<=', db.fn.now())
+            .update({
+                status: 3
+            });
     }
 }

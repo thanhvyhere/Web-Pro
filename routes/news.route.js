@@ -278,7 +278,16 @@ router.post('/comment', auth, async function (req, res) {
     }
     await newsService.addComment(entity);
     res.redirect(req.headers.referer);
-})
+});
 
-
+router.get('/update-status', async function (req, res) {
+    try {
+        // Gọi hàm cập nhật trạng thái
+        await newsService.updateStatus(); // Hàm xử lý cập nhật
+        res.send('Update successfully');
+    } catch (error) {
+        console.error('Error updating status:', error.message);
+        res.status(500).send('Error updating status');
+    }
+});
 export default router;
