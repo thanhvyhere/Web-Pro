@@ -126,37 +126,43 @@ router.post('/create_article',upload.single('ImageFile'), async (req, res) => {
         await newsService.add(entity);
         const [result] = await newsService.getIdNewEntity();
         const newsID = result[0].id;
-        const { tags } = req.body  || "0";
-
-        let parsedTags = tags;
-        if (typeof tags === 'string') {
-            parsedTags = JSON.parse(tags);
+        const { tags } = req.body  || "";
+        if (tags === "") {
+            res.redirect('/writer/pending_approval?success=Update%20successful!');
         }
-        for (let tag of parsedTags) {
-            let tagValue = tag.value;
-
-            // Kiểm tra nếu tag đã tồn tại trong cơ sở dữ liệu
-            let existingTag = await newsService.findTagByTagName(tagValue); 
-            if (!existingTag) {
-                let newTag = {
-                    TagName: tagValue
-                };
-                // Lưu tag mới vào database
-                await newsService.addNewTag(newTag);
-                existingTag = await newsService.findTagByTagName(tagValue);
+        else {
+            let parsedTags = tags;
+            if (typeof tags === 'string') {
+                parsedTags = JSON.parse(tags);
             }
+            for (let tag of parsedTags) {
+                let tagValue = tag.value;
 
-            // Tạo mối quan hệ giữa tag và bài viết
-            const tagNewsEntity = {
-                TagID: existingTag.TagID,
-                NewsID: newsID
-            };
+                // Kiểm tra nếu tag đã tồn tại trong cơ sở dữ liệu
+                let existingTag = await newsService.findTagByTagName(tagValue); 
+                if (!existingTag) {
+                    let newTag = {
+                        TagName: tagValue
+                    };
+                    // Lưu tag mới vào database
+                    await newsService.addNewTag(newTag);
+                    existingTag = await newsService.findTagByTagName(tagValue);
+                }
 
-            await newsService.addTagIdAndNewsId(tagNewsEntity);
+                // Tạo mối quan hệ giữa tag và bài viết
+                const tagNewsEntity = {
+                    TagID: existingTag.TagID,
+                    NewsID: newsID
+                };
+
+                await newsService.addTagIdAndNewsId(tagNewsEntity);
+            }
+            res.redirect('/writer/pending_approval?success=Upload%20successful!');
         }
+        
 
         // Chuyển hướng với thông báo thành công
-        res.redirect('/writer/pending_approval?success=Upload%20successful!');
+        
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to save tags' });

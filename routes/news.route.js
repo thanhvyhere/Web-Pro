@@ -4,8 +4,8 @@ import newsService from '../services/news.service.js';
 import moment from 'moment';
 import auth from '../middleware/auth.mdw.js';
 import multer from 'multer';
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
 const router = express.Router();
 
 
@@ -13,7 +13,6 @@ router.get('/byCat', async function (req, res) {
     const catId = req.query.catId || 0;
     const category = await newsService.findCatByCatId(catId);
     const limit = 6;
-
     // Kiểm tra và giới hạn current_page
     const nRows = await newsService.countByCatId(catId);
     const nPages = Math.ceil(nRows.total / limit);
@@ -278,7 +277,16 @@ router.post('/comment', auth, async function (req, res) {
     }
     await newsService.addComment(entity);
     res.redirect(req.headers.referer);
-})
+});
 
-
+router.get('/update-status', async function (req, res) {
+    try {
+        // Gọi hàm cập nhật trạng thái
+        await newsService.updateStatus(); // Hàm xử lý cập nhật
+        res.send('Update successfully');
+    } catch (error) {
+        console.error('Error updating status:', error.message);
+        res.status(500).send('Error updating status');
+    }
+});
 export default router;

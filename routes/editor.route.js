@@ -12,6 +12,13 @@ router.get('/', async function (req,res)
 // repository
 router.get('/repository', async function (req,res) 
 {
+    if(req.session.authUser){
+        console.log(req.session.authUser.userid)
+    }
+    else
+    {
+        return res.redirect('/account/login'); 
+    }
     const limit =6;
     const current_page = req.query.page || 1; 
     const offset = (current_page - 1) *limit; 
@@ -33,6 +40,13 @@ router.get('/repository', async function (req,res)
 // reviewed
 router.get('/reviewed', async function (req,res) 
 {
+    if(req.session.authUser){
+        console.log(req.session.authUser.userid)
+    }
+    else
+    {
+        return res.redirect('/account/login'); 
+    }
     const list = await editorService.findReviewed();
     res.render('vwEditor/reviewed', {news: list}
         );
@@ -40,6 +54,13 @@ router.get('/reviewed', async function (req,res)
 // editor_rejected
 router.get('/editor_rejected', async function (req,res) 
 {
+    if(req.session.authUser){
+        console.log(req.session.authUser.userid)
+    }
+    else
+    {
+        return res.redirect('/account/login'); 
+    }
     const list = await editorService.findRejected();
    
     res.render('vwEditor/rejected', {news: list}
@@ -48,6 +69,13 @@ router.get('/editor_rejected', async function (req,res)
 // editor_approved
 router.get('/editor_approved', async function (req,res) 
 {
+    if(req.session.authUser){
+        console.log(req.session.authUser.userid)
+    }
+    else
+    {
+        return res.redirect('/account/login'); 
+    }
     const list = await editorService.findApproved();
    
     res.render('vwEditor/approved', {news: list}
@@ -56,6 +84,13 @@ router.get('/editor_approved', async function (req,res)
 // schedule
 router.get('/schedule', async function (req,res) 
 {
+    if(req.session.authUser){
+        console.log(req.session.authUser.userid)
+    }
+    else
+    {
+        return res.redirect('/account/login'); 
+    }
     try {
         const list = await editorService.findApproved();
         const parentcatList = await editorService.findParentCat();
@@ -63,24 +98,15 @@ router.get('/schedule', async function (req,res)
             ...item,
             parentCatList: parentcatList, // Gắn parentCatList vào từng phần tử
         }));
-        res.render('vwEditor/schedule', { news: updatedList });
+        res.render('vwEditor/schedule', { news: updatedList, empty: list.length === 0 });
     } catch (error) {
         console.error('Error:', error); // Ghi lỗi ra console
         res.status(500).send('Internal Server Error');
     }
 });
-// router.post('/schedule', async function (req,res) 
-// {
-//     const publishedDay = moment(req.body.PublishedDay, "DD/MM/YY H:i").format('YYYY-MM-DD HH:mm')
-//     const id = req.body.NewsID;
-//     const changes = {
-//         PublishedDay: publishedDay,
-//         CatID: req.body.CatID,
-//     }
-//     await editorService.update(changes,id)
-//     res.redirect('/editor/schedule');
-// });
+
 router.get('/getChildCategories/:parentCatId', async (req, res) => {
+    
     const parentCatId = req.params.parentCatId;
     
     try {
@@ -99,6 +125,13 @@ router.get('/getChildCategories/:parentCatId', async (req, res) => {
 });
 router.get('/feedback', async function (req,res) 
 {
+    if(req.session.authUser){
+        console.log(req.session.authUser.userid)
+    }
+    else
+    {
+        return res.redirect('/account/login'); 
+    }
     const id = +req.query.id || 0;
     const news = await editorService.findNewsByID(id)
   
@@ -118,6 +151,13 @@ router.post('/feedback', async function (req,res)
 });
 router.get('/modify', async function (req,res) 
 {
+    if(req.session.authUser){
+        console.log(req.session.authUser.userid)
+    }
+    else
+    {
+        return res.redirect('/account/login'); 
+    }
     const id = +req.query.id || 0;
     const news = await editorService.findANews(id)
     const parentcatList = await editorService.findParentCat();

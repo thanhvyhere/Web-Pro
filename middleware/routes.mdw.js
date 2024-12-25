@@ -9,15 +9,18 @@ import newspaperRouter from '../routes/news.route.js';
 import subcriberRouter from '../routes/subcriber.route.js';
 import readerRouter from '../routes/reader.route.js';
 import accountRouter from '../routes/account.route.js';
-import { checkPremium , authAdmin, authEditor, authWriter} from './auth.mdw.js';
+import { checkPremium, authAdmin, authEditor, authWriter } from './auth.mdw.js';
+import passport from 'passport';
+import auth from './auth.mdw.js';
 export default function (app) {
+    
   
   app.get('/', checkPremium, async function (req, res) {
      if (!req.session.auth || !req.session.authUser) {
           // Truyền dữ liệu vào view
           return res.render('homepage');
       }
-  
+      
       if (req.session.views) {
           req.session.views++;
       } else req.session.views = 1;
@@ -42,7 +45,6 @@ export default function (app) {
       }
   });
 
-  
 app.use('/account', accountRouter);
 app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
