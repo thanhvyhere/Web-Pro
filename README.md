@@ -24,6 +24,9 @@ NewsLand is a web-based platform designed for publishing and moderating news art
 ---
 
 ## Installation Guide
+## Hosted at
+The Guest system is hosted and accessible at:  
+[https://web-pro-wo15.onrender.com](https://web-pro-wo15.onrender.com)
 
 ### 1. Clone the Repository
 
