@@ -84,7 +84,7 @@ router.post('/create_article',upload.single('ImageFile'), async (req, res) => {
 
         // Nếu file được tải lên
         if (imageFile) {
-            const fileName = `news_${number[0].total}.jpg`;
+            const fileName = `news_${number.total}.jpg`;
             const newFilePath = path.join(imagePath, fileName);
 
             // Đổi tên file để lưu đúng chuẩn
