@@ -139,7 +139,7 @@ INSERT INTO `news` (
   , FALSE),
 
 (
-  '2024-12-09 19:00:00', 'Taylor Swift khép lại The Eras Tour', 
+  NULL, 'Taylor Swift khép lại The Eras Tour', 
   '<p>Ca sĩ Taylor Swift tổ chức đêm nhạc cuối của "The Eras Tour" tại Vancouver, hoàn thành 149 buổi diễn sau gần hai năm thực hiện.</p>
   <p>Chặng cuối của <i>The Eras Tour</i> diễn ra tại sân vận động BC Place với khoảng 60.000 người tham dự mỗi đêm, từ ngày 6 đến 8/12 (giờ địa phương). Theo <i>CNN</i>, trong đêm 8/12, Taylor Swift nói với người hâm mộ đến nay cô đã biểu diễn trước hơn 10 triệu khán giả, cảm ơn tất cả mang lại trải nghiệm "hoàn toàn khác với những gì bản thân từng làm trong đời".</p>
   <p>Nghệ sĩ nói thêm: "Tôi nghĩ di sản của chuyến lưu diễn này là việc các bạn cùng nhau tạo nên không gian ngập tràn niềm vui, sự gắn bó và tình yêu".</p>
@@ -255,7 +255,7 @@ INSERT INTO `news` (
     'https://i1-vnexpress.vnecdn.net/2024/12/16/ttxvn-tong-bi-thu-2-4990-17343-5961-4020-1734348002.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=nFiuxNuV1LaVhrHGN9aswQ',
     3,'Tổng Bí thư Tô Lâm yêu cầu kiên quyết phòng chống tiêu cực, tham nhũng trong công tác sắp xếp bộ máy và đội ngũ cán bộ. Ông nhấn mạnh cần tinh gọn bộ máy, nâng cao chất lượng cán bộ và kiên quyết ngăn chặn việc lợi dụng sắp xếp bộ máy để tiêu cực. Cán bộ lãnh đạo cần gương mẫu, chủ động thực hiện nhiệm vụ.', FALSE
 ), (
-  '2024-12-16 12:00:00', 
+  NULL, 
  '6 điểm nhấn công nghệ thế giới 2024', 
  '<p>Thế giới công nghệ 2024 chứng kiến sự bùng nổ của AI tạo sinh, làn sóng robot hình người, trong khi thị trường tiền số khởi sắc.</p><p>Trong 12 tháng qua, nhiều sự kiện liên quan đến trí tuệ nhân tạo diễn ra, len lỏi đến mọi mặt trong đời sống thực tế. Hàng chục công ty cũng tham gia cuộc đua robot hình người với nhiều cải tiến quan trọng.</p><p><strong>AI tạo sinh bùng nổ</strong></p><p>Cuộc chiến AI tạo sinh được đánh giá đang diễn ra tương tự những năm 1990 khi Microsoft và Netscape đối đầu để trở thành trình duyệt tốt nhất. ChatGPT liên tục cải tiến với mô hình mới như GPT-4 hay o1. Google đổi Bard thành Gemini, Microsoft đưa Copilot vào Office, Windows, còn Meta AI cũng được triển khai cho Messenger, Instagram, WhatsApp và web. Character.AI, Viggle, Pixverse, Luma AI cũng tạo dấu ấn với khả năng tùy biến cho nhu cầu riêng. Các công ty Trung Quốc như Baidu, Alibaba, ByteDance... cũng công bố hàng loạt AI tương tự ChatGPT. Dù vậy, làn sóng chatbot được cho là có sự giống nhau giữa các sản phẩm thay vì đột phá.</p><p>Nối tiếp xu hướng AI chuyển văn bản thành ảnh, OpenAI tiếp tục là bên mở màn cho cuộc đua AI chuyển văn bản thành video với mô hình Sora hồi tháng 2. Sau đó, Google trình làng Veo, Runway công bố Gen-3 Alpha, Meta ra Movie Gen, còn Adobe cũng giới thiệu công cụ video AI của riêng mình. Tuy nhiên, hiện mới có Sora thương mại hóa đầu tháng 12, còn hầu hết vẫn đang thử nghiệm.</p>',
   
@@ -264,7 +264,7 @@ INSERT INTO `news` (
  'https://i1-sohoa.vnecdn.net/2024/12/15/image-copy-4616-1728578684-173-5411-9689-1734251543.png?w=680&h=0&q=100&dpr=1&fit=crop&s=IRcwfC15RTkRruYmXWWx6A',
  5,'Thế giới công nghệ 2024 chứng kiến sự bùng nổ của AI tạo sinh và robot hình người. ChatGPT và các AI khác liên tục cải tiến, trong khi AI chuyển văn bản thành video bắt đầu được triển khai. Tuy nhiên, các sản phẩm chatbot vẫn thiếu sự đột phá, với nhiều sự tương đồng.', FALSE),
 (
-  '2024-12-15 21:03:00',
+  null,
  'Chủ tịch hội đồng trường quan trọng hơn hiệu trưởng',
  '<p>Chủ tịch hội đồng trường trực tiếp hoạch định chính sách, chiến lược, quan trọng hơn hiệu trưởng, nhưng chưa được quy định rõ trong Luật, theo GS Nguyễn Đình Đức.</p>
   <p>Ý kiến được GS Đức, Chủ tịch hội đồng trường Đại học Công nghệ, Đại học Quốc gia Hà Nội, nêu tại hội thảo đổi mới quản trị đại học tại TP HCM, ngày 14/12.</p>
@@ -342,7 +342,7 @@ INSERT INTO `news` (
   3,'Queensland (Australia) đã thông qua luật áp dụng án tù như người lớn đối với trẻ em từ 10 tuổi trở lên phạm trọng tội. Mức án mới nghiêm khắc hơn, với án tù chung thân cho tội giết người. Tuy nhiên, chuyên gia và LHQ lo ngại luật này vi phạm quyền trẻ em và không giảm tội phạm thiếu niên.'
   ,FALSE), 
 (
-      '2024-12-16 11:50:00',
+      null,
   'Giá vàng thế giới năm 2025 có thể tăng chậm lại',
   '<p>Hội đồng Vàng Thế giới (WGC) cho rằng nếu tình hình thị trường giữ nguyên như hiện tại, giá vàng 2025 sẽ tăng chậm hơn năm nay.</p>
   <p>Vàng ghi nhận năm tốt nhất trong hơn một thập kỷ. Từ đầu năm đến nay, kim loại quý 40 lần lập đỉnh, có thời điểm tiến sát 2.800 USD một ounce vào cuối tháng 10. Tổng nhu cầu vàng trong quý III lần đầu tiên chạm 100 tỷ USD. Dù bị bán tháo sau cuộc bầu cử Tổng thống Mỹ, kim loại quý vẫn tăng 30% năm nay.</p>
@@ -368,7 +368,7 @@ INSERT INTO `news` (
  7,'Giá vàng năm 2025 dự báo tăng chậm hơn năm nay, dù vẫn có tiềm năng nếu nhu cầu của các ngân hàng trung ương mạnh. Nhu cầu vàng từ Trung Quốc và Ấn Độ sẽ tiếp tục hỗ trợ giá. Tuy nhiên, nếu lãi suất giảm lại bị đảo ngược, giá vàng sẽ gặp khó khăn.', 
  FALSE), 
 (
-  '2024-12-04 20:12:00',
+  null,
  'Phó thủ tướng: ''Không để gián đoạn hệ thống khi tinh gọn bộ máy Ngân hàng Nhà nước''',
  '<p>Phó thủ tướng Hồ Đức Phớc lưu ý việc sắp xếp, tinh gọn bộ máy của Ngân hàng Nhà nước phải đảm bảo hoạt động bình thường của hệ thống ngân hàng.</p>
   <p>Theo kế hoạch định hướng sắp xếp tổ chức bộ máy của Chính phủ công bố ngày 6/12, Ngân hàng Nhà nước nằm trong 5 bộ và 3 cơ quan ngang bộ dự kiến duy trì, chỉ tinh gọn bên trong.</p>
@@ -394,7 +394,7 @@ INSERT INTO `news` (
   'https://i1-kinhdoanh.vnecdn.net/2024/12/14/web-jpeg-1734180472-1734180498-2500-1734180597.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=ZkT3CltW725-zF4NtLCDhg',
   2,'Phó thủ tướng Hồ Đức Phớc yêu cầu tinh gọn bộ máy Ngân hàng Nhà nước mà không ảnh hưởng đến hoạt động ngân hàng, đồng thời tiếp tục điều hành chính sách tiền tệ và tín dụng. Ngân hàng Nhà nước đã giúp ổn định kinh tế và kiểm soát lạm phát trong năm 2024.',FALSE),
 (
-    '2024-12-16 10:08:00',
+    null,
   'Rau luộc hay hấp tốt cho sức khỏe hơn?',
   '<p>Luộc rau có thể làm mất chất dinh dưỡng hòa tan trong nước, trong khi phương pháp hấp giữ lại nhiều vitamin và hợp chất thực vật hơn.</p>
   <p>Rau củ là một trong những thực phẩm tốt nhất cho sức khỏe. Nhờ chứa nhiều hợp chất thực vật, chất xơ, vitamin và khoáng chất, rau củ mang lại nhiều lợi ích, từ hỗ trợ cân nặng đến giảm nguy cơ mắc các bệnh thông thường như tim mạch và một số loại ung thư.</p>
@@ -421,15 +421,6 @@ INSERT INTO `news` (
   'Mỹ Ý', 
   'https://i1-suckhoe.vnecdn.net/2024/12/15/Buoc-4-Anh-dai-dien-4-3836-171-8620-5492-1734255099.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=cKWY4eSVgzgwsmf9DgM0eA',
   1,'Hấp rau giữ nhiều chất dinh dưỡng hơn luộc, giúp rau tươi sáng và giữ hương vị. Không hấp quá lâu để bảo vệ dưỡng chất. Thêm thảo mộc và chất béo để tăng hấp thu dinh dưỡng.',TRUE),
-  -- (`PublishedDay`,
-  -- `Title`,
-  -- `Content`,
-  -- `CatID`,
-  -- `AuthorName`,
-  -- `ImageCover`,
-  -- `Status`,
-  -- `Abstract`,
-  -- `Premium`)
   ('2024-12-04 20:12:00', 'Có nên ăn đồ cay khi trời lạnh?', '<p>Vợ tôi hạn chế ăn đồ cay khi trời lạnh để giảm trào ngược, nhưng tôi cho rằng ăn đồ cay nóng giúp ấm bụng. Vậy trời lạnh có nên ăn cay và ăn thế nào tốt cho sức khỏe? (Hoàng, 33 tuổi, Hà Nội)</p>
 <p>
 <strong>Trả lời:</strong>
@@ -448,7 +439,7 @@ INSERT INTO `news` (
 <p>
 <br>&nbsp;</p>',71,'Mỹ Ý','https://i1-suckhoe.vnecdn.net/2024/12/12/Buoc-6-6-1235-1671269525-17340-7488-5392-1734000606.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=bafVstO9jlNBBfNR_4q45A',
   3,'Vợ tôi hạn chế ăn đồ cay khi trời lạnh để giảm trào ngược, nhưng tôi cho rằng ăn đồ cay nóng giúp ấm bụng. Vậy trời lạnh có nên ăn cay và ăn thế nào tốt cho sức khỏe?',TRUE),
-  ('2024-12-04 20:12:00', '"Người nhàn nhã" gây bất bình vì nhận lương cao nhất Sở Cảnh sát New York', '<p>Quathisha Epps, nhân viên được trả lương cao nhất của Sở Cảnh sát New York, bị đình chỉ chức vụ khi có cuộc điều tra nội bộ về số giờ tăng ca bất thường.</p>
+  (null, '"Người nhàn nhã" gây bất bình vì nhận lương cao nhất Sở Cảnh sát New York', '<p>Quathisha Epps, nhân viên được trả lương cao nhất của Sở Cảnh sát New York, bị đình chỉ chức vụ khi có cuộc điều tra nội bộ về số giờ tăng ca bất thường.</p>
 <p>Theo The Post, trung úy Quathisha Epps, 51 tuổi, kiếm được 403.515 USD (hơn 10 tỷ đồng) trong năm tài chính 2024 (tính từ 1/10/2023 đến 30/9/2024). Tuy nhiên, hồ sơ bảng lương cho thấy trong đó có đến 204.000 USD là tiền làm thêm giờ cho công việc hành chính tại văn phòng Giám đốc Sở Cảnh sát New York (NYPD) Jeffrey Maddrey.</p>
 <p>Theo hồ sơ, trong năm bà Epps đã làm thêm gần 1.627 giờ ngoài các ca thường lệ, trung bình khoảng 74 giờ một tuần. Thời gian tăng ca, cộng với mức lương cơ bản 164.477 USD, đã đẩy tổng số tiền lương của bà Epps lên hơn 400.000 USD và khiến bà trở thành nhân viên NYPD được trả lương cao nhất.</p>
 <p>Trong cùng năm, cấp trên của bà, ông Maddrey, nhận được khoảng 292.000 USD.</p>
@@ -474,7 +465,7 @@ INSERT INTO `news` (
 <p>Căng thẳng về vấn đề này gia tăng sau khi Tổng thống đắc cử Donald Trump và tỷ phú Elon Musk hồi đầu tuần gây sức ép khiến đảng Cộng hòa đã phải từ bỏ phiên bản đầu tiên của dự luật ngân sách mà họ đã thống nhất với đảng Dân chủ. Phiên bản thứ hai do đảng Cộng hòa đưa ra đã bị Hạ viện bác bỏ hôm 19/12.</p>
 <p>Phiên bản cuối cùng được thông qua gần như giống hệt dự luật bị bác hôm 19/12, điểm khác là không có điều khoản về đình chỉ trần nợ công trong hai năm mà ông Trump đề ra.</p>',71,'Mỹ Ý','https://i1-vnexpress.vnecdn.net/2024/12/21/5563187178137268617a-My-173476-6697-9248-1734764467.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=TRYAMxjMSy7TERzDLuB6Bg',
   3,'Thượng viện Mỹ duyệt dự luật ngân sách mới nhằm ngăn chính phủ đóng cửa ngay trước hạn chót, chấm dứt một tuần hỗn loạn của quốc hội.',FALSE),
-  ('2024-12-04 20:12:00', 'Giá vàng thế giới bật tăng trở lại', '<p>Mỗi ounce vàng tăng thêm gần 30 USD khi số liệu lạm phát Mỹ tháng 11 củng cố khả năng Fed tiếp tục giảm lãi suất năm tới.</p>
+  (null, 'Giá vàng thế giới bật tăng trở lại', '<p>Mỗi ounce vàng tăng thêm gần 30 USD khi số liệu lạm phát Mỹ tháng 11 củng cố khả năng Fed tiếp tục giảm lãi suất năm tới.</p>
 <p>Chốt phiên giao dịch hôm qua, <a href="https://vnexpress.net/chu-de/gia-vang-hom-nay-1403">giá vàng</a> thế giới giao ngay tăng 27,7 USD lên 2.622 USD một ounce. Trước đó, giá đi xuống vài phiên liên tiếp sau khi Cục Dự trữ liên bang Mỹ (Fed) ra tín hiệu muốn lãi suất giảm chậm lại trong năm 2025.</p>
 <p>Ngày 20/12, số liệu của Cục Phân tích Kinh tế thuộc Bộ Thương mại Mỹ cho thấy Chỉ số Chi tiêu Cá nhân (PCE) lõi - không tính giá thực phẩm và năng lượng - chỉ tăng 0,1% so với tháng 10. Đây là tốc độ chậm nhất kể từ tháng 5. PCE là thước đo lạm phát ưa thích của Fed.</p>
 <figure class="image">
@@ -487,7 +478,7 @@ INSERT INTO `news` (
 <p>Từ đầu năm, giá vàng đã tăng 27% và nhiều lần lập đỉnh mới. Nguyên nhân chủ yếu là lực mua của các ngân hàng trung ương, làn sóng giảm lãi suất và nhu cầu trú ẩn trong bất ổn địa chính trị trên toàn cầu.</p>
 <p>Cơn sốt vàng chững lại từ đầu tháng 11, khi việc ông Donald Trump đắc cử Tổng thống Mỹ khiến giá USD tăng mạnh. Tuy nhiên, ngân hàng Goldman Sachs kỳ vọng thị trường lập đỉnh mới năm tới, có thể lên 3.000 USD một ounce trước tháng 12/2025.</p>',50,'Mỹ Ý','https://i1-kinhdoanh.vnecdn.net/2024/12/21/gold-2024-12-21T090624-347-173-5354-5926-1734746917.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=q2meEcbmIBNBZE9nV6TzRw',
   2,'Mỗi ounce vàng tăng thêm gần 30 USD khi số liệu lạm phát Mỹ tháng 11 củng cố khả năng Fed tiếp tục giảm lãi suất năm tới.',TRUE),
-  ('2024-12-04 20:12:00', 'Bitcoin giảm về sát 92.000 USD', '<p>Gần 680 triệu USD dòng tiền bị rút ròng từ các quỹ ETF Bitcoin khiến thị giá đồng này bốc hơi 10% về sát 92.000 USD.</p>
+  (null, 'Bitcoin giảm về sát 92.000 USD', '<p>Gần 680 triệu USD dòng tiền bị rút ròng từ các quỹ ETF Bitcoin khiến thị giá đồng này bốc hơi 10% về sát 92.000 USD.</p>
 <p>Bitcoin (BTC) một lần nữa mất mốc 100.000 USD và đi quanh khu vực 95.000-97.000 USD suốt chiều nay.</p>
 <p>Đến khoảng 19h10 (tức 7h10 giờ địa phương), BTC bất ngờ sụt mạnh về 92.175 USD một đơn vị, mất giá 10% chỉ sau 24 giờ. Nếu so với kỷ lục hồi 17/12, tiền số lớn nhất thế giới mất gần 16.100 USD. Vốn hóa cũng giảm theo tốc độ tương tự, khiến BTC lùi về vị trí thứ 8 trong bảng xếp hạng tài sản lớn nhất toàn cầu.</p>
 <p>Sau đó, giá thị trường cải thiện lên vùng 94.000 USD. Tuy nhiên, đây vẫn là khoảng cách lớn so với <a href="https://vnexpress.net/gia-bitcoin-hom-nay-btc-co-ky-luc-moi-gan-106-500-usd-4828266.html">đỉnh giá 106.500 USD</a> cách đây 3 ngày.</p>
@@ -503,7 +494,7 @@ INSERT INTO `news` (
 <p>Thêm vào đó, Chủ tịch Fed Jerome Powell nói rằng cơ quan này "không được phép sở hữu Bitcoin" theo Đạo luật Cục Dự trữ liên bang. Ông nhấn mạnh họ cũng không có ý định sửa đổi luật để tham gia vào xây dựng kho dự trữ tiền số theo ý tưởng của Tổng thống đắc cử Donald Trump.</p>
 <p>"Mặc dù rất dễ đổ lỗi cho việc bán tháo là do Fed, nhưng chúng tôi tin rằng nguyên nhân gốc rễ của sự sụp đổ bởi thị trường ở trạng thái tăng trưởng quá mức", nhóm phân tích của nền tảng tiền số QCP Capital nhấn mạnh.</p>',50,'Mỹ Ý','https://i1-kinhdoanh.vnecdn.net/2024/12/20/Bitcoin-giam-jpeg-1734700459-5258-1734700723.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=5igJPN1N_wLFyoH4Ihn7ZQ',
   5,'Gần 680 triệu USD dòng tiền bị rút ròng từ các quỹ ETF Bitcoin khiến thị giá đồng này bốc hơi 10% về sát 92.000 USD.',TRUE),
-   ('2024-12-04 20:12:00', 'Công ty ChatGPT tiến bước dài đến siêu trí tuệ AGI', '<p>OpenAI cho biết đang thử nghiệm hai mô hình AI "có thể suy luận" o3 và o3 mini, được đánh giá giúp tiến thêm một bước dài đến AGI.</p>
+   (null, 'Công ty ChatGPT tiến bước dài đến siêu trí tuệ AGI', '<p>OpenAI cho biết đang thử nghiệm hai mô hình AI "có thể suy luận" o3 và o3 mini, được đánh giá giúp tiến thêm một bước dài đến AGI.</p>
 <p>Trên blog ngày 20/12, OpenAI cho biết o3 và o3 mini đang trong quá trình thử nghiệm an toàn ở quy mô nội bộ, nhưng đã đạt "điểm số cao đột phá" trong bài kiểm tra lý luận AI có tên ARC Challenge. Trong đó, mô hình đạt 87,5% ở bài ARC-AGI, vượt "trình độ con người" cũng như có tính năng "chuỗi suy nghĩ riêng tư", giúp "tự suy nghĩ" trước khi đưa ra câu trả lời.</p>
 <p>OpenAI khẳng định mô hình mới "mạnh hơn <a href="https://vnexpress.net/ai-lap-muu-phan-khang-khi-nghi-sap-bi-thay-the-4825746.html">mô hình o1</a> ra mắt trước đó" và là "bước nhảy vọt ấn tượng về hiệu suất". CEO Sam Altman khiêm tốn hơn khi nói đây là khởi đầu cho "giai đoạn tiếp theo" của AI.</p>
 <figure class="image">

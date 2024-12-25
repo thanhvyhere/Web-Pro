@@ -7,7 +7,7 @@
 <div class="row d-grids">
      {{#each this.news}}
             <div class="col-sm-4 mb-3 tw-flex tw-justify-center tw-items-center">
-            <div class="tw-w-[350px] tw-h-[450px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-px-3 tw-pt-2"
+            <div class="tw-w-[350px] tw-h-[480px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-px-3 tw-pt-2"
                   style="
                         box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
                         border: 1px solid black;
@@ -15,9 +15,10 @@
                   <p>Thời gian: {{formatDate CreatedDate}}</p>
                   <img src="{{ImageCover}}" alt="{{Title}}" 
                         class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-1">
-                  <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis">
+                  <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
                         <strong>{{Title}}</strong>
                   </p>
+                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400" style="font-style: italic; text-decoration:underline">xem trước</a>
                   <div class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
                         {{Abstract}}
                   </div>

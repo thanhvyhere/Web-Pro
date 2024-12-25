@@ -22,50 +22,53 @@ router.get('/login', function (req, res) {
 
 router.post('/login', async function (req, res) {
     const user = await accountService.findByUsername(req.body.username);
-    if(!user){
+    if (!user) {
         return res.render('vwAccount/login', {
             layout: 'account-layout',
             showErrors: true
-        }); 
+        });
     }
-    if(!bcrypt.compareSync(req.body.raw_password, user.password)){
+    if (!bcrypt.compareSync(req.body.raw_password, user.password)) {
         return res.render('vwAccount/login', {
             layout: 'account-layout',
             showErrors: true,
-        }); 
+        });
     }
-    
-    const preDate = await accountService.findPremiumDate(user.id);
 
+    const preDate = await accountService.findPremiumDate(user.id);
     const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
 
-    req.session.auth = true; 
-    
+    req.session.auth = true;
+
     let expirationDate = null;
+
+    // Kiểm tra nếu preDate và expiration_date có giá trị hợp lệ
     if (preDate && preDate.expiration_date) {
-        
         expirationDate = new Date(preDate.expiration_date);
-        
-        
+
+        // Kiểm tra xem expirationDate có phải là giá trị hợp lệ không
         if (isNaN(expirationDate.getTime())) {
-            expirationDate = null;
+            expirationDate = null; // Nếu không hợp lệ, gán lại null
+        } else {
+            // Nếu có expiration_date hợp lệ, cộng thêm 7 ngày
+            expirationDate.setDate(expirationDate.getDate() + 7);
         }
     }
 
     req.session.authUser = {
-        username: user.username,  
-        userid: user.id,  
+        username: user.username,
+        userid: user.id,
         email: user.email,
-        name: user.name,  
-        permission: user.permission,  
+        name: user.name,
+        permission: user.permission,
         rolename: role.RoleName,
-        expiration_date: expirationDate  
+        expiration_date: expirationDate
     };
 
-
-    const retUrl = req.session.retUrl || '/'
+    const retUrl = req.session.retUrl || '/';
     res.redirect(retUrl);
-})
+});
+
 
 router.get('/register', function(req, res){
     res.render('vwAccount/register', {
@@ -247,7 +250,7 @@ router.post('/reset-password', async function (req, res) {
     }
 });
 
-configurePassportGithub();
+
 router.get('/login/githubAuth',
     passport.authenticate('github'));
 
@@ -255,13 +258,13 @@ router.get('/login/githubAuth/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   async function (req, res) {
     // Lấy thông tin user từ session do passport tự lưu
-    const user = req.user; 
+    let user = req.user; 
 
     if (!user) {
-      return res.redirect('/login');
+      return res.redirect('/account/login');
      }
-
-
+     user = await accountService.findByUsername(user.username)
+    
     const preDate = await accountService.findPremiumDate(user.id);
     const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
 
@@ -327,7 +330,7 @@ router.post('/premium', async function (req, res) {
 
         if (account === "") {
             expirationDate = new Date();
-            expirationDate.setMinutes(expirationDate.getMinutes() + 7*24*60);
+            expirationDate.setDate(expirationDate.getDate() + 7)
 
             const entity = {
                 id: userId, // ID người dùng
@@ -354,7 +357,7 @@ router.post('/premium', async function (req, res) {
             if (isNaN(expirationDate)) {
                 throw new Error("Invalid expiration_date format in database.");
             }
-            expirationDate.setMinutes(expirationDate.getMinutes() + 7*24*60);
+            expirationDate.setDate(expirationDate.getDate() + 7)
 
             await accountService.updatePremium(userId, expirationDate);
         }

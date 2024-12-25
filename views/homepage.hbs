@@ -112,7 +112,7 @@
                     </div>
                     <div class="tw-flex tw-flex-row tw-gap-2">
                         {{#each tags}}
-                        <button class="tw-bg-yellow-200 tw-text-black" disabled="disabled">{{TagName}}</button>
+                            <a class="btn btn-outline-primary tag" disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}} </a>
                         {{/each}}
                     </div>
                 </div>
@@ -160,8 +160,8 @@
                                     </div>
                                     <div class="tw-flex tw-flex-row tw-gap-2">
                                         {{#each tags}}
-                                        <button class="tw-bg-yellow-200 tw-text-black"
-                                            disabled="disabled">{{TagName}}</button>
+                                        <a class="btn btn-outline-primary tag"
+                                            disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
                                         {{/each}}
                                     </div>
                                 </div>
@@ -203,8 +203,8 @@
 
                             </div>
                             {{#each (limit tags 2)}}
-                            <button class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black"
-                                disabled="disabled">{{TagName}}</button>
+                            <a class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black" 
+                                disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
                             {{/each}}
                         </div>
 
@@ -293,8 +293,8 @@
 
                         </div>
                         {{#each (limit tags 4)}}
-                        <button class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black"
-                            disabled="disabled">{{TagName}}</button>
+                        <a class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black"
+                            disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
                         {{/each}}
                     </div>
 
@@ -329,8 +329,8 @@
 
                         </div>
                         {{#each tags}}
-                        <button class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black"
-                            disabled="disabled">{{TagName}}</button>
+                        <a class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black"
+                            disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
                         {{/each}}
                     </div>
 
