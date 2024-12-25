@@ -12,6 +12,7 @@
                 mask: true
             }
         );
+
     // Fetch user info from the server
     fetch('/account/user-info')
         .then(function (response) {
@@ -53,6 +54,7 @@
         }
         return true; // Trả về true nếu hợp lệ
     }
+
     $('#fmSignup').on('submit', function (e) {
         e.preventDefault();
         const username = $('#txtUsername').val();
@@ -91,6 +93,7 @@
             });
             return;
         }
+
         // Kiểm tra username khả dụng qua AJAX
         $.getJSON(`/account/is-available?username=${username}`, function (data) {
             if (data === false) {
@@ -125,6 +128,7 @@
             });
         });
     });
+
     $('#fmUpdate').on('submit', function (e) {
             e.preventDefault();
 
@@ -156,7 +160,6 @@
             // Gửi form
             $(this).off('submit').submit();
         });
-
 </script>
 {{/section}}
 

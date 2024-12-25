@@ -5,8 +5,11 @@
 
 {{#section "signupjs"}}
 <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+</script>
 <script>
+
+
     function checkValidEmail() {
         const email = document.querySelector('#txtEmail').value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Định dạng cơ bản cho email
@@ -16,6 +19,7 @@
         }
         return true; // Trả về true nếu hợp lệ
     }
+
     $('#fmSignup').on('submit', function (e) {
         e.preventDefault();
         const username = $('#txtUsername').val();
@@ -54,6 +58,7 @@
             });
             return;
         }
+
         // Kiểm tra username khả dụng qua AJAX
         $.getJSON(`/account/is-available?username=${username}`, function (data) {
             if (data === false) {
@@ -64,6 +69,7 @@
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
+
             } else {
                 // Hiển thị thông báo đăng ký thành công
                 Swal.fire({
@@ -78,6 +84,7 @@
                     }
                 });
             }
+
         }).fail(function () {
             // Xử lý lỗi kết nối hoặc lỗi server
             Swal.fire({
@@ -90,12 +97,14 @@
     });
 </script>
 {{/section}}
+
 <div id="card-contain" class="card">
     <div id="signup-card" class="card-body">
         <div class="d-flex flex-column justify-content-center align-items-center">
             <img id="logo-img" src="/static/imgs/NEWSLANDlogoRmBg.png" alt="" class="img-fluid rounded-circle">
-            <h1>Đăng ký Premium</h1>
+            <h1>Đăng ký NewsLand</h1>
         </div>
+
         <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
             <form id="fmSignup" action="/account/register" method="post">
                 <div class="mb-2 form-group">
@@ -122,7 +131,7 @@
                 </div>
                 <div class="mb-2 form-group">
                     <label class="form-label" for="txtDOB">Ngày sinh</label>
-                    <input type="date" name="dob" id="txtDOB" class="form-control txt-input" required>
+                    <input type="date" name="raw_dob" id="txtDOB" class="form-control txt-input" required>
                 </div>
 
                 <button type="submit" class="btn btn-info btn-connect mb-3" href="#">Đăng ký</button>
