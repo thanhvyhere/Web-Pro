@@ -1,15 +1,34 @@
-import knexObj from 'knex';
+import mongoose from 'mongoose';
+import dotenv from "dotenv";
 
-const knex = knexObj({
-    client: 'mysql2',
-    connection: {
-        host: '127.0.0.1',
-        port: 3306,
-        user: 'root',
-        password: '',
-        database: 'newslanddb'
-    },
-    pool: { min: 0, max: 7 }
-});
+dotenv.config();
+class MongoConnection {
+  constructor() {
+    if (!MongoConnection.instance) {
+      MongoConnection.instance = this;
+      this._connect();
+    }
+    return MongoConnection.instance;
+  }
 
-export default knex;
+  async _connect() {
+    if (this.connection) return this.connection;
+
+    try {
+      this.connection = await mongoose.connect(
+        process.env.MONGO_URI,
+        {
+        }
+      );
+      console.log('MongoDB connected');
+    } catch (error) {
+      console.error('MongoDB connection failed:', error);
+    }
+
+    return this.connection;
+  }
+}
+
+new MongoConnection();
+
+export { mongoose };
