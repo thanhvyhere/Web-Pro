@@ -78,7 +78,8 @@ router.get('/register', function(req, res){
 
 router.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
-    const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    console.log(req.body.raw_dob);
+    const ymd_dob = moment(req.body.raw_dob, 'DD-MM-YYYY').format('YYYY-MM-DD');
     const entity = {
         username: req.body.username,
         password: hash_password, 
@@ -101,8 +102,6 @@ router.post('/register', async function (req, res) {
     const retUrl = req.session.retUrl || '/'
     res.redirect(retUrl);
 });
-
-
 
 router.get('/is-available', async function (req, res) {
     const username = req.query.username;
@@ -250,7 +249,6 @@ router.post('/reset-password', async function (req, res) {
     }
 });
 
-
 router.get('/login/githubAuth',
     passport.authenticate('github'));
 
@@ -294,6 +292,7 @@ router.get('/login/githubAuth/callback',
     res.redirect('/subscriber');
   }
 );
+
 configurePassportGoogle();
 router.get('/login/googleAuth',
   passport.authenticate('google'));
@@ -379,7 +378,6 @@ router.post('/premium', async function (req, res) {
     }
 });
 
-
 // GET /premium route
 router.get('/premium', function (req, res) {
     const userId = req.session.authUser ? req.session.authUser.userid : null;
@@ -429,6 +427,7 @@ router.get('/user-info', async function(req, res) {
         rolename: role.RoleName
     });
 });
+
 router.post('/update', async function (req, res) {
     const userId = req.body.id || "";
     if (!userId) {

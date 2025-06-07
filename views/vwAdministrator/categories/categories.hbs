@@ -78,11 +78,13 @@
         <tr id="category-row-{{this.CatID}}">
           <td>{{this.CatID}}</td>
           <td>{{this.CatName}}</td>
-          <td>{{#if this.parent_id}}
-                {{#with (lookup ../categories this.parent_id)}}
-                  {{CatName}}
-                {{/with}}
-              {{else}}None{{/if}}</td>
+          <td>
+            {{#if this.parent_name}}
+              {{this.parent_name}}
+            {{else}}
+              -
+            {{/if}}
+          </td>
           <td>
             <a href="/administrator/manage_categories/update/{{this.CatID}}" class="btn btn-warning btn-sm">Edit</a>
             <a href="/administrator/manage_categories/delete/{{this.CatID}}" class="btn btn-danger btn-sm">Delete</a>

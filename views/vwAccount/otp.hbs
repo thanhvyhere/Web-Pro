@@ -1,3 +1,19 @@
+{{#section "signupjs"}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessage = "{{this.errorMessage}}"; // Lấy giá trị của errormessage từ template
+            if (errorMessage.length > 0) {
+               Swal.fire({
+                    title: 'Error',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+        });
+    </script>
+{{/section}}
 
 <div id="card-contain">
     <div id="signup-card">
@@ -22,20 +38,3 @@
         </div>
     </div>
 </div>
-{{#section "signupjs"}}
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const errorMessage = "{{this.errorMessage}}"; // Lấy giá trị của errormessage từ template
-            if (errorMessage.length > 0) {
-               Swal.fire({
-                    title: 'Error',
-                    text: errorMessage,
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-        });
-    </script>
-{{/section}}
-
