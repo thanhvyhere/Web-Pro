@@ -1,13 +1,18 @@
 import { mongoose } from '../utils/db.js'; 
-
-const { Schema, model } = mongoose;
+const { Schema, model, Types } = mongoose;
 
 const userSchema = new Schema({
+  githubId: String,      
   googleId: String,
-  name: String,
   username: { type: String, unique: true },
-  createdAt: { type: Date, default: Date.now },
   password: String,
+  name: String,
+  email: String,
+  dob: Date,             
+  permission: Number,    
+  NoOfFollower: { type: Number, default: 0 },
+  NoOfFollowing: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
   gender: {
     type: String,
     enum: ['Male', 'Female', 'none'],
@@ -15,9 +20,12 @@ const userSchema = new Schema({
   },
   address: String,
   phone: String,
-  email: String,
   avatar: String,
-  role: { type: String, required: true, enum: ['Customer', 'Staff', 'Owner'], default: 'Customer' }
+  roleId: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'Role', 
+    required: true 
+  }
 }, { collection: 'User' });
 
 const User = model('User', userSchema);

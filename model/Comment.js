@@ -6,5 +6,5 @@ const CommentSchema = new mongoose.Schema({
   UserID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   CreatedDate: { type: Date, default: Date.now }
 });
-const News = model('News',newsSchema);
-export {News};
+const Comment = model('Comment',CommentSchema);
+export {Comment};
