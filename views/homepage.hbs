@@ -34,7 +34,43 @@
         }
     });
 </script>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+                const premiumLinks = document.querySelectorAll(".premium-link");
 
+                premiumLinks.forEach(link => {
+                    link.addEventListener("click", (event) => {
+                        const isPremium = link.getAttribute("data-premium") === "true";
+                        const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
+                        let text = 'Đăng nhập';
+                        let href = "/account/login";
+
+                        if (auth) {
+                            text = 'Đăng ký Premium';
+                            href = "/account/premium";
+                        }
+
+                        if (isPremium) {
+                            event.preventDefault(); // Ngăn chặn chuyển hướng
+                            Swal.fire({
+                                title: "Thông báo",
+                                text: "Bạn không được cấp quyền để xem nội dung này.",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: text,
+                                cancelButtonText: "Hủy"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Chuyển hướng đến trang đăng nhập hoặc trang Premium
+                                    window.location.href = href;
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+
+    </script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const premiumLinks = document.querySelectorAll(".premium-link");

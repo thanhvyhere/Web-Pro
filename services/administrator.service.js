@@ -1,4 +1,5 @@
 import db from '../utils/db.js';
+import bcrypt from 'bcryptjs';
 
 export default {
   // Lấy tất cả chuyên mục
@@ -11,19 +12,19 @@ export default {
     return db('categories').where('CatID', categoryId).first();
   },
 
-// Thêm chuyên mục mới
-add(category) {
-  return db('categories')
-    .insert({
-      CatName: category.CatName,
-      parent_id: category.parent_id || null
-    })
-    .returning('CatID') // Return inserted category IDs
-    .then(function(ids) {
-      return ids[0]; // Access the first element of the array (the inserted CatID)
-    });
-},
-
+  // Thêm chuyên mục mới
+  add(category) {
+    return db('categories')
+      .insert({
+        CatName: category.CatName,
+        parent_id: category.parent_id || null
+      })
+      .returning('CatID') // Return inserted category IDs
+      .then(function(ids) {
+        return ids[0]; // Access the first element of the array (the inserted CatID)
+      });
+  },
+  
   // Cập nhật chuyên mục
   update(id, category) {
     const updatedRows = db('categories')
@@ -40,41 +41,41 @@ add(category) {
     return db('categories').where('CatID', id).del();
   },
 
-// Hàm cập nhật parent_id cho các danh mục
-updateCategoryParent(categoryIds, newParentId) {
-  // Kiểm tra nếu newParentId là null, không cho phép cập nhật thành null
-  if (newParentId === null) {
-    return Promise.reject(new Error('Không thể cập nhật parent_id thành null.'));
-  }
+  // Hàm cập nhật parent_id cho các danh mục
+  updateCategoryParent(categoryIds, newParentId) {
+    // Kiểm tra nếu newParentId là null, không cho phép cập nhật thành null
+    if (newParentId === null) {
+      return Promise.reject(new Error('Không thể cập nhật parent_id thành null.'));
+    }
 
-  // Kiểm tra xem parent_id có tồn tại trong cơ sở dữ liệu không
-  return db('categories')
-    .where('CatID', newParentId)  // Kiểm tra xem parent_id mới có tồn tại không
-    .first()
-    .then(parentCategory => {
-      if (!parentCategory) {
-        return Promise.reject(new Error('Danh mục cha không tồn tại.'));
-      }
+    // Kiểm tra xem parent_id có tồn tại trong cơ sở dữ liệu không
+    return db('categories')
+      .where('CatID', newParentId)  // Kiểm tra xem parent_id mới có tồn tại không
+      .first()
+      .then(parentCategory => {
+        if (!parentCategory) {
+          return Promise.reject(new Error('Danh mục cha không tồn tại.'));
+        }
 
-      // Cập nhật parent_id cho các danh mục
-      return db('categories')
-        .whereIn('CatID', categoryIds)  // Cập nhật tất cả các danh mục có trong categoryIds
-        .update({ parent_id: newParentId || null })  // Cập nhật parent_id
-        .then(updatedRows => {
-          return updatedRows;  // Trả về số lượng dòng được cập nhật
-        });
-    })
-    .catch(error => {
-      throw new Error('Có lỗi khi cập nhật danh mục: ' + error.message);
-    });
-},
+        // Cập nhật parent_id cho các danh mục
+        return db('categories')
+          .whereIn('CatID', categoryIds)  // Cập nhật tất cả các danh mục có trong categoryIds
+          .update({ parent_id: newParentId || null })  // Cập nhật parent_id
+          .then(updatedRows => {
+            return updatedRows;  // Trả về số lượng dòng được cập nhật
+          });
+      })
+      .catch(error => {
+        throw new Error('Có lỗi khi cập nhật danh mục: ' + error.message);
+      });
+  },
 
-// Delete selected categories
-deleteCategories(categoryIds) {
-  return db('categories')
-    .whereIn('CatID', categoryIds)
-    .del();
-},
+  // Delete selected categories
+  deleteCategories(categoryIds) {
+    return db('categories')
+      .whereIn('CatID', categoryIds)
+      .del();
+  },
 
   // Tags methods
   getAllTags() {
@@ -97,7 +98,6 @@ deleteCategories(categoryIds) {
         return { tags, total };
       })
   },
-  
 
   getTagById(tagId) {
     return db('tag').where('TagID', tagId).first();
@@ -125,27 +125,30 @@ deleteCategories(categoryIds) {
     return db('users').where('id', id).first();
   },
 
-// Thêm người dùng mới
-addUsers(user) {
-  return db('users')
-    .insert({
-      username: user.username,
-      password: user.password,
-      name: user.name || null,
-      email: user.email || null,
-      dob: user.dob || null,
-      permission: user.permission || 0,
-    })
-    .returning('id')
-    .then((result) => {
-      const [newUserId] = result;  // Destructure the array returned
-      return newUserId;  // Return the ID of the newly inserted user
-    })
-    .catch((error) => {
-      console.error(error);
-      throw error;  // Rethrow the error for further handling if necessary
-    });
-},
+  addUsers(user) {
+    const saltRounds = 10;
+    return bcrypt.hash(user.password, saltRounds)  // Mã hóa mật khẩu trước khi lưu
+      .then(hashedPassword => {
+        return db('users')
+          .insert({
+            username: user.username,
+            password: hashedPassword,  // Lưu mật khẩu đã mã hóa
+            name: user.name || null,
+            email: user.email || null,
+            dob: user.dob || null,
+            permission: user.permission || 0,
+          })
+          .returning('id')
+          .then((result) => {
+            const [newUserId] = result;
+            return newUserId;
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        throw error;
+      });
+  },
 
   // Cập nhật thông tin người dùng
   updateUsers(id, updatedUser) {
@@ -196,25 +199,29 @@ addUsers(user) {
       return { users, total };
     })
   },
-   
 
   // Lấy danh sách chuyên mục với phân trang và tìm kiếm
   findAllWithPagination(offset, limit, searchQuery = '') {
-    const query = db('categories');
+    const query = db('categories as c')
+      .leftJoin('categories as p', 'c.parent_id', 'p.CatID') // JOIN với chính bảng để lấy parent_name
+      .select(
+        'c.CatID',
+        'c.CatName',
+        db.raw('COALESCE(p.CatName, "-") as parent_name') // Nếu parent_name là NULL, thay bằng "-"
+      );
   
     if (searchQuery) {
-      query.where('CatName', 'like', `%${searchQuery}%`);
+      query.where('c.CatName', 'like', `%${searchQuery}%`);
     }
   
     return Promise.all([
-      query.clone().limit(limit).offset(offset), // Lấy danh sách categories
-      query.clone().count('CatID as total'),    // Đếm tổng số categories
-    ])
-      .then(([categories, countResult]) => {
-        const total = countResult[0]?.total || 0;
-        return { categories, total };
-      })
-  },
+      query.clone().limit(limit).offset(offset), // Fetch paginated categories
+      query.clone().count('c.CatID as total'),    // Count total categories
+    ]).then(([categories, countResult]) => {
+      const total = countResult[0]?.total || 0;
+      return { categories, total };
+    });
+  },  
 
   findAllWithPaginationArticles(offset, limit) {
     return db('news')
@@ -236,6 +243,7 @@ addUsers(user) {
           .then(({ total }) => ({ articles, total }));
       });
   },
+
   // Lấy thông tin chi tiết bài viết
   findByIdArticles(newsID) {
     return db('news')

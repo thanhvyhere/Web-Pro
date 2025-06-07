@@ -1,7 +1,8 @@
 import passport from 'passport';
 import dotenv from 'dotenv';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import User from '../services/account.service.js'; // Giả định rằng bạn có mô hình User
+import User from '../models/User.js';
+import userService from '../services/user.service.js';
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ export default function configurePassport() {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/account/login/googleAuth/callback",
+        callbackURL: "http://localhost:3000/user/login/googleAuth/callback",
         scope: ['profile', 'email']
       },
       async function (accessToken, refreshToken, profile, done) {
@@ -21,26 +22,30 @@ export default function configurePassport() {
             : null;
 
           // Tìm user theo tên hiển thị (displayName) hoặc email
-          let user = await User.findByUsername(profile.displayName);
+          let user = await userService.findByUsername(profile.displayName);
 
           if (user) {
             // Nếu user đã tồn tại nhưng chưa có googleId, cập nhật googleId
             if (!user.googleId) {
-              user.googleId = profile.id;
-              await User.update(user); // Cập nhật thông tin user
+              if (!user.googleId) {
+                await User.findOneAndUpdate(
+                    { username: profile.displayName }, 
+                    { googleId: profile.id },         
+                    { new: true }                       
+                );
+                }
             }
             // Xác thực thành công
             return done(null, user);
           } else {
             // Nếu không tìm thấy user, tạo user mới
-            user = {
+            user = new User({
               googleId: profile.id,
               username: profile.displayName,
-              email: email,
-              permission: 1
-            };
-            await User.add(user); // Thêm user mới vào cơ sở dữ liệu
-            return done(null, user); // Xác thực thành công và trả về user
+              email: email
+            });
+            await user.save();
+            return done(null, user); 
           }
         } catch (error) {
           console.error('Error during Google authentication:', error);
@@ -57,7 +62,7 @@ export default function configurePassport() {
   // Deserialize user: khôi phục thông tin người dùng từ session
   passport.deserializeUser(async function(username, done) {
     try {
-      const user = await User.findByUsername(username);  // Lấy thông tin người dùng từ DB bằng ID
+      const user = await userService.findByUsername(username);  // Lấy thông tin người dùng từ DB bằng ID
       done(null, user);
     } catch (error) {
       done(error, null);

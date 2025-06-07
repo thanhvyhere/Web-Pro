@@ -33,7 +33,7 @@ router.get('/manage_tags', (req, res) => {
         console.error('Error fetching tags:', err.message);
         res.status(500).send('Error fetching tags');
       });
-  });  
+    });  
 
 // Route: Render Add Tag Page
 router.get('/manage_tags/add', async (req, res) => {
@@ -100,41 +100,38 @@ router.post('/manage_tags/delete/:id', async (req, res) => {
         res.status(500).send('Error deleting tag');
     }
 });
+
 router.get('/manage_categories', (req, res) => {
     const page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1
     const limit = 20; // Số mục mỗi trang
     const offset = (page - 1) * limit;
     const searchQuery = req.query.search || ''; // Từ khóa tìm kiếm, mặc định rỗng
-  
+
     administratorService.findAllWithPagination(offset, limit, searchQuery)
-      .then(({ categories, total }) => {
+    .then(({ categories, total }) => {
         const totalPages = Math.ceil(total / limit);
-  
+
         if (categories.length === 0) {
-          res.render('vwAdministrator/categories/categories', {
+        res.render('vwAdministrator/categories/categories', {
             categories: [],
             currentPage: page,
             totalPages,
             query: { search: searchQuery },
             message: searchQuery
-              ? `No categories found for search term "${searchQuery}"`
-              : 'No categories found', // Thông báo tùy thuộc vào có từ khóa tìm kiếm hay không
-          });
+            ? `No categories found for search term "${searchQuery}"`
+            : 'No categories found', // Thông báo tùy thuộc vào có từ khóa tìm kiếm hay không
+        });
         } else {
-          res.render('vwAdministrator/categories/categories', {
+        res.render('vwAdministrator/categories/categories', {
             categories,
             currentPage: page,
             totalPages,
             query: { search: searchQuery },
-          });
+        });
         }
-      })
-      .catch(err => {
-        console.error('Error fetching categories:', err.message);
-        res.status(500).send('Error fetching categories');
-      });
-  });
-  
+    })
+});
+
 // Route: Render Add Category Page
 router.get('/manage_categories/add', async (req, res) => {
     try {
@@ -145,7 +142,7 @@ router.get('/manage_categories/add', async (req, res) => {
         res.status(500).send('Error rendering add category page');
     }
 });
-  
+
 // Route: Add new category
 router.post('/manage_categories/add', async (req, res) => {
     const { CatName, parent_id } = req.body;
@@ -184,50 +181,50 @@ router.post('/manage_categories/update/:id', async (req, res) => {
 
 router.post('/administrator/manage_categories/update_parent', (req, res) => {
     const { categoryIds, newParentId } = req.body;
-  
+
     // Gọi service để thực hiện cập nhật parent_id cho các danh mục
     administratorService.updateCategoryParent(categoryIds, newParentId)
-      .then(updatedRows => {
+    .then(updatedRows => {
         // Kiểm tra số lượng dòng được cập nhật
         if (updatedRows > 0) {
-          res.json({ success: true });
+        res.json({ success: true });
         } else {
-          res.json({ success: false, message: 'Không có danh mục nào được cập nhật.' });
+        res.json({ success: false, message: 'Không có danh mục nào được cập nhật.' });
         }
-      })
-      .catch(error => {
+    })
+    .catch(error => {
         console.error('Error updating categories:', error);
         res.json({ success: false, message: 'Có lỗi xảy ra khi cập nhật danh mục.' });
-      });
-  });
+    });
+});
 
 // Route: Render Delete Category Confirmation Page
 router.get('/manage_categories/delete/:id', function(req, res) {
     const categoryId = req.params.id; // Get the category ID from the URL
     administratorService.findCategoryById(categoryId) // Fetch category by ID
-      .then(function(category) {
+    .then(function(category) {
         // Render the delete confirmation page and pass the category data to the view
         res.render('vwAdministrator/categories/delete', { category: category });
-      })
-      .catch(function(err) {
+    })
+    .catch(function(err) {
         console.error(err);
         res.status(500).send('Error rendering delete category page');
-      });
-  });
-  
+    });
+});
+
 
 // Route to delete a category
 router.post('/manage_categories/delete/:id', function(req, res) {
     const categoryId = req.params.id;
     administratorService.deleteCategories([categoryId])
-      .then(function() {
+    .then(function() {
         res.redirect('/administrator/manage_categories'); // Redirect back to the categories list
-      })
-      .catch(function(err) {
+    })
+    .catch(function(err) {
         console.error(err);
         res.status(500).send('Error deleting category');
-      });
-  });  
+    });
+});  
 
 // manage_users
 // Route: View all users with pagination
@@ -235,20 +232,20 @@ router.get('/manage_users', (req, res) => {
     const page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1
     const limit = 20; // Số mục mỗi trang
     const offset = (page - 1) * limit;
-  
+
     administratorService.findAllWithPaginationUsers(offset, limit)
-      .then(({ users, total }) => {
+    .then(({ users, total }) => {
         const totalPages = Math.ceil(total / limit);
-  
+
         // Render trang với dữ liệu người dùng và phân trang
         res.render('vwAdministrator/users/users', {
-          users,
-          currentPage: page,
-          totalPages,
+        users,
+        currentPage: page,
+        totalPages,
         });
-      })
-  });
-  
+    })
+});
+
 // Route: Render Add User Page
 router.get('/manage_users/add', async (req, res) => {
     try {
@@ -262,7 +259,13 @@ router.get('/manage_users/add', async (req, res) => {
 
 // Route: Add new user
 router.post('/manage_users/add', async (req, res) => {
-    const { username, password, name, email, dob, permission } = req.body;
+    const { username, password, confirmPassword, name, email, dob, permission } = req.body;
+
+    // Kiểm tra mật khẩu và xác nhận mật khẩu có trùng khớp không
+    if (password !== confirmPassword) {
+        return res.status(400).send('Passwords do not match');
+    }
+
     try {
         await administratorService.addUsers({ username, password, name, email, dob, permission });
         res.redirect('/administrator/manage_users');
@@ -270,7 +273,7 @@ router.post('/manage_users/add', async (req, res) => {
         console.error(err);
         res.status(500).send('Error adding user');
     }
-});
+});    
 
 // Route: Render Update User Page
 router.get('/manage_users/update/:id', async (req, res) => {
@@ -347,7 +350,7 @@ router.get('/manage_articles', (req, res) => {
     const page = parseInt(req.query.page) || 1; // Current page, default is 1
     const limit = 20; // Number of items per page
     const offset = (page - 1) * limit;
-  
+
     administratorService.findAllWithPaginationArticles(offset, limit)
         .then(({ articles, total }) => {
         const totalPages = Math.ceil(total / limit);
@@ -368,32 +371,33 @@ router.get('/manage_articles', (req, res) => {
 // Xem chi tiết bài viết
 router.get('/manage_articles/detail/:id', (req, res) => {
     const newsID = req.params.id;
-  
+
     administratorService.findByIdArticles(newsID)  // Gọi service để lấy thông tin bài viết
-      .then((article) => {  
+    .then((article) => {  
         // Render view và truyền dữ liệu bài viết
         res.render('vwAdministrator/articles/detail', { article });
-      })
-  });
-  
-  router.get('/manage_articles/update/:id', async (req, res) => {
+    })
+});
+
+router.get('/manage_articles/update/:id', async (req, res) => {
     const newsID = req.params.id;
     const article = await administratorService.findByIdArticles(newsID);
     if (!article) {
-      return res.status(404).send('Article not found');
+    return res.status(404).send('Article not found');
     }
     res.render('vwAdministrator/articles/update', { article });
-  });
-  
-  // Cập nhật trạng thái Premium
-  router.post('/manage_articles/update/:id', (req, res) => {
+});
+
+// Cập nhật trạng thái Premium
+router.post('/manage_articles/update/:id', (req, res) => {
     const newsId = req.params.id;
     const premiumStatus = req.body.premiumStatus; // Lấy giá trị từ form
     // Chuyển đổi giá trị từ chuỗi 'true' / 'false' sang boolean
     const isPremium = premiumStatus === 'true';  
     administratorService.updatePremium(newsId, isPremium) // Gọi service để cập nhật
-      .then(() => {
+    .then(() => {
         res.redirect('/administrator/manage_articles'); // Quay lại trang quản lý bài viết
-      })
-  });
+    })
+});
+
 export default router;
