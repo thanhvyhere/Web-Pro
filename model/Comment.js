@@ -5,6 +5,6 @@ const CommentSchema = new mongoose.Schema({
   NewsID: { type: Schema.Types.ObjectId, ref: 'News', required: true },
   UserID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   CreatedDate: { type: Date, default: Date.now }
-});
+},{collection: 'Comment' });
 const Comment = model('Comment',CommentSchema);
 export {Comment};
