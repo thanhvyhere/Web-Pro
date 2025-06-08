@@ -2,16 +2,16 @@ import { mongoose } from '../utils/db.js';
 const { Schema, model, Types } = mongoose;
 
 const featureSchema = new Schema({
-  featureID: { type: Number, required: true, unique: true },
-  featureName: { type: String, required: true },
-  pathName: { type: String, required: true },
-  roleId: { 
-    type: Schema.Types.ObjectId, 
+  _id:Number,
+  FeatureName: { type: String, required: true },
+  PathName: { type: String, required: true },
+  RoleID: { 
+    type: Number, 
     ref: 'Role', 
     required: true 
   },
-  icon: { type: String, default: null },
-}, { collection: 'features' });
+  Icon: { type: String, default: null },
+}, {_id:false, collection: 'Feature' });
 
 const Feature = model('Feature', featureSchema);
 
