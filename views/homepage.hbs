@@ -116,7 +116,7 @@
             <div class="feature-paper mb-5" style="--bg-image: url('{{this.ImageCover}}')">
                 <div class="paper-infor">
                     <div class="header-paper">
-                        <button class="name-category-paper tw-w-[200px]" disabled="disabled">{{this.CatName}}</button>
+                        <button class="name-category-paper tw-w-[200px]" disabled="disabled">{{CatID.CatName}}</button>
                         <h6>
                             <i class="bi bi-calendar3"></i>
                             {{formatDate this.PublishedDay}}
@@ -192,12 +192,12 @@
                                         <h6><i class="bi bi-eye-fill"></i>{{this.Views}}</h6>
                                         <h6><i class="bi bi-hearts"></i>500</h6>
                                         <h6><i class="bi bi-chat-dots"></i>{{countComment}}</h6>
-                                        <button class="name-category-paper" disabled="disabled">{{CatName}}</button>
+                                        <button class="name-category-paper" disabled="disabled">{{CatID.CatName}}</button>
                                     </div>
                                     <div class="tw-flex tw-flex-row tw-gap-2">
                                         {{#each tags}}
                                         <a class="btn btn-outline-primary tag"
-                                            disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
+                                            disabled="disabled" href="/newspaper/byTag?id={{Tags}}">{{TagName}}</a>
                                         {{/each}}
                                     </div>
                                 </div>
@@ -226,7 +226,7 @@
                         <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
                         <div class="paper-small">
                             <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
-                                <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatName}}</button>
+                                <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatID.CatName}}</button>
                                 <p class="tw-text-l">
                                     <i class="bi bi-calendar3"></i>
                                     {{formatDate this.PublishedDay}}
@@ -240,7 +240,7 @@
                             </div>
                             {{#each (limit tags 2)}}
                             <a class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black" 
-                                disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
+                                disabled="disabled" href="/newspaper/byTag?id={{_id}}">{{tagName}}</a>
                             {{/each}}
                         </div>
 
@@ -265,7 +265,7 @@
                                                 class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
                                                 style="background-color: rgb(243, 219, 142);"
                                                 disabled="disabled">{{No}}</button>
-                                            <a href="/newspaper/byCat?catId={{CatID}}"
+                                            <a href="/newspaper/byCat?catId={{_id}}"
                                                 class="top-chart-format">{{CatName}}</a>
                                         </div>
                                     </div>
@@ -280,7 +280,7 @@
                                                 class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
                                                 style="background-color: rgb(243, 219, 142);"
                                                 disabled="disabled">{{No}}</button>
-                                            <a href="/newspaper/byCat?catId={{CatID}}"
+                                            <a href="/newspaper/byCat?catId={{_id}}"
                                                 class="top-chart-format">{{CatName}}</a>
                                         </div>
                                     </div>
@@ -316,7 +316,7 @@
                     <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
                     <div class="paper-small">
                         <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
-                            <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatName}}</button>
+                            <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatID.CatName}}</button>
                             <p class="tw-text-l">
                                 <i class="bi bi-calendar3"></i>
                                 {{formatDate this.PublishedDay}}
@@ -352,7 +352,7 @@
                     <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
                     <div class="paper-small">
                         <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
-                            <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatName}}</button>
+                            <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatID.CatName}}</button>
                             <p class="tw-text-l">
                                 <i class="bi bi-calendar3"></i>
                                 {{formatDate this.PublishedDay}}

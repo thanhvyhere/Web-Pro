@@ -4,7 +4,8 @@ const { Schema, model } = mongoose;
 
 
 const tagSchema = new Schema({
-    tagName: { type: String, required: true },
-},{collection:'Tag'});
+    _id: {type:Number},
+    TagName: { type: String, required: true },
+},{collection:'Tag', _id:false});
 const Tag = model('Tag',tagSchema);
 export {Tag};
