@@ -5,6 +5,7 @@ const newsSchema = new Schema({
   Content: { type: String, required: true },
   Abstract: { type: String, required: true },
   CatID: { type: Number, ref: 'Category', required: true },
+  Tags: [{ type: Number, ref: 'Tag'}],
   AuthorName: { type: String, required: true },
   ImageCover: { type: String },
   Status: { type: Number, ref: 'Status', required: true },
