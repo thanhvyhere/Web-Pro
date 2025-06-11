@@ -29,7 +29,6 @@ export default function (app) {
     });
 
     app.use(async (req, res, next) => {
-        // Lấy tất cả categories và limitCate (8 cái đầu tiên)
         const categories = await newsService.getAllCategoriesWithChildren();
         const limitCate = categories.slice(0, 8);
 
@@ -43,7 +42,7 @@ export default function (app) {
 
     app.use(async (req, res, next) => {
         const topNews = await newsService.getTop3NewsByView();
-        
+        console.log(topNews)
             // Đếm số lượng bình luận cho từng bài báo trong top3 và lấy tên danh mục
           const updatedList = await Promise.all(topNews.map(async (item) => {
               const count = await newsService.countCommentBynewsId(item.NewsID);

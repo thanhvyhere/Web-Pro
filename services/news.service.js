@@ -1,4 +1,9 @@
-import db from '../utils/db.js';
+// import db from '../utils/db.js';
+import { Category } from '../model/Category.js';
+import { News } from '../model/News.js';
+import { Tag } from '../model/Tag.js';
+import { Comment } from '../model/Comment.js';
+
 export default
     {
         findAll() {
@@ -47,12 +52,29 @@ export default
         },
     
         async getAllCategoriesWithChildren() {
-            const categories = await db('categories').where('parent_id', null);
-
-            for (let category of categories) {
-                category.children = await db('categories').where('parent_id', category.CatID);
-            }
-            return categories;
+            // Get all categories in a single query and process in memory
+            const allCategories = await Category.find().lean();
+            
+            // Create a map for quick lookup
+            const categoriesMap = new Map();
+            const rootCategories = [];
+            
+            // First pass: populate the map and identify root categories
+            allCategories.forEach(category => {
+                categoriesMap.set(category._id, { ...category, children: [] });
+                if (category.parent_id === null) {
+                    rootCategories.push(categoriesMap.get(category._id));
+                }
+            });
+            
+            // Second pass: build the hierarchy
+            allCategories.forEach(category => {
+                if (category.parent_id !== null && categoriesMap.has(category.parent_id)) {
+                    categoriesMap.get(category.parent_id).children.push(categoriesMap.get(category._id));
+                }
+            });
+            
+            return rootCategories;
         },
         getNewsByAuthorStatus(authorName, status) {
             return db('news')
@@ -105,10 +127,9 @@ export default
             return db.raw('SELECT LAST_INSERT_ID() as id');
         },
 
-        getTagByNewsId(newId) {
-            return db('tag as t')
-                .join('news_tags as nt', 't.TagID', '=', 'nt.TagID')
-                .where('nt.NewsID', newId)
+        async getTagByNewsId(newsId) {
+            const news = await News.findById(newsId).populate('Tags');
+            return news?.Tags || [];
         },
 
         getAllCommentById(id) {
@@ -124,16 +145,17 @@ export default
         addComment(entity) {
             return db('comment').insert(entity);
         },
-        countCommentBynewsId(newId) {
-            return db('comment').where('NewsID', newId).count('* as total').first();
+        async countCommentBynewsId(newsId) {
+            const total = await Comment.countDocuments({ NewsID: newsId });
+            return { total };
         },
 
-    incrementViewCount(newsId) {
-        // Tăng cột view lên 1
-        return db('news')
-            .where('NewsID', newsId)  
-            .increment('Views', 1); 
-    },
+        incrementViewCount(newsId) {
+            // Tăng cột view lên 1
+            return db('news')
+                .where('NewsID', newsId)  
+                .increment('Views', 1); 
+        },
         incrementViewCount(newsId) {
             // Tăng cột view lên 1
             return db('news')
@@ -141,59 +163,88 @@ export default
                 .increment('Views', 1); // Tăng giá trị cột 'view' lên 1
         },
 
-        getTop3NewsByView() {
-            return db('news')
-            .join('categories', 'news.CatID', '=', 'categories.CatID')
-            .where('Status',3) 
-            .orderBy('news.Views', 'desc')  
-            .limit(5);  
+        async getTop3NewsByView() {
+            return await News.find({ Status: 3 })  // lọc theo Status
+            .sort({ Views: -1 })                 // sắp xếp giảm dần
+            .limit(5)                            // giới hạn 5 kết quả
+            .populate('CatID').lean().exec();   
         },
-        getTop10NewsByDate() {
-            return db('news')
-            .join('categories', 'news.CatID', '=', 'categories.CatID')
-            .where('Status',3)  
-            .orderBy('news.PublishedDay', 'desc')  
-            .limit(10); 
+        async getTop10NewsByDate() {
+            return await News.find({ Status: 3 })                         
+            .sort({ PublishedDay: -1 })                                
+            .limit(10)                                                  
+            .populate('CatID', 'CatName').lean()                               
+            .exec();
         },
-        getTop10Cat()
+        async getTop10Cat()
         {
-            return db('news as n')
-            .join('categories as c', 'n.CatID', '=', 'c.CatID') // Join bảng news với categories
-            .groupBy('c.CatID', 'c.CatName') // Nhóm theo CatID và tên danh mục con
-            .sum('n.Views as total_views') // Tính tổng lượt xem
-            .orderBy('total_views', 'desc') // Sắp xếp theo tổng lượt xem giảm dần
-            .limit(10) // Lấy 10 kết quả đầu tiên
-            .select('c.CatName as CatName', 'c.CatID as CatID') // Lấy tên và ID danh mục con
-            .then(results => {
-                // Thêm cột "No" để đánh số thứ tự cho từng dòng kết quả
-                return results.map((item, index) => {
-                item.No = index + 1; // Đánh số thứ tự bắt đầu từ 1
-                return item;
-                });
-            });
+            const results = await News.aggregate([
+            {
+            $group: {
+                _id: '$CatID',         // Group theo CatID
+                total_views: { $sum: '$Views' } // Tính tổng lượt xem
+            }
+            },
+            {
+            $lookup: {
+                from: 'Category',         // Tên collection (chữ hoa/thường đúng với Mongo)
+                localField: '_id',        // _id chính là CatID
+                foreignField: '_id',      // Category._id
+                as: 'categoryInfo'
+            }
+            },
+            { $unwind: '$categoryInfo' }, // Lấy phần tử đầu (vì mỗi CatID là duy nhất)
+            { $sort: { total_views: -1 } }, // Giảm dần theo Views
+            { $limit: 10 },                 // Lấy top 10
+            {
+            $project: {
+                CatID: '$_id',
+                CatName: '$categoryInfo.CatName',
+                total_views: 1,
+                _id: 0
+            }
+            }
+        ]);
+
+        // Đánh số thứ tự
+        return results.map((item, index) => ({
+            ...item,
+            No: index + 1
+        }));
         },
-        getTop10NewsByViews() {
-            return db('news')
-            .join('categories', 'news.CatID', '=', 'categories.CatID') 
-            .where('Status',3)
-            .orderBy('Views', 'desc') // Sắp xếp theo số lượt xem giảm dần
-            .limit(10); // Lấy 10 bài báo có lượt xem cao nhất
+         getTop10NewsByViews() {
+        return News.find({ Status: 3 })
+            .populate('CatID') // Populate category details if needed
+            .sort({ Views: -1 }) // Descending order by Views
+            .limit(10)
+            .lean()
+            .exec();
+    },
+
+    getTop3NewsByRandom() {
+        return News.find({ Status: 3 })
+            .populate('CatID')
+            .sort({ $natural: -1 }) // Hoặc dùng plugin cho random
+            .limit(3)
+            .lean(); // Lúc này có thể dùng lean()
         },
-        getTop3NewsByRandom()
-        {
-            return db('news')
-            .join('categories', 'news.CatID', '=', 'categories.CatID')
-            .where('Status',3)
-            .orderByRaw('RAND()') // Sắp xếp ngẫu nhiên
-            .limit(3); // Lấy 3 bài báo ngẫu nhiên
-        },
-        getTop3NewsCateByRandom(catId) {
-            return db('news')
-                .join('categories', 'news.CatID', '=', 'categories.CatID')
-                .where({'news.CatID': catId, 'news.Status':3})
-                .orderByRaw('RAND()') // Sắp xếp ngẫu nhiên
-                .limit(3); // Lấy 3 bài báo ngẫu nhiên
-        },
+
+    getTop3NewsCateByRandom(catId) {
+        return News.aggregate([
+            { $match: { 
+                CatID: catId,
+                Status: 3 
+            }},
+            { $sample: { size: 3 } },
+            { $lookup: {
+                from: 'categories',
+                localField: 'CatID',
+                foreignField: 'CatID',
+                as: 'category'
+            }},
+            { $unwind: '$category' }
+        ]).exec();
+        }  ,
         findPageByTagId(id, limit, offset) {
         return db('news_tags') // Bắt đầu từ bảng news_tags
             .join('news', 'news_tags.NewsID', '=', 'news.NewsID') // Kết hợp với bảng news qua NewsID

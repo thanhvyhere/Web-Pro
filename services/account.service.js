@@ -1,5 +1,5 @@
-import db from '../utils/db.js';
-
+// import db from '../utils/db.js';
+import { Role } from '../model/Role.js';
 export default {
     // Tìm người dùng theo tên đăng nhập
     findByUsername(username) {
@@ -57,9 +57,9 @@ export default {
             .where('features.RoleID', id); // Lọc theo RoleID
     },
 
-    findbyrolename(permission)
+    async findbyrolename(permission)
     {
-        return db('roles').where('RoleName', permission).first();
+        return await Role.findOne({ RoleName: permission }).exec();
     },
 
     findRoleById(roleId) {
