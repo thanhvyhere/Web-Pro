@@ -42,7 +42,6 @@ export default function (app) {
 
     app.use(async (req, res, next) => {
         const topNews = await newsService.getTop3NewsByView();
-        console.log(topNews)
             // Đếm số lượng bình luận cho từng bài báo trong top3 và lấy tên danh mục
           const updatedList = await Promise.all(topNews.map(async (item) => {
               const count = await newsService.countCommentBynewsId(item.NewsID);
