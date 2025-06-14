@@ -58,6 +58,28 @@ app.use('/role', editorRouter);
 app.use('/editor', editorRouter);
 app.use('/subscriber', checkPremium, subcriberRouter);
 app.use('/administrator', authAdmin, administratorRouter);
+app.use('/error',(req, res) => {
+  res.status(404).render('error', {
+    status: 'Lỗi rồi',
+    message: 'Bạn tại lại trang trước nhe!',
+    layout: 'empty'  
+  });
+});
+app.use((req, res) => {
+   res.status(404).render('error', {
+    status: 404,
+    message: 'Trang bạn tìm không tồn tại!',
+    layout: 'empty'  
+  });
+});
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render('error', {
+    status: 500,
+    message: 'Lỗi máy chủ, vui lòng thử lại sau.',
+    layout: 'empty' 
+  });
+});
 }
 

@@ -6,7 +6,7 @@ export default function (app) {
   
   app.engine('hbs', engine({
       extname: 'hbs',
-      defaultLayout: 'main',
+      defaultLayout: 'home',
       helpers: {
           format_number(value) {
               return numeral(value).format('0,0') + ' đ'
