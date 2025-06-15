@@ -8,20 +8,20 @@ import auth, { checkPremium } from '../middleware/auth.mdw.js';
 import configurePassportGithub from '../controllers/passportGithub.config.js';
 import configurePassportGoogle from '../controllers/passportGoogle.config.js';
 import passport from 'passport';
-import nodemailer from 'nodemailer';
+import { sendEmailRegister, sendEmailResetPassword } from '../utils/mailer.js';
 import newsService from '../services/news.service.js';
-
+configurePassportGithub();
 const router = express.Router();
 dotenv.config();
 
 router.get('/login', function (req, res) {
     res.render('vwAccount/login', {
-        layout: 'account-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
+        layout: 'account-layout'
     });
 });
 
 router.post('/login', async function (req, res) {
-    const user = await accountService.findByUsername(req.body.username);
+    const user = await accountService.findByUsername(req.body.username).lean();
     if (!user) {
         return res.render('vwAccount/login', {
             layout: 'account-layout',
@@ -35,18 +35,16 @@ router.post('/login', async function (req, res) {
         });
     }
 
-    const preDate = await accountService.findPremiumDate(user.id);
-    const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
-
+    const preDate = user.expiration_date || null;
+    const role = user.role;  
     req.session.auth = true;
 
     let expirationDate = null;
 
     // Kiểm tra nếu preDate và expiration_date có giá trị hợp lệ
-    if (preDate && preDate.expiration_date) {
-        expirationDate = new Date(preDate.expiration_date);
+    if (preDate) {
+        expirationDate = new Date(preDate);
 
-        // Kiểm tra xem expirationDate có phải là giá trị hợp lệ không
         if (isNaN(expirationDate.getTime())) {
             expirationDate = null; // Nếu không hợp lệ, gán lại null
         } else {
@@ -56,12 +54,12 @@ router.post('/login', async function (req, res) {
     }
 
     req.session.authUser = {
-        username: user.username,
-        userid: user.id,
+        username: user.username || user.name || null,
+        userid: user._id,
         email: user.email,
         name: user.name,
         permission: user.permission,
-        rolename: role.RoleName,
+        role: role,
         expiration_date: expirationDate
     };
 
@@ -78,39 +76,95 @@ router.get('/register', function(req, res){
 
 router.post('/register', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
-    console.log(req.body.raw_dob);
-    const ymd_dob = moment(req.body.raw_dob, 'DD-MM-YYYY').format('YYYY-MM-DD');
-    const entity = {
-        username: req.body.username,
-        password: hash_password, 
+    const tempUser = {
         name: req.body.name,
-        email: req.body.email, 
-        dob: ymd_dob,
-        permission: 1
-    }
-    const ret = await accountService.add(entity);
-    const user = await accountService.findByUsername(req.body.username);
-    req.session.auth = true;
-    req.session.authUser = {
-        username: user.username,
-        userid: user.id,
-        name: user.name,
-        email: user.email,
-        permission: user.permission,
-        rolename: 'guest'
-    }
-    const retUrl = req.session.retUrl || '/'
-    res.redirect(retUrl);
-});
+        username: req.body.username,
+        password: hash_password,
+        phone: req.body.phone,
+        email: req.body.email,
+    };
 
-router.get('/is-available', async function (req, res) {
-    const username = req.query.username;
-    const user = await accountService.findByUsername(username);
-    if(!user){
-        return res.json(true); //lay bien du lieu quang xuong
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    const expireAt = new Date(Date.now() + 1 * 60 * 1000);
+    
+    await accountService.addOTP({
+        otp: otp,
+        expire_time: expireAt,
+        email: tempUser.email
+    });
+
+    const subject = '[VERIFY EMAIL] - NEWSLAND REGISTRATION';
+    const html = `
+        <h3 Email Verification</h3>
+        <p>Thank you for registering at Newsland.</p>
+        <p>Your verification code is:</p>
+        <h2>${otp}</h2>
+        <p>This code is valid for 1 minutes.</p>
+    `;
+
+    
+     try {
+        setTimeout(() => {
+        sendEmailRegister(tempUser.email, subject, html)
+            .then(() => console.log('Verification email sent.'))
+            .catch(err => console.error('Failed to send email:', err));
+        }, 500);
+        req.session.tempUser = tempUser;
+        
+        res.render('vwAccount/register', {
+            layout: 'account-layout',
+            email: req.body.email,
+            username: req.body.username,
+            showVerifyPopup: true
+        });
+    } catch (err) {
+        console.error('Failed to send verification email:', err);
+        return res.status(500).json({ showVerifyPopup: false, error: 'Failed to send OTP email.' });
     }
-    res.json(false);
-})
+});
+router.post('/verify-email', async function (req, res) {
+    const email = req.body.email;
+    const username = req.body.username;
+    const otp = req.body.otp;
+    console.log(email);
+
+    try {
+        const otpRecord = await accountService.findOTPByEmail(email).lean();
+        console.log(otpRecord);
+        if (!otpRecord) {
+            return res.render('vwAccount/register', {
+                layout: 'account-layout',
+                email,
+                username,
+                errorMessage: 'OTP expired. Please register again.'
+            });
+        }
+        if (parseInt(otp) !== otpRecord.otp) {
+            return res.render('vwAccount/register', {
+                layout: 'account-layout',
+                email,
+                username,
+                errorMessage: 'Incorrect OTP. Please try again.'
+            });
+        }
+        const tempUser = req.session.tempUser;
+        if (!tempUser) {
+            return res.redirect('/user/register');
+        }
+
+        await accountService.add(tempUser);
+        await accountService.delOTP(otp);
+        req.session.tempUser = null;
+
+        res.render('vwAccount/login', {
+            layout: 'account-layout',
+            successMessage: 'Email verified. Account created successfully!'
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error. Please try again later.');
+    }
+});
 
 router.post('/logout', auth, function(req, res){
     req.session.auth = false;
@@ -129,7 +183,7 @@ router.post('/forgot-password', async function(req, res) {
     const username = req.body.username || '';
     try {
         // Kiểm tra email tồn tại trong cơ sở dữ liệu
-        const user = await accountService.findByUsername(username);
+        const user = await accountService.findByUsername(username).lean();
         if (!user) {
             return res.render('vwAccount/forgot-password', {
                 layout: 'account-layout',
@@ -181,7 +235,66 @@ router.post('/forgot-password', async function(req, res) {
         res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
     }
 });
+router.get('/is-available', async function (req, res) {
+    const username = req.query.username;
+    const user = await accountService.findByUsername(username);
+    if (!user) {
+        return res.json(true);
+    }
+    res.json(false);
+});
+// router.get('/verify-email', function (req, res) {
+//     const email = req.query.email || '';
+//     const username = req.query.username || '';
+//     res.render('vwAccount/verifyEmail', {
+//         layout: 'account-layout',
+//         email,
+//         username
+//     });
+// });
 
+router.post('/verify-email', async function (req, res) {
+    const email = req.body.email;
+    const username = req.body.username;
+    const otp = req.body.otp;
+
+    try {
+        const otpRecord = await accountService.findOTPByEmail(email).lean();
+        console.log(otpRecord);
+        if (!otpRecord) {
+            return res.render('vwAccount/register', {
+                layout: 'account-layout',
+                email,
+                username,
+                errorMessage: 'OTP expired. Please register again.'
+            });
+        }
+        if (parseInt(otp) !== otpRecord.otp) {
+            return res.render('vwAccount/register', {
+                layout: 'account-layout',
+                email,
+                username,
+                errorMessage: 'Incorrect OTP. Please try again.'
+            });
+        }
+        const tempUser = req.session.tempUser;
+        if (!tempUser) {
+            return res.redirect('/user/register');
+        }
+
+        await accountService.add(tempUser);
+        await accountService.delOTP(otp);
+        req.session.tempUser = null;
+
+        res.render('vwAccount/login', {
+            layout: 'account-layout',
+            successMessage: 'Email verified. Account created successfully!'
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error. Please try again later.');
+    }
+});
 // Trang OTP (GET)
 router.get('/otp', function (req, res) {
     const email= req.query.email; // Nhận email từ URL query
@@ -261,10 +374,9 @@ router.get('/login/githubAuth/callback',
     if (!user) {
       return res.redirect('/account/login');
      }
-     user = await accountService.findByUsername(user.username)
+     user = await accountService.findByUsername(user.username).lean()
     
-    const preDate = await accountService.findPremiumDate(user.id);
-    const role = await accountService.findRoleById(user.permission);  // Fetch the role based on user's permission
+    const preDate = user.expiration_date || null;
 
     req.session.auth = true; 
     
@@ -281,11 +393,11 @@ router.get('/login/githubAuth/callback',
 
     req.session.authUser = {
         username: user.username,
-        userid: user.id,  
+        userid: user._id,  
         name: user.name,  
         permission: user.permission, 
         email: user.email,
-        rolename: role.RoleName,  
+        rolename: user.role,  
         expiration_date: expirationDate  
     };
 
@@ -305,25 +417,21 @@ router.get('/login/googleAuth/callback',
     if (!user) {
       return res.redirect('/login');
      }
-    const role = await accountService.findRoleById(user.permission);
-    // Đánh dấu người dùng đã đăng nhập
     req.session.auth = true;
     req.session.authUser = {
         username: user.username,
-        userid: user.id,
+        userid: user._id,
         name: user.name,
         email: user.email,
-        permission: user.permission,
-        rolename: role.RoleName
+        rolename: user.role
     };
     res.redirect('/subscriber');
     })
   
 router.post('/premium', async function (req, res) {
     try {
-        // Lấy ID của người dùng hiện tại từ session
         const userId = req.session.authUser.userid;
-        const account = await accountService.findPremiumByUserId(userId) || "";
+        const account = await accountService.findbyID(userId).lean() || "";
 
         let expirationDate;
 
@@ -336,16 +444,10 @@ router.post('/premium', async function (req, res) {
                 expiration_date: expirationDate, // Ngày hết hạn
                 created_at: new Date(), // Ngày tạo
             };
-
-            await accountService.addPremium(entity);
-            await accountService.updatePermission(userId, 2);
-
-            // Cập nhật session với quyền mới
-            req.session.authUser.permission = 2;
+            await accountService.upPremium(userId);
             req.session.authUser.rolename = 'subscribers';
             req.session.authPremium = true;
         } else {
-            // Nếu tài khoản đã có, kiểm tra expiration_date
             if (!account.expiration_date) {
                 throw new Error("Missing expiration_date in account.");
             }
@@ -358,9 +460,8 @@ router.post('/premium', async function (req, res) {
             }
             expirationDate.setDate(expirationDate.getDate() + 7)
 
-            await accountService.updatePremium(userId, expirationDate);
+            await accountService.updatePremiumDate(userId, expirationDate);
         }
-        req.session.authUser.permission = 2;
         req.session.authPremium = true;
         req.session.authUser.rolename = 'subscriber';
         req.session.authUser.expiration_date = expirationDate;
@@ -411,11 +512,9 @@ router.get('/premium', function (req, res) {
 // Hiển thị trang thông tin người dùng
 router.get('/user-info', async function(req, res) {
     const userId = req.query.id; // Lấy userId từ session
-    const user = await accountService.findbyID(userId);
-    const role = await accountService.findRoleById(user.permission);
-
+    const user = await accountService.findbyID(userId).lean();
     if (!user) {
-        return res.redirect('/account/login'); // Nếu không có userId trong session, chuyển hướng tới trang đăng nhập
+        return res.redirect('/account/login'); 
     }
 
     // Định dạng ngày sinh cho input type="date"
@@ -424,7 +523,7 @@ router.get('/user-info', async function(req, res) {
     res.render('vwAccount/user-info', {
         layout: 'account-layout', // Chỉ định layout
         user: { ...user, dob: formattedDob }, // Gắn ngày sinh đã định dạng vào object user
-        rolename: role.RoleName
+        rolename: user.role
     });
 });
 

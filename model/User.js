@@ -9,7 +9,6 @@ const userSchema = new Schema({
   name: String,
   email: String,
   dob: Date,             
-  permission: Number,    
   NoOfFollower: { type: Number, default: 0 },
   NoOfFollowing: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
@@ -21,11 +20,13 @@ const userSchema = new Schema({
   address: String,
   phone: String,
   avatar: String,
-  roleId: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'Role', 
-    required: true 
-  }
+  role: { 
+        type: String, 
+        required: true, 
+        enum: ['guest', 'subscriber', 'writer', 'editor', 'administrator'], 
+        default: 'guest' 
+    },
+  expiration_date: Date
 }, { collection: 'User' });
 
 const User = model('User', userSchema);

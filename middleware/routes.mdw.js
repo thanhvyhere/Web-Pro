@@ -26,23 +26,8 @@ export default function (app) {
       } else req.session.views = 1;
   
       
-      const permission = req.session.authUser.permission;
-  
-      // Redirect users to their respective dashboards
-      switch (permission) {
-          case 1: 
-              return res.redirect('/reader')
-          case 2: // Subscriber
-              return res.redirect('/subscriber');
-          case 3: // Writer
-              return res.redirect('/writer');
-          case 4: // Editor
-              return res.redirect('/editor');
-          case 5: // Admin
-              return res.redirect('/administrator');
-          default: // Guest or invalid permission
-              return res.redirect('/');
-      }
+      const role = req.session.authUser.role;
+      return res.redirect(`/${role}`);
   });
 
 app.use('/account', accountRouter);
@@ -50,7 +35,7 @@ app.use('/writer', writerRouter);
 app.use('/newspaper', newspaperRouter);
 // Khởi động server
 // app.use('/artist', artistRouter);
-app.use('/reader', readerRouter)
+app.use('/guest', readerRouter)
 
 app.use('/role', editorRouter);
 

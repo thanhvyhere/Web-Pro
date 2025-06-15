@@ -11,12 +11,11 @@ export default function (req, res, next) {
 
 export async function checkPremium(req, res, next) {
     try {
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (req.session.authUser) {
             const userId = req.session.authUser.userid || '0';
 
             // Tìm thông tin Premium của người dùng
-            const accPre = await accountService.findPremiumByUserId(userId);
+            const accPre = await accountService.findbyID(userId).lean();
 
             if (accPre) {
                 const currentDate = new Date();
@@ -24,15 +23,11 @@ export async function checkPremium(req, res, next) {
                 // So sánh ngày hết hạn với ngày hiện tại
                 if (new Date(accPre.expiration_date) < currentDate) {
                     // Nếu hết hạn, xóa quyền Premium và cập nhật quyền về cơ bản
-                    await accountService.delPremium(userId);
-                    await accountService.updatePermission(userId, 1);
+                    await accountService. updatePremiumDate(userId, null);
 
-                    // Cập nhật session
-                    req.session.authUser.permission = 1;
                     req.session.authPremium = false;
-                    req.session.authUser.expiration_date = "";
+                    req.session.authUser.expiration_date = null;
                 } else {
-                    // Nếu vẫn còn hạn, đánh dấu người dùng là Premium
                     req.session.authPremium = true;
                 }
             } else {
