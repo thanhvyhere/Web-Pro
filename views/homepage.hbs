@@ -1,180 +1,58 @@
 {{#section "css"}}
 <link href="/static/css/homepage.css" rel="stylesheet">
-{{/section}}{{#section "script"}}
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Lấy tất cả các phần tử carousel-item
-        const items = document.querySelectorAll('#carouselExampleCaptions .carousel-item');
-
-        // Xóa lớp active khỏi tất cả các phần tử
-        items.forEach(item => {
-            item.classList.remove('active');
-        });
-
-        // Thêm lại lớp active vào phần tử đầu tiên
-        if (items.length > 0) {
-            items[0].classList.add('active');
-        }
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Lấy tất cả các phần tử carousel-item
-        const items = document.querySelectorAll('#carouselExample2Captions .carousel-item');
-
-        // Xóa lớp active khỏi tất cả các phần tử
-        items.forEach(item => {
-            item.classList.remove('active');
-        });
-
-        // Thêm lại lớp active vào phần tử đầu tiên
-        if (items.length > 0) {
-            items[0].classList.add('active');
-        }
-    });
-</script>
-<script>
-        document.addEventListener("DOMContentLoaded", () => {
-                const premiumLinks = document.querySelectorAll(".premium-link");
-
-                premiumLinks.forEach(link => {
-                    link.addEventListener("click", (event) => {
-                        const isPremium = link.getAttribute("data-premium") === "true";
-                        const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
-                        let text = 'Đăng nhập';
-                        let href = "/account/login";
-
-                        if (auth) {
-                            text = 'Đăng ký Premium';
-                            href = "/account/premium";
-                        }
-
-                        if (isPremium) {
-                            event.preventDefault(); // Ngăn chặn chuyển hướng
-                            Swal.fire({
-                                title: "Thông báo",
-                                text: "Bạn không được cấp quyền để xem nội dung này.",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonText: text,
-                                cancelButtonText: "Hủy"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Chuyển hướng đến trang đăng nhập hoặc trang Premium
-                                    window.location.href = href;
-                                }
-                            });
-                        }
-                    });
-                });
-            });
-
-    </script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const premiumLinks = document.querySelectorAll(".premium-link");
-
-        premiumLinks.forEach(link => {
-            link.addEventListener("click", (event) => {
-                const isPremium = link.getAttribute("data-premium") === "true";
-                const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
-                let text = 'Đăng nhập';
-                let href = "/account/login";
-
-                if (auth) {
-                    text = 'Đăng ký Premium';
-                    href = "/account/premium";
-                }
-
-                if (isPremium) {
-                    event.preventDefault(); // Ngăn chặn chuyển hướng
-                    Swal.fire({
-                        title: "Thông báo",
-                        text: "Bạn không được cấp quyền để xem nội dung này.",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: text,
-                        cancelButtonText: "Hủy"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Chuyển hướng đến trang đăng nhập hoặc trang Premium
-                            window.location.href = href;
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script>
 {{/section}}
 
-<div id="carouselExampleCaptions" class="carousel carousel-dark slide">
-    <div class="carousel-inner">
-        {{#each topNews}}
-        <div class="carousel-item {{#if @first}}active{{/if}}" style="opacity: 1;!important;">
-            <div class="feature-paper mb-5" style="--bg-image: url('{{this.ImageCover}}')">
-                <div class="paper-infor">
-                    <div class="header-paper">
-                        <button class="name-category-paper tw-w-[200px]" disabled="disabled">{{CatID.CatName}}</button>
-                        <h6>
-                            <i class="bi bi-calendar3"></i>
-                            {{formatDate this.PublishedDay}}
-                        </h6>
-                    </div>
-                    {{#if authPremium}}
-                        <!-- Người dùng đã đăng nhập -->
-                        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
-                            <h1 class="card-title tw-mb-2">{{Title}}</h1>
-                        </a>
-                    {{else}}
-                        {{#if this.is_premium}}
-                        <!-- Bài viết Premium nhưng chưa đăng nhập -->
-                        <a href="javascript:void(0);" class="premium-link" data-premium="true">
-                            <h1 class="card-title tw-mb-2">{{Title}}</h1>
-                        </a>
-                        {{else}}
-                        <!-- Bài viết không phải Premium -->
-                        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
-                            <h1 class="card-title tw-mb-2">{{Title}}</h1>
-                        </a>
-                        {{/if}}
-                    {{/if}}
-                    <div class="status-paper" style="opacity: 1;!important; color: white; font-size: 25px !important;">
-                        <h6><i class="bi bi-pencil-square"></i>{{this.AuthorName}}</h6>
-                        <h6><i class="bi bi-eye-fill"></i>{{this.Views}}</h6>
-                        <h6><i class="bi bi-hearts"></i>500</h6>
-                        <h6><i class="bi bi-chat-dots"></i>{{this.countComment}}</h6>
-                    </div>
-                    <div class="tw-flex tw-flex-row tw-gap-2">
-                        {{#each tags}}
-                            <a class="btn btn-outline-primary tag" disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}} </a>
-                        {{/each}}
-                    </div>
-                </div>
-            </div>
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    {{#each topNews}}
+    <div class="swiper-slide tw-relative tw-h-full tw-w-full">
+      <!-- Ảnh nền -->
+      <img src="{{this.ImageCover}}" alt="news" class="tw-absolute tw-inset-0 tw-w-full tw-h-full tw-object-cover tw-brightness-50" />
+
+      <!-- Nội dung -->
+      <div class="tw-absolute tw-z-10 tw-p-6 tw-text-white tw-left-0 tw-w-[40%] tw-top-[50%]">
+        <div class="header-paper">
+          <button class="tw-bg-white tw-text-black tw-w-[160px] tw-h-[30px] tw-rounded-[10px] tw-font-black hover:tw-border-white hover:tw-bg-transparent hover:tw-text-white" disabled>{{CatID.CatName}}</button>
+          <h6><i class="bi bi-calendar3"></i> {{formatDate this.PublishedDay}}</h6>
         </div>
-        {{/each}}
+        {{#if authPremium}}
+        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link"><h2 class="card-title tw-mb-2">{{Title}}</h2></a>
+        {{else}}
+          {{#if this.is_premium}}
+          <a href="javascript:void(0);" class="premium-link" data-premium="true"><h2 class="card-title tw-mb-2">{{Title}}</h2></a>
+          {{else}}
+          <a href="/newspaper/detail?id={{NewsID}}" class="premium-link"><h2 class="card-title tw-mb-2">{{Title}}</h2></a>
+          {{/if}}
+        {{/if}}
+        <div class="status-paper tw-mt-2 tw-text-lg tw-text-white">
+          <h6><i class="bi bi-pencil-square"></i> {{this.AuthorName}}</h6>
+          <h6><i class="bi bi-eye-fill"></i> {{this.Views}}</h6>
+          <h6><i class="bi bi-hearts"></i> 500</h6>
+          <h6><i class="bi bi-chat-dots"></i> {{this.countComment}}</h6>
+        </div>
+        <div class="tw-flex tw-gap-2 tw-mt-3">
+          {{#each tags}}
+            <a class="btn btn-outline-primary tag" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
+          {{/each}}
+        </div>
+      </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        {{!-- <span class="visually-show"></span> --}}
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        {{!-- <span class="visually-hidden"></span> --}}
-    </button>
+    {{/each}}
+  </div>
+  <div class="swiper-scrollbar"></div>
 </div>
+
+
 <div class="title-paper-list mb-3">
     <h1>Bài viết mới nhất</h1>
-    <div class="container-fluid">
-        <div class="row tw-min-h-[500px]">
-            <div class="col-sm-4 ">
+    <div class="tw-pl-0">
+        <div class="row tw-min-h-[600px]">
+            <div class="col-sm-6 tw-mx-auto">
                 <div id="carouselExample2Captions" class="carousel slide ">
                     <div class="carousel-inner tw-h-full">
                         {{#each (limit newNews 7)}}
                         <div class="carousel-item {{#if @first}}active{{/if}}" style="">
-                            <div class="feature-paper-2 mb-5  tw-min-h-[500px]" style="--bg-image: url('{{ImageCover}}');">
+                            <div class="feature-paper-2 mb-5  tw-min-h-[600px]" style="--bg-image: url('{{ImageCover}}');">
                                 <div class="paper-infor-2 tw-min-h-[500px]" style="">
                                     <div class="header-paper-2">
                                         {{!-- <button class="name-category-paper"
@@ -218,89 +96,89 @@
                 </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-6 ">
                 <div class="">
                     {{#each (skip newNews 7)}}
-                    <div
-                        class="card tw-h-[170px] d-flex flex-row tw-mb-2 align-items-center tw-border-[#9CA3AF] tw-border-[1px] tw-p-3 tw-w-[100%]">
-                        <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
-                        <div class="paper-small">
-                            <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
-                                <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatID.CatName}}</button>
+                    {{!-- Bắt đầu card --}}
+                    <div class="md:tw-h-[200px] tw-max-w-full tw-bg-white tw-shadow-lg tw-overflow-hidden md:tw-max-w-full tw-mb-2">
+                        <div class="md:tw-flex">
+                            <div class="md:tw-shrink-0">
+                                <img class="tw-h-[100px] tw-w-full tw-object-cover md:tw-h-full md:tw-w-48" src="{{ImageCover}}" alt="{{Title}}">
+                            </div>
+                            <div class="tw-p-4">
                                 <p class="tw-text-l">
                                     <i class="bi bi-calendar3"></i>
                                     {{formatDate this.PublishedDay}}
                                 </p>
-                            </div>
-                            <div class="tw-flex tw-flex-row tw-justify-between">
-                                <a href="/newspaper/detail?id={{NewsID}}">
-                                    <h6 class="tw-text-[16px] tw-ml-2 tw-text-black">{{Title}}</h6>
+                                <div class="tw-uppercase tw-tracking-wide tw-text-sm tw-text-indigo-500 tw-font-semibold">{{CatID.CatName}}</div>
+                                <a  href="/newspaper/detail?id={{NewsID}}" class="tw-block tw-mt-1 tw-text-lg tw-leading-tight tw-font-medium tw-text-black hover:tw-underline">
+                                    {{Title}}
                                 </a>
-
+                                <p class="tw-mt-2 tw-text-slate-500 tw-line-clamp-2">
+                                {{Abstract}}
+                                </p>
+                                {{#each (limit tags 2)}}
+                                <a class="tw-ml-2 tw-bg-yellow-200 tw-text-black tw-px-2 tw-rounded tw-inline-block tw-mt-1"
+                                    disabled="disabled" href="/newspaper/byTag?id={{_id}}">{{tagName}}</a>
+                                {{/each}}
                             </div>
-                            {{#each (limit tags 2)}}
-                            <a class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black" 
-                                disabled="disabled" href="/newspaper/byTag?id={{_id}}">{{tagName}}</a>
-                            {{/each}}
                         </div>
-
                     </div>
                     {{/each}}
                 </div>
             </div>
-
-            <div id="top-chart" class="col-sm-4">
-                <h4 class="tw-pl-3 tw-w-[60%]">CHUYÊN MỤC HÀNG DẦU</h4>
-                <hr>
-                <div class="container text-center">
-                    <div class="row row-cols-1">
-                        <div id="carouselExample" class="carousel slide">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    {{#each (limit topCat 5)}}
-                                    <div class="col tw-h-[80px]">
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[90%] tw-pl-[10%] tw-py-[10px]">
-                                            <button
-                                                class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
-                                                style="background-color: rgb(243, 219, 142);"
-                                                disabled="disabled">{{No}}</button>
-                                            <a href="/newspaper/byCat?catId={{_id}}"
-                                                class="top-chart-format">{{CatName}}</a>
-                                        </div>
-                                    </div>
-                                    {{/each}}
-                                </div>
-                                <div class="carousel-item">
-                                    {{#each (skip topCat 5)}}
-                                    <div class="col">
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[80%]  tw-pl-[10%] tw-py-[10px]">
-                                            <button
-                                                class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
-                                                style="background-color: rgb(243, 219, 142);"
-                                                disabled="disabled">{{No}}</button>
-                                            <a href="/newspaper/byCat?catId={{_id}}"
-                                                class="top-chart-format">{{CatName}}</a>
-                                        </div>
-                                    </div>
-                                    {{/each}}
-                                </div>
-
+        </div>
+    </div>
+</div>
+<div id="top-chart" class="col-sm-4">
+    <h4 class="tw-pl-3 tw-w-[60%]">CHUYÊN MỤC HÀNG DẦU</h4>
+    <hr>
+    <div class="container text-center">
+        <div class="row row-cols-1">
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        {{#each (limit topCat 5)}}
+                        <div class="col tw-h-[80px]">
+                            <div
+                                class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[90%] tw-pl-[10%] tw-py-[10px]">
+                                <button
+                                    class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
+                                    style="background-color: rgb(243, 219, 142);"
+                                    disabled="disabled">{{No}}</button>
+                                <a href="/newspaper/byCat?catId={{_id}}"
+                                    class="top-chart-format">{{CatName}}</a>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden"></span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden"></span>
-                            </button>
                         </div>
+                        {{/each}}
                     </div>
+                    <div class="carousel-item">
+                        {{#each (skip topCat 5)}}
+                        <div class="col">
+                            <div
+                                class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[80%]  tw-pl-[10%] tw-py-[10px]">
+                                <button
+                                    class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
+                                    style="background-color: rgb(243, 219, 142);"
+                                    disabled="disabled">{{No}}</button>
+                                <a href="/newspaper/byCat?catId={{_id}}"
+                                    class="top-chart-format">{{CatName}}</a>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -377,3 +255,130 @@
         </div>
     </div>
 </div>
+{{#section "script"}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tất cả các phần tử carousel-item
+        const items = document.querySelectorAll('#carouselExampleCaptions .carousel-item');
+
+        // Xóa lớp active khỏi tất cả các phần tử
+        items.forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Thêm lại lớp active vào phần tử đầu tiên
+        if (items.length > 0) {
+            items[0].classList.add('active');
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tất cả các phần tử carousel-item
+        const items = document.querySelectorAll('#carouselExample2Captions .carousel-item');
+
+        // Xóa lớp active khỏi tất cả các phần tử
+        items.forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Thêm lại lớp active vào phần tử đầu tiên
+        if (items.length > 0) {
+            items[0].classList.add('active');
+        }
+    });
+</script>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+                const premiumLinks = document.querySelectorAll(".premium-link");
+
+                premiumLinks.forEach(link => {
+                    link.addEventListener("click", (event) => {
+                        const isPremium = link.getAttribute("data-premium") === "true";
+                        const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
+                        let text = 'Đăng nhập';
+                        let href = "/account/login";
+
+                        if (auth) {
+                            text = 'Đăng ký Premium';
+                            href = "/account/premium";
+                        }
+
+                        if (isPremium) {
+                            event.preventDefault(); // Ngăn chặn chuyển hướng
+
+                            swalWithCustomButtons.fire({
+                                title: "Thông báo",
+                                text: "Bạn không được cấp quyền để xem nội dung này.",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: text,
+                                cancelButtonText: "Hủy"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Chuyển hướng đến trang đăng nhập hoặc trang Premium
+                                    window.location.href = href;
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+
+    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const premiumLinks = document.querySelectorAll(".premium-link");
+
+        premiumLinks.forEach(link => {
+            link.addEventListener("click", (event) => {
+                const isPremium = link.getAttribute("data-premium") === "true";
+                const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
+                let text = 'Đăng nhập';
+                let href = "/account/login";
+
+                if (auth) {
+                    text = 'Đăng ký Premium';
+                    href = "/account/premium";
+                }
+
+                if (isPremium) {
+                    event.preventDefault(); // Ngăn chặn chuyển hướng
+                    swalWithCustomButtons.fire({
+                        title: "Thông báo",
+                        text: "Bạn không được cấp quyền để xem nội dung này.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: text,
+                        cancelButtonText: "Hủy"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Chuyển hướng đến trang đăng nhập hoặc trang Premium
+                            window.location.href = href;
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+ <script>
+    var swiper = new Swiper(".mySwiper", {
+    scrollbar: {
+        el: ".swiper-scrollbar",
+        hide: true,
+    },
+    keyboard: {
+        enabled: true,
+    },
+    mousewheel: true,
+    loop: true,
+    autoplay: {
+         delay: 2500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+    },
+    });
+  </script>
+{{/section}}
