@@ -2,10 +2,10 @@
 <link href="/static/css/homepage.css" rel="stylesheet">
 {{/section}}
 
-<div class="swiper mySwiper">
+<div class="swiper mySwiper tw-h-[700px] tw-w-full">
   <div class="swiper-wrapper">
     {{#each topNews}}
-    <div class="swiper-slide tw-relative tw-h-[650px] tw-w-full">
+    <div class="swiper-slide tw-relative tw-h-[700px] tw-w-full">
       <!-- Ảnh nền -->
       <img src="{{this.ImageCover}}" alt="news" class="tw-absolute tw-inset-0 tw-w-full tw-h-full tw-object-cover tw-brightness-50" />
 
@@ -39,7 +39,7 @@
     </div>
     {{/each}}
   </div>
-  <div class="swiper-scrollbar"></div>
+  <div class="swiper-scrollbar tw-bg-yellow-200"></div>
 </div>
   
 
@@ -48,7 +48,7 @@
     <div class="tw-pl-0">
         <div class="row tw-min-h-[600px]">
             <div class="col-sm-6 tw-mx-auto">
-            <div class="swiper mySwiperSmall">
+            <div class="swiper mySwiperSmall tw-w-full tw-h-[600px]">
                 <div class="swiper-wrapper ">
                 {{#each (limit newNews 7)}}
                 <div class="swiper-slide tw-group  tw-relative tw-h-full tw-w-full">
@@ -123,127 +123,100 @@
 <div id="top-chart" >
     <h4 class="tw-pl-3 tw-w-[60%]">CHUYÊN MỤC HÀNG DẦU</h4>
     <hr>
-    <div class="container text-center">
-        <div class="row row-cols-1">
-            <div id="carouselExample" class="carousel slide">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        {{#each (limit topCat 5)}}
-                        <div class="col tw-h-[80px]">
-                            <div
-                                class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[90%] tw-pl-[10%] tw-py-[10px]">
-                                <button
-                                    class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
-                                    style="background-color: rgb(243, 219, 142);"
-                                    disabled="disabled">{{No}}</button>
-                                <a href="/newspaper/byCat?catId={{_id}}"
-                                    class="top-chart-format">{{CatName}}</a>
-                            </div>
-                        </div>
-                        {{/each}}
-                    </div>
-                    <div class="carousel-item">
-                        {{#each (skip topCat 5)}}
-                        <div class="col">
-                            <div
-                                class="d-flex flex-row justify-content-between align-items-center mb-2 tw-w-[80%]  tw-pl-[10%] tw-py-[10px]">
-                                <button
-                                    class="tw-w-[60px] tw-h-[50px] tw-rounded-[20px] tw-text-black tw-font-bold"
-                                    style="background-color: rgb(243, 219, 142);"
-                                    disabled="disabled">{{No}}</button>
-                                <a href="/newspaper/byCat?catId={{_id}}"
-                                    class="top-chart-format">{{CatName}}</a>
-                            </div>
-                        </div>
-                        {{/each}}
-                    </div>
-
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden"></span>
-                </button>
+    <div class="tw-container tw-mx-auto tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-px-6 tw-py-2">
+        {{#each topCat}}
+        <a href="/newspaper/byCat?catId={{_id}}" class="tw-border-[0.8px] tw-border-solid tw-border-black tw-flex 
+        tw-items-center tw-bg-white tw-shadow-md tw-rounded-full tw-my-2
+        tw-transition hover:tw-shadow-lg tw-text-black hover:tw-bg-black hover:tw-text-white tw-text-[25px]">
+            <div class="tw-w-[20%] tw-h-[60px] -tw-ml-[3px] -tw-my-[3px] tw-rounded-full" style="background-color: {{color}};">
             </div>
-        </div>
+            <span class="tw-font-semibold tw-uppercase tw-pl-4">{{CatName}}</span>
+        </a>
+        {{/each}}
     </div>
 </div>
 <div class="title-paper-list mb-3 d-flex flex-column">
-    <h1>Được xem nhiều nhất</h1>
-    <div class="container-fluid">
-        <div class="row d-grids">
-            {{#each viewsNews}}
-            <div class="col-sm-4">
-                <div
-                    class="card tw-h-[200px] d-flex flex-row tw-mb-2 align-items-center tw-border-[#9CA3AF] tw-border-[1px] tw-p-3 tw-w-[100%]">
-                    <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
-                    <div class="paper-small">
-                        <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
-                            <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatID.CatName}}</button>
-                            <p class="tw-text-l">
-                                <i class="bi bi-calendar3"></i>
-                                {{formatDate this.PublishedDay}}
-                            </p>
-                        </div>
-                        <div class="tw-flex tw-flex-row tw-justify-between">
-                            <a href="/newspaper/detail?id={{NewsID}}">
-                                <h6 class="tw-text-[16px] tw-ml-2 tw-text-black">{{Title}}</h6>
-                            </a>
-
-                        </div>
-                        {{#each (limit tags 4)}}
-                        <a class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black"
-                            disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
-                        {{/each}}
-                    </div>
-
-                </div>
+  <h1>Được xem nhiều nhất</h1>
+  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+    {{#each viewsNews}}
+    <a href="/newspaper/detail?id={{NewsID}}">
+      <div class="tw-group tw-border-[0.8px] tw-border-solid tw-border-black md:tw-h-[230px] tw-max-w-full
+       tw-bg-white hover:tw-bg-yellow-200 tw-shadow-lg tw-rounded-lg tw-overflow-hidden">
+        <div class="md:tw-flex">
+          <div class="md:tw-shrink-0">
+            <img class="tw-w-full tw-object-cover md:tw-h-[230px] md:tw-w-48 -tw-ml-[3px] -tw-my-[3px] "
+                 src="{{ImageCover}}" alt="{{Title}}">
+          </div>
+          <div class="tw-p-4">
+            <p class="tw-text-sm tw-text-gray-600">
+              <i class="bi bi-calendar3"></i> {{formatDate this.PublishedDay}}
+            </p>
+            <div class="tw-uppercase tw-tracking-wide tw-text-sm tw-text-indigo-500 tw-font-semibold">
+              {{CatID.CatName}}
             </div>
-            {{/each}}
+            <h2 class="tw-block tw-mt-1 tw-text-lg tw-leading-tight tw-font-medium tw-text-black hover:tw-underline">
+              {{Title}}
+            </h2>
+            <p class="tw-mt-2 tw-text-slate-500 tw-line-clamp-2">
+              {{Abstract}}
+            </p>
+            <div class="tw-mt-2">
+              {{#each (limit tags 2)}}
+              <a class="tw-bg-yellow-200 tw-text-black tw-px-2 tw-rounded tw-text-xs tw-inline-block tw-mr-2"
+                 href="/newspaper/byTag?id={{_id}}">
+                {{TagName}}
+              </a>
+              {{/each}}
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+    </a>
+    {{/each}}
+  </div>
 </div>
+
+
 
 <div class="title-paper-list mb-3 d-flex flex-column">
     <h1>Gợi ý cho bạn</h1>
-    <div class="container-fluid">
-        <div class="row d-grids">
-            {{#each randomNews}}
-            <div class="col-sm-4">
-                <div
-                    class="card tw-h-[200px] d-flex flex-row align-items-center tw-mb-2 tw-border-[#9CA3AF] tw-border-[1px] tw-p-3 tw-w-[100%]">
-                    <img src="{{ImageCover}}" alt="{{Title}}" class="img-title-paper">
-                    <div class="paper-small">
-                        <div class=" tw-flex tw-flex-row tw-justify-between tw-mt-2">
-                            <button class="name-category-paper tw-ml-1" disabled="disabled">{{CatID.CatName}}</button>
-                            <p class="tw-text-l">
-                                <i class="bi bi-calendar3"></i>
-                                {{formatDate this.PublishedDay}}
-                            </p>
-                        </div>
-                        <div class="tw-flex tw-flex-row tw-justify-between">
-                            <a href="/newspaper/detail?id={{NewsID}}">
-                                <h6 class="tw-text-[16px] tw-ml-2 tw-text-black">{{Title}}</h6>
-                            </a>
-
-                        </div>
-                        {{#each tags}}
-                        <a class="tw-ml-2 tw-w-50% tw-bg-yellow-200 tw-text-black"
-                            disabled="disabled" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
-                        {{/each}}
-                    </div>
-
-                </div>
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+    {{#each randomNews}}
+    <a href="/newspaper/detail?id={{NewsID}}">
+      <div class="tw-group tw-border-[0.8px] tw-border-solid tw-border-black md:tw-h-[230px] tw-max-w-full
+       tw-bg-white hover:tw-bg-yellow-200 tw-shadow-lg tw-rounded-lg tw-overflow-hidden">
+        <div class="md:tw-flex">
+          <div class="md:tw-shrink-0">
+            <img class="tw-w-full tw-object-cover md:tw-h-[230px] md:tw-w-48 -tw-ml-[3px] -tw-my-[3px] "
+                 src="{{ImageCover}}" alt="{{Title}}">
+          </div>
+          <div class="tw-p-4">
+            <p class="tw-text-sm tw-text-gray-600">
+              <i class="bi bi-calendar3"></i> {{formatDate this.PublishedDay}}
+            </p>
+            <div class="tw-uppercase tw-tracking-wide tw-text-sm tw-text-indigo-500 tw-font-semibold">
+              {{CatID.CatName}}
             </div>
-            {{/each}}
-
+            <h2 class="tw-block tw-mt-1 tw-text-lg tw-leading-tight tw-font-medium tw-text-black hover:tw-underline">
+              {{Title}}
+            </h2>
+            <p class="tw-mt-2 tw-text-slate-500 tw-line-clamp-2">
+              {{Abstract}}
+            </p>
+            <div class="tw-mt-2">
+              {{#each (limit tags 2)}}
+              <a class="tw-bg-yellow-200 tw-text-black tw-px-2 tw-rounded tw-text-xs tw-inline-block tw-mr-2"
+                 href="/newspaper/byTag?id={{_id}}">
+                {{TagName}}
+              </a>
+              {{/each}}
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+    </a>
+    {{/each}}
+  </div>
 </div>
 {{#section "script"}}
 <script>
