@@ -13,16 +13,14 @@
     <link href="/css/tailwind.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=League+Spartan:wght@100..900&display=swap"
         rel="stylesheet">
     {{{_sections.css}}}
 </head>
-<body class="tw-overflow-auto tw-no-scrollbar">
+<body class="tw-overflow-auto">
     <header>
 
         <div class="tw-w-full tw-grid tw-grid-cols-[0_1fr_auto] sm:tw-grid-cols-[1fr_3fr_1fr] tw-items-center">
@@ -54,9 +52,9 @@
             </div>
         <hr class="tw-m-0 tw-border-2 tw-w-full">
         <!-- Menu Category -->
-        <div class="container red topBotomBordersOut group" onmouseleave="hidePanel()" >
+        <div id="nav-container" class="container red topBotomBordersOut group" onmouseleave="hidePanel()" >
             <a id="toggleNavleft" type="button">
-            <i class="bi bi-list" style="font-size: 2rem; color:black;"></i>
+            <i class="bi bi-list" style="font-size: 1rem; color:black;"></i>
             </a>
             <div  role="tablist" >
                     <a
@@ -162,7 +160,7 @@
         </nav>
         </div>
         {{/if}}
-        <main class="tw-px-[2%] tw-mt-[8%] sm:tw-mt-[12%]">
+        <main class="tw-mt-[5%] sm:tw-mt-[12%]">
         {{{body}}}
         </main>
     </div>
@@ -192,13 +190,10 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     {{{_sections.script}}}
-     <script>
-        $(document).ready(function () {
-            if (!{{ auth }}) { 
-            $('#toggleNavleft').on('click', function () {
-                const swalWithCustomButtons = Swal.mixin({
+    <script>
+        const swalWithCustomButtons = Swal.mixin({
                 customClass: {
                     confirmButton: "tw-bg-black tw-rounded-sm tw-text-white tw-border-0 tw-py-3 tw-px-2 tw-ml-2",
                     cancelButton: "tw-bg-grey-500 tw-rounded-sm tw-text-black tw-border-0 tw-py-3 tw-px-2 tw-ml-2"
@@ -220,6 +215,13 @@
                 },
                 buttonsStyling: false
                 });
+    </script>
+     <script>
+        $(document).ready(function () {
+            
+            if (!{{ auth }}) { 
+            $('#toggleNavleft').on('click', function () {
+                
                 swalWithCustomButtons.fire({
                     title: 'Bạn chưa đăng nhập',
                     text: 'Bạn cần đăng nhập để truy cập các tính năng này.',
@@ -238,7 +240,7 @@
         } 
             else if ({{ auth }} && parseInt({{ authUser.permission }}) === 1) {  // Kiểm tra quyền của người dùng
             $('#toggleNavleft').on('click', function () {
-                Swal.fire({
+                swalWithCustomButtons.fire({
                     title: 'Bạn không đủ quyền',
                     text: 'Bạn cần đăng ký premium để truy cập các tính năng này.',
                     showCancelButton: true,
@@ -291,19 +293,28 @@
     }
     </script>
     <script>
+        let lastScrollY = window.scrollY;
         const logo = document.getElementById("logo-img");
         const logoContainer = document.getElementById("logo-container");
-
+        const navContainer = document.getElementById("nav-container");
+       
         window.addEventListener("scroll", () => {
-            if (window.scrollY > 50) {
-            logo.src = "/static/imgs/black.png"; // đổi sang ảnh nhỏ
-            logo.classList.remove("tw-w-[150px]", "sm:tw-w-[350px]");
-            logo.classList.add("tw-w-[100px]", "sm:tw-w-[200px]");
-            } else {
-            logo.src = "/static/imgs/with-slogan-black.png"; // ảnh ban đầu
-            logo.classList.remove("tw-w-[100px]", "sm:tw-w-[200px]");
-            logo.classList.add("tw-w-[150px]", "sm:tw-w-[350px]");
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                // Scroll xuống
+                logo.src = "/static/imgs/black.png";
+                logo.classList.remove("tw-w-[150px]", "sm:tw-w-[350px]");
+                logo.classList.add("tw-w-[100px]", "sm:tw-w-[200px]");
+                navContainer.classList.add("tw-hidden");
+            } else if (currentScrollY < lastScrollY) {
+                logo.src = "/static/imgs/with-slogan-black.png";
+                logo.classList.remove("tw-w-[100px]", "sm:tw-w-[200px]");
+                logo.classList.add("tw-w-[150px]", "sm:tw-w-[350px]");
+                navContainer.classList.remove("tw-hidden");
             }
+
+            lastScrollY = currentScrollY;
         });
 </script>
 </body>

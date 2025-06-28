@@ -1,3 +1,19 @@
+
+.swiper-pagination-bullet {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      font-size: 12px;
+      color: #000;
+      opacity: 1;
+      background: rgba(255, 255, 234, 0.549);
+}
+
+.swiper-pagination-bullet-active {
+    color: rgb(4, 4, 2);
+    background: #f3f953;
+}
 .feature-paper {
     position: relative;
     width: 100%;
@@ -60,8 +76,9 @@ a:hover{
     color: white;
 }
 .name-category-paper{
-    background-color: #f3725c;
-    color: white;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
     width: 160px;
     height: 30px;
     border-radius: 10px;
@@ -173,9 +190,8 @@ a:hover{
 }
 
 #top-chart h4{
-    font-weight: 600;
+    font-weight: 900;
     color: #FF5757;
-    background-color: #f4cdc6;
     width: 50%;
 }
 
@@ -190,16 +206,16 @@ a:hover{
     background-color: #271b06;
 }
 
-.container-fluid{
-    padding-left: 0px !important;
-}
-
 h1 {
     font-weight: 900;
     margin-top: 20px;
     margin-bottom: 10px;
 } 
-
+h2 {
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 10px;
+} 
 .top-chart-format{
     background-color:transparent;
     color: white;

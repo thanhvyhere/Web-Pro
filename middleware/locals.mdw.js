@@ -65,9 +65,28 @@ export default function (app) {
     });
 
     app.use(async (req, res, next) => {
-        const topCat = await newsService.getTop10Cat();
-        res.locals.topCat = topCat;
-        next();
+    const colors = [
+        '#F3DB8E', // vàng nhạt
+        '#BCE6F4', // xanh dương nhạt
+        '#F3A7C0', // hồng nhạt
+        '#C1F1C1', // xanh lá nhạt
+        '#E7D1F3', // tím nhạt
+        '#FFDFB9', // cam nhạt
+        '#D2E0FB', // xanh pastel
+        '#FFD6E8', // hồng pastel
+        '#D5F5E3', // xanh lá pastel
+        '#E6E6FA'  // tím lavender
+    ];
+
+    const topCatRaw = await newsService.getTop10Cat();
+    const topCat = topCatRaw.map((cat, index) => ({
+        ...cat,
+        No: index + 1,
+        color: colors[index % colors.length]
+    }));
+
+    res.locals.topCat = topCat;
+    next();
     });
 
     app.use(async (req, res, next) => {
