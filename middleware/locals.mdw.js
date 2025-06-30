@@ -152,7 +152,7 @@ export default function (app) {
         }
         if (rolePort === 'editor' || rolePort === 'administrator'||rolePort === 'writer' || rolePort === 'subscriber') {
             try {
-                const permission = await accountService.findbyrolename(rolePort);
+                const permission = await accountService.findByRoleName(rolePort);
                 const roleFeature = await accountService.roleFeature(permission.RoleID);
                 res.locals.lcFeatureRoles = roleFeature;
                 res.locals.roleName = rolePort;

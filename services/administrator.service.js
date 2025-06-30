@@ -114,12 +114,6 @@ export default {
   deleteTag(tagId) {
     return db('tag').where('TagID', tagId).del();
   },
-
-  // Lấy tất cả người dùng
-  findAllUsers() {
-    return db('users');
-  },
-
   // Lấy thông tin người dùng theo ID
   findByIdUsers(id) {
     return db('users').where('id', id).first();
