@@ -2,15 +2,6 @@
 
 export default
 {
-    findAll()
-    {
-        return db('news')
-        .join('status', 'news.Status', '=', 'status.StatusID')
-        .orderByRaw(`
-            FIELD(status.StatusName, 'Đang chờ', 'Đã chỉnh sửa', 'Đã duyệt', 'Đã nhận xét', 'Đã từ chối', 'Đã đăng', 'Đã xóa')
-        `)
-        .select('news.*', 'status.StatusName');
-    },
     findReviewed()
     {
         return db('news')

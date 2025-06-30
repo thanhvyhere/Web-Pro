@@ -6,11 +6,6 @@ export default {
         return db('users').where('username', username).first();
     },
     
-    // Tìm người dùng theo email
-    findByEmail(email) {
-        return db('users').where('email', email).first();
-    },
-
     // Thêm người dùng mới
     add(entity) {
         return db('users').insert(entity);
@@ -57,7 +52,7 @@ export default {
             .where('features.RoleID', id); // Lọc theo RoleID
     },
 
-    async findbyrolename(permission)
+    async findByRoleName(permission)
     {
         return await Role.findOne({ RoleName: permission }).exec();
     },
