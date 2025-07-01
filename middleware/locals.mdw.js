@@ -28,8 +28,6 @@ export default function (app) {
   app.use(async (req, res, next) => {
     const categories = await newsService.getAllCategoriesWithChildren();
     const limitCate = categories.slice(0, 8);
-
-    // Lưu vào res.locals để có thể sử dụng trong tất cả các view
     res.locals.categories = categories;
     res.locals.limitCate = limitCate;
 
@@ -81,7 +79,6 @@ export default function (app) {
       No: index + 1,
       color: colors[index % colors.length],
     }));
-
     res.locals.topCat = topCat;
     next();
   });

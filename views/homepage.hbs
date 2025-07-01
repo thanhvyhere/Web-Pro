@@ -19,7 +19,7 @@
           <h6><i class="bi bi-calendar3"></i> {{formatDate this.PublishedDay}}</h6>
         </div>
         {{#if authPremium}}
-        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+        <a href="/newspaper/detail?id={{_id}}" class="premium-link">
           <h2 class="card-title tw-mb-2">{{Title}}</h2>
         </a>
         {{else}}
@@ -28,7 +28,7 @@
           <h2 class="card-title tw-mb-2">{{Title}}</h2>
         </a>
         {{else}}
-        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+        <a href="/newspaper/detail?id={{_id}}" class="premium-link">
           <h2 class="card-title tw-mb-2">{{Title}}</h2>
         </a>
         {{/if}}
@@ -75,7 +75,7 @@
                     <h6 class="tw-text-sm tw-text-white"><i class="bi bi-calendar3"></i> {{formatDate
                       this.PublishedDay}}</h6>
                   </div>
-                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-block tw-mb-2">
+                  <a href="/newspaper/detail?id={{_id}}" class="tw-block tw-mb-2">
                     <h2 class="tw-text-2xl tw-font-bold tw-text-white">{{Title}}</h2>
                   </a>
                   <div
@@ -106,7 +106,7 @@
         <div class="">
           {{#each (skip newNews 7)}}
           {{!-- Bắt đầu card --}}
-          <a href="/newspaper/detail?id={{NewsID}}">
+          <a href="/newspaper/detail?id={{_id}}">
             <div
               class="md:tw-h-[200px] tw-max-w-full tw-group tw-bg-white hover:tw-bg-yellow-200 tw-shadow-lg tw-overflow-hidden md:tw-max-w-full tw-mb-2 ">
               <div class="md:tw-flex">
@@ -121,7 +121,7 @@
                   </p>
                   <div class="tw-uppercase tw-tracking-wide tw-text-sm tw-text-indigo-500 tw-font-semibold">
                     {{CatID.CatName}}</div>
-                  <a href="/newspaper/detail?id={{NewsID}}"
+                  <a href="/newspaper/detail?id={{_id}}"
                     class="tw-block tw-mt-1 tw-text-lg tw-leading-tight tw-font-medium tw-text-black hover:tw-underline">
                     {{Title}}
                   </a>
@@ -157,7 +157,7 @@
   <hr>
   <div class="tw-container tw-mx-auto tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-px-6 tw-py-2">
     {{#each topCat}}
-    <a href="/newspaper/byCat?catId={{_id}}" class="tw-border-[0.8px] tw-border-solid tw-border-black tw-flex 
+    <a href="/newspaper/byCat?catId={{CatID}}" class="tw-border-[0.8px] tw-border-solid tw-border-black tw-flex
         tw-items-center tw-bg-white tw-shadow-md tw-rounded-full tw-my-2
         tw-transition hover:tw-shadow-lg tw-text-black hover:tw-bg-black hover:tw-text-white tw-text-[25px]">
       <div class="tw-w-[20%] tw-h-[60px] -tw-ml-[3px] -tw-my-[3px] tw-rounded-full"
@@ -173,7 +173,7 @@
   <h1>Được xem nhiều nhất</h1>
   <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
     {{#each viewsNews}}
-    <a href="/newspaper/detail?id={{NewsID}}">
+    <a href="/newspaper/detail?id={{_id}}">
       <div class="tw-group tw-border-[0.8px] tw-border-solid tw-border-black md:tw-h-[230px] tw-max-w-full
        tw-bg-white hover:tw-bg-yellow-200 tw-shadow-lg tw-rounded-lg tw-overflow-hidden">
         <div class="md:tw-flex">
@@ -216,7 +216,7 @@
   <h1>Gợi ý cho bạn</h1>
   <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
     {{#each randomNews}}
-    <a href="/newspaper/detail?id={{NewsID}}">
+    <a href="/newspaper/detail?id={{_id}}">
       <div class="tw-group tw-border-[0.8px] tw-border-solid tw-border-black md:tw-h-[230px] tw-max-w-full
        tw-bg-white hover:tw-bg-yellow-200 tw-shadow-lg tw-rounded-lg tw-overflow-hidden">
         <div class="md:tw-flex">
@@ -286,6 +286,8 @@
     }
   });
 </script>
+<!-- prettier-ignore-start -->
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const premiumLinks = document.querySelectorAll(".premium-link");
@@ -293,7 +295,9 @@
     premiumLinks.forEach(link => {
       link.addEventListener("click", (event) => {
         const isPremium = link.getAttribute("data-premium") === "true";
-        const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
+        // prettier-ignore
+        const auth = {{ auth }};
+      // Ensure this is rendered correctly on the server-side
       let text = 'Đăng nhập';
       let href = "/account/login";
 
@@ -321,45 +325,10 @@
       }
     });
   });
-            });
-
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const premiumLinks = document.querySelectorAll(".premium-link");
-
-    premiumLinks.forEach(link => {
-      link.addEventListener("click", (event) => {
-        const isPremium = link.getAttribute("data-premium") === "true";
-        const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
-      let text = 'Đăng nhập';
-      let href = "/account/login";
-
-      if (auth) {
-        text = 'Đăng ký Premium';
-        href = "/account/premium";
-      }
-
-      if (isPremium) {
-        event.preventDefault(); // Ngăn chặn chuyển hướng
-        swalWithCustomButtons.fire({
-          title: "Thông báo",
-          text: "Bạn không được cấp quyền để xem nội dung này.",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: text,
-          cancelButtonText: "Hủy"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Chuyển hướng đến trang đăng nhập hoặc trang Premium
-            window.location.href = href;
-          }
-        });
-      }
-    });
   });
-    });
+
 </script>
+<!-- prettier-ignore-end -->
 <script>
   var swiper = new Swiper(".mySwiper", {
     scrollbar: {

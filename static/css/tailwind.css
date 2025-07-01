@@ -140,6 +140,10 @@
   }
 }
 
+.tw-fixed {
+  position: fixed !important
+}
+
 .tw-absolute {
   position: absolute !important
 }
@@ -152,8 +156,16 @@
   inset: 0px !important
 }
 
+.tw-bottom-5 {
+  bottom: 1.25rem !important
+}
+
 .tw-left-0 {
   left: 0px !important
+}
+
+.tw-left-5 {
+  left: 1.25rem !important
 }
 
 .tw-top-\[50\%\] {
@@ -164,12 +176,20 @@
   top: 100% !important
 }
 
+.tw-right-5 {
+  right: 1.25rem !important
+}
+
 .tw-z-10 {
   z-index: 10 !important
 }
 
 .tw-z-20 {
   z-index: 20 !important
+}
+
+.tw-z-50 {
+  z-index: 50 !important
 }
 
 .tw-m-0 {
@@ -368,6 +388,10 @@
   height: 100% !important
 }
 
+.tw-h-\[75px\] {
+  height: 75px !important
+}
+
 .tw-max-h-screen {
   max-height: 100vh !important
 }
@@ -442,6 +466,10 @@
 
 .tw-w-screen {
   width: 100vw !important
+}
+
+.tw-w-\[75px\] {
+  width: 75px !important
 }
 
 .tw-max-w-\[100\%\] {
@@ -641,6 +669,11 @@
   background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1)) !important
 }
 
+.tw-bg-blue-600 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1)) !important
+}
+
 .tw-bg-gray-50 {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1)) !important
@@ -829,6 +862,11 @@
   line-height: 1rem !important
 }
 
+.tw-text-3xl {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important
+}
+
 .tw-font-\[18px\] {
   font-weight: 18px !important
 }
@@ -951,6 +989,12 @@
 
 .tw-transition-all {
   transition-property: all !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 150ms !important
+}
+
+.tw-transition-opacity {
+  transition-property: opacity !important;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
   transition-duration: 150ms !important
 }
