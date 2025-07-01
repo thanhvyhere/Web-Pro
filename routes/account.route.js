@@ -67,13 +67,13 @@ router.post("/login", async function (req, res) {
   res.redirect(retUrl);
 });
 
-router.get("/register", function (req, res) {
+router.get('/register', function (req, res) {
   res.render("vwAccount/register", {
     layout: "account-layout",
   });
 });
 
-router.post("/register", async function (req, res) {
+router.post('/register', async function (req, res) {
   const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
   const tempUser = {
     name: req.body.name,

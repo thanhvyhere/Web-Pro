@@ -10,8 +10,7 @@
         premiumLinks.forEach(link => {
             link.addEventListener("click", (event) => {
                 const isPremium = link.getAttribute("data-premium") === "true";
-                const auth = {{ auth }
-            }; // Ensure this is rendered correctly on the server-side
+                const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
             let text = 'Đăng nhập';
             let href = "/account/login";
 

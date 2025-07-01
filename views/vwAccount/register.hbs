@@ -180,12 +180,12 @@
   });
 
   window.addEventListener('DOMContentLoaded', () => {
-    const showVerifyPopup = {{ #if showVerifyPopup }
-  }true{{ else}}false{{/if}};
-  if (showVerifyPopup) {
-    openOtpModal();
-  }
+    const showVerifyPopup = {{#if showVerifyPopup}}true{{else}}false{{/if}};
+    if (showVerifyPopup) {
+      openOtpModal();
+    }
   });
+
 </script>
 {{/section}}
 
@@ -242,7 +242,7 @@
         Sign Up
       </button>
       <p class="text-sm text-gray-600 mt-4">Already have an account?
-        <a href="#" class="text-blue-600 font-bold hover:underline">Login here</a>
+        <a href="/account/login" class="text-blue-600 font-bold hover:underline">Login here</a>
       </p>
     </div>
   </form>

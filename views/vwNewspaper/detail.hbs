@@ -8,8 +8,7 @@
 <script>
     $(document).ready(function () {
         // Kiểm tra nếu người dùng đã đăng nhập
-        if (!{{ auth }
-    }) {  // Kiểm tra nếu auth là false
+        if (!{{ auth }}) {  // Kiểm tra nếu auth là false
         // Nếu chưa đăng nhập, hiển thị thông báo SweetAlert khi nhấn vào #toggleNavleft
         $('#txtComment').on('click', function () {
             Swal.fire({
