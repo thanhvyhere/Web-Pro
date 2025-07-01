@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 @layer utilities {
-      .tw-no-scrollbar::-webkit-scrollbar {
-          display: none;
-      }
-      .tw-no-scrollbar {
-          -ms-overflow-style: none;  
-          scrollbar-width: 0; 
-    }
+  .tw-no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
+  .tw-no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: 0;
+  }
+}

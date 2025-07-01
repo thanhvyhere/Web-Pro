@@ -1,27 +1,32 @@
-import dotenv from 'dotenv';
-import nodemailer from 'nodemailer';
+import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
 // Tạo transporter dùng Gmail
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.MY_EMAIL,
-    pass: process.env.MY_EMAIL_PW
+    pass: process.env.MY_EMAIL_PW,
   },
   tls: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
 
 // Hàm dùng chung để gửi email với tiêu đề người gửi tuỳ chọn
-const sendCustomEmail = async (to, subject, html, senderName = "Pet Service") => {
+const sendCustomEmail = async (
+  to,
+  subject,
+  html,
+  senderName = "Pet Service"
+) => {
   const mailOptions = {
     from: `"${senderName}" <${process.env.MY_EMAIL}>`,
     to,
     subject,
-    html
+    html,
   };
 
   await transporter.sendMail(mailOptions);

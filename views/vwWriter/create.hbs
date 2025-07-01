@@ -1,7 +1,8 @@
 {{#section "css"}}
 <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.9.3/dist/tagify.css" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/cssWriter/writer.css">
-<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all"
+  rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" crossorigin="anonymous">
 {{/section}}
 {{#section "script"}}
@@ -52,112 +53,112 @@
 </script>
 <script>
   document.addEventListener('DOMContentLoaded', async function () {
-      const input = document.querySelector('#txtTag');
+    const input = document.querySelector('#txtTag');
 
-      try {
-        // Gọi API để lấy danh sách tags
-        const response = await fetch('/newspaper/api/tags');
-        if (!response.ok) throw new Error('Failed to fetch tags');
-        const tags = await response.json(); // Danh sách tags từ API
-        const tagifyTags = tags.map(tag => ({ value: tag.TagName }));
-        console.log(tagifyTags);
-        // Kiểm tra xem dữ liệu tags có hợp lệ không
-        console.log('Tags fetched:', tags); // Kiểm tra dữ liệu tags
+    try {
+      // Gọi API để lấy danh sách tags
+      const response = await fetch('/newspaper/api/tags');
+      if (!response.ok) throw new Error('Failed to fetch tags');
+      const tags = await response.json(); // Danh sách tags từ API
+      const tagifyTags = tags.map(tag => ({ value: tag.TagName }));
+      console.log(tagifyTags);
+      // Kiểm tra xem dữ liệu tags có hợp lệ không
+      console.log('Tags fetched:', tags); // Kiểm tra dữ liệu tags
 
-        const tagify = new Tagify(input, {
-          whitelist: tagifyTags, // Sử dụng danh sách tags từ API
-          maxTags: 5,
-          placeholder: 'Add tags',
-          dropdown: {
-            maxItems: 10, // Hiển thị tối đa 10 tag
-            enabled: 0, // Hiển thị dropdown ngay khi focus
-            closeOnSelect: true // Giữ dropdown mở sau khi chọn
-          }
-        });
+      const tagify = new Tagify(input, {
+        whitelist: tagifyTags, // Sử dụng danh sách tags từ API
+        maxTags: 5,
+        placeholder: 'Add tags',
+        dropdown: {
+          maxItems: 10, // Hiển thị tối đa 10 tag
+          enabled: 0, // Hiển thị dropdown ngay khi focus
+          closeOnSelect: true // Giữ dropdown mở sau khi chọn
+        }
+      });
 
-        // Xử lý sự kiện khi thêm tag
-        tagify.on('add', async function (e) {
-          console.log('Tag added:', e.detail.data);
+      // Xử lý sự kiện khi thêm tag
+      tagify.on('add', async function (e) {
+        console.log('Tag added:', e.detail.data);
 
-          // Gửi tag mới lên server
-          try {
-            const addedTag = e.detail.data.value; // Lấy giá trị tag mới
-            const response = await fetch('/newspaper/api/tags', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ tags: [addedTag] }) // Gửi mảng tags
-            });
+        // Gửi tag mới lên server
+        try {
+          const addedTag = e.detail.data.value; // Lấy giá trị tag mới
+          const response = await fetch('/newspaper/api/tags', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tags: [addedTag] }) // Gửi mảng tags
+          });
 
-            if (!response.ok) throw new Error('Failed to save tag');
-            const result = await response.json();
-            console.log('Tag saved successfully:', result);
-          } catch (error) {
-            console.error('Error saving tag:', error);
-          }
-        });
+          if (!response.ok) throw new Error('Failed to save tag');
+          const result = await response.json();
+          console.log('Tag saved successfully:', result);
+        } catch (error) {
+          console.error('Error saving tag:', error);
+        }
+      });
 
-        // Xử lý sự kiện khi xóa tag
-        tagify.on('remove', function (e) {
-          console.log('Tag removed:', e.detail.data);
-          // Nếu cần, bạn có thể thêm logic để xóa tag khỏi cơ sở dữ liệu
-        });
-      } catch (error) {
-        console.error('Error initializing tags:', error);
-      }
-    });
+      // Xử lý sự kiện khi xóa tag
+      tagify.on('remove', function (e) {
+        console.log('Tag removed:', e.detail.data);
+        // Nếu cần, bạn có thể thêm logic để xóa tag khỏi cơ sở dữ liệu
+      });
+    } catch (error) {
+      console.error('Error initializing tags:', error);
+    }
+  });
 
 </script>
 
 <script>
-   $(document).ready(function() {
-        $("#imageFile").fileinput({
-          showUpload: false,
-            dropZoneEnabled: false,
-            maxFileCount: 1,
-            allowedFileExtensions: ["jpg", "png", "gif"],
-            theme: 'fa',
-            language: 'vi',
-        });
-});
+  $(document).ready(function () {
+    $("#imageFile").fileinput({
+      showUpload: false,
+      dropZoneEnabled: false,
+      maxFileCount: 1,
+      allowedFileExtensions: ["jpg", "png", "gif"],
+      theme: 'fa',
+      language: 'vi',
+    });
+  });
 </script>
 <script>
   const fileInputContainer = document.getElementById('fileInputContainer');
-    const urlInputContainer = document.getElementById('urlInputContainer');
-    const inputTypeRadios = document.getElementsByName('inputType');
-    const fileInput = document.getElementById('imageFile');
-    const urlInput = document.getElementById('imageUrl');
+  const urlInputContainer = document.getElementById('urlInputContainer');
+  const inputTypeRadios = document.getElementsByName('inputType');
+  const fileInput = document.getElementById('imageFile');
+  const urlInput = document.getElementById('imageUrl');
 
-    inputTypeRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.value === 'file') {
-                fileInputContainer.style.display = 'block'; // Hiển thị file input
-                urlInputContainer.style.display = 'none'; // Ẩn URL input
-                urlInput.value = '';  // Clear URL input
-                fileInput.required = true;  // Đặt file input là required
-                fileInput.disabled = false; // Kích hoạt file input
-                urlInput.required = false; // Đặt URL input không required
-                urlInput.disabled = true;  // Vô hiệu hóa URL input
-            } else if (radio.value === 'url') {
-                fileInputContainer.style.display = 'none'; // Ẩn file input
-                urlInputContainer.style.display = 'flex'; // Hiển thị URL input
-                fileInput.value = '';  // Clear file input
-                fileInput.required = false;  // Đặt file input không required
-                fileInput.disabled = true; // Vô hiệu hóa file input
-                urlInput.required = true; // Đặt URL input là required
-                urlInput.disabled = false; // Kích hoạt URL input
-            }
-        });
+  inputTypeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.value === 'file') {
+        fileInputContainer.style.display = 'block'; // Hiển thị file input
+        urlInputContainer.style.display = 'none'; // Ẩn URL input
+        urlInput.value = '';  // Clear URL input
+        fileInput.required = true;  // Đặt file input là required
+        fileInput.disabled = false; // Kích hoạt file input
+        urlInput.required = false; // Đặt URL input không required
+        urlInput.disabled = true;  // Vô hiệu hóa URL input
+      } else if (radio.value === 'url') {
+        fileInputContainer.style.display = 'none'; // Ẩn file input
+        urlInputContainer.style.display = 'flex'; // Hiển thị URL input
+        fileInput.value = '';  // Clear file input
+        fileInput.required = false;  // Đặt file input không required
+        fileInput.disabled = true; // Vô hiệu hóa file input
+        urlInput.required = true; // Đặt URL input là required
+        urlInput.disabled = false; // Kích hoạt URL input
+      }
     });
-    
-     // Khi chọn URL, giá trị file sẽ không bị xóa
-    urlInput.addEventListener('input', () => {
-        fileInput.value = ''; 
-    });
-    
-    // Khi chọn file, giá trị URL sẽ không bị xóa
-    fileInput.addEventListener('change', () => {
-        urlInput.value = ''; // Gỡ URL nếu file được chọn
-    });
+  });
+
+  // Khi chọn URL, giá trị file sẽ không bị xóa
+  urlInput.addEventListener('input', () => {
+    fileInput.value = '';
+  });
+
+  // Khi chọn file, giá trị URL sẽ không bị xóa
+  fileInput.addEventListener('change', () => {
+    urlInput.value = ''; // Gỡ URL nếu file được chọn
+  });
 
 </script>
 {{/section}}
@@ -187,8 +188,7 @@
     </div>
     <div class="form-group mb-3">
       <label for="txtCatChild">Danh mục con</label>
-      <select name="category_child_id" id="txtCatChild" class="form-control txt-input"
-        disabled>
+      <select name="category_child_id" id="txtCatChild" class="form-control txt-input" disabled>
         <option value="" disabled selected>Select a category child</option>
         <!-- Các option category child sẽ được thêm vào ở đây -->
       </select>
@@ -201,30 +201,31 @@
   <div class="flex items-center space-x-1 mb-3">
     <!-- Radio buttons for choosing input method -->
     <div class="flex space-x-4">
-        <label class="flex items-center">
-            <input type="radio" name="inputType" value="file" class="mr-2" checked>
-            Tải file
-        </label>
-        <label class="flex items-center">
-            <input type="radio" name="inputType" value="url" class="mr-2">
-            Nhập URL
-        </label>
+      <label class="flex items-center">
+        <input type="radio" name="inputType" value="file" class="mr-2" checked>
+        Tải file
+      </label>
+      <label class="flex items-center">
+        <input type="radio" name="inputType" value="url" class="mr-2">
+        Nhập URL
+      </label>
     </div>
-</div>
-<!-- File input -->
-<div id="fileInputContainer" class="form-group flex items-center space-x-1 mb-3">
+  </div>
+  <!-- File input -->
+  <div id="fileInputContainer" class="form-group flex items-center space-x-1 mb-3">
     <label for="imageInput" class="bg-white text-black font-semibold p-2.5 rounded ml-2">Tải ảnh lên</label>
     <input type="file" id="imageFile" name="ImageFile" class="mb-4 p-2 border rounded text-black">
-</div>
+  </div>
 
-<!-- URL input -->
-<div id="urlInputContainer" class="form-group input-group" style="display: none;">
+  <!-- URL input -->
+  <div id="urlInputContainer" class="form-group input-group" style="display: none;">
     <span class="input-group-text" id="basic-addon3">URL ảnh</span>
-    <input type="url" id="imageUrl" name="ImageUrl" aria-describedby="basic-addon3 basic-addon4" class="form-control" placeholder="https://example.com/image.jpg">
+    <input type="url" id="imageUrl" name="ImageUrl" aria-describedby="basic-addon3 basic-addon4" class="form-control"
+      placeholder="https://example.com/image.jpg">
   </div>
 
   <div class="form-group mb-3">
-    <label for="txtContent" >Content</label>
+    <label for="txtContent">Content</label>
     <textarea id="txtContent" name="content" required>Hello World</textarea>
   </div>
   <div class="d-flex flex-row btn-footer">

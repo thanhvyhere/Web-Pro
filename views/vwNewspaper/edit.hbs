@@ -1,7 +1,8 @@
 {{#section "css"}}
 <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.9.3/dist/tagify.css" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/cssWriter/writer.css">
-<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all"
+    rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" crossorigin="anonymous">
 {{/section}}
 {{#section "script"}}
@@ -98,7 +99,7 @@
                 // Nếu cần, bạn có thể thêm logic để xóa tag khỏi cơ sở dữ liệu
             });
 
-            
+
         } catch (error) {
             console.error('Error initializing tags:', error);
         }
@@ -165,7 +166,7 @@
         // Đường dẫn file sẽ được đưa vào initialPreview
         initialFilePreview.push(imageFile);
     }
-   $(document).ready(function() {
+    $(document).ready(function () {
         $("#imageFile").fileinput({
             initialPreview: initialFilePreview,
             initialPreviewAsData: true,
@@ -176,20 +177,22 @@
             overwriteInitial: true,
             theme: 'fa',
             language: 'vi',
-        });});
+        });
+    });
 
 </script>
 {{/section}}
 
 
-<form class="formCreate" action="/newspaper/patch" method="post"  enctype="multipart/form-data">
+<form class="formCreate" action="/newspaper/patch" method="post" enctype="multipart/form-data">
     <div class="header-create">
         <h4>Cập nhật bài viết</h4>
         <hr>
     </div>
     <div class="form-group mb-3">
         <label for="txtNewsID">Mã bài báo</label>
-        <input type="text" name="newsId" id="txtNewsID" class="form-control txt-input" readonly value="{{this.news.NewsID}}">
+        <input type="text" name="newsId" id="txtNewsID" class="form-control txt-input" readonly
+            value="{{this.news.NewsID}}">
     </div>
     <div class="form-group mb-3">
         <label for="txtTitle">Title</label>
@@ -198,7 +201,8 @@
 
     <div class="form-group mb-3">
         <label for="txtAbstract">Tóm tắt</label>
-        <input type="text" name="abstract" id="txtAbstract" class="form-control txt-input" value="{{this.news.Abstract}}">
+        <input type="text" name="abstract" id="txtAbstract" class="form-control txt-input"
+            value="{{this.news.Abstract}}">
     </div>
     <div>
         <div class="form-group mb-3">
@@ -231,7 +235,7 @@
         <input type="file" id="imageFile" name="ImageFile" class="mb-4 p-2 border rounded text-black">
     </div>
 
-   
+
     <div class="form-group mb-3">
         <label for="txtContent">Nội dung bài viết</label>
         <textarea id="txtContent" name="content">{{{this.news.Content}}}</textarea>
@@ -240,6 +244,6 @@
         <button type="button" class="btn btn-danger" onclick="confirmDelete('{{this.news.NewsID}}')">
             Xóa
         </button>
-       <button type="submit" class="btn btn-warning ">Cập nhật</button>
+        <button type="submit" class="btn btn-warning ">Cập nhật</button>
     </div>
 </form>

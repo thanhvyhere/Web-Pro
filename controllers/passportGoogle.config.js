@@ -1,8 +1,8 @@
-import passport from 'passport';
-import dotenv from 'dotenv';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import User from '../model/User.js';
-import accountService from '../services/account.service.js';
+import passport from "passport";
+import dotenv from "dotenv";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import User from "../model/User.js";
+import accountService from "../services/account.service.js";
 
 dotenv.config();
 
@@ -13,13 +13,14 @@ export default function configurePassport() {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: "http://localhost:3000/account/login/googleAuth/callback",
-        scope: ['profile', 'email']
+        scope: ["profile", "email"],
       },
       async function (accessToken, refreshToken, profile, done) {
         try {
-          const email = profile.emails && profile.emails.length > 0
-            ? profile.emails[0].value
-            : null;
+          const email =
+            profile.emails && profile.emails.length > 0
+              ? profile.emails[0].value
+              : null;
 
           // Tìm user theo tên hiển thị (displayName) hoặc email
           let user = await accountService.findByEmail(email);
@@ -30,7 +31,8 @@ export default function configurePassport() {
               if (!user.googleId) {
                 user.googleId = profile.id;
                 await user.save();
-            }}
+              }
+            }
             // Xác thực thành công
             return done(null, user);
           } else {
@@ -38,27 +40,27 @@ export default function configurePassport() {
             user = new User({
               googleId: profile.id,
               username: profile.displayName,
-              email: email
+              email: email,
             });
             await user.save();
-            return done(null, user); 
+            return done(null, user);
           }
         } catch (error) {
-          console.error('Error during Google authentication:', error);
+          console.error("Error during Google authentication:", error);
           return done(error, null); // Xử lý lỗi
         }
       }
     )
   );
 
-  passport.serializeUser(function(user, done) {
-    done(null, user.username);  // Chỉ lưu trữ ID (hoặc username) của người dùng vào session
+  passport.serializeUser(function (user, done) {
+    done(null, user.username); // Chỉ lưu trữ ID (hoặc username) của người dùng vào session
   });
 
   // Deserialize user: khôi phục thông tin người dùng từ session
-  passport.deserializeUser(async function(username, done) {
+  passport.deserializeUser(async function (username, done) {
     try {
-      const user = await accountService.findByUsername(username);  // Lấy thông tin người dùng từ DB bằng ID
+      const user = await accountService.findByUsername(username); // Lấy thông tin người dùng từ DB bằng ID
       done(null, user);
     } catch (error) {
       done(error, null);

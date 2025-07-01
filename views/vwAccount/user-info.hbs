@@ -6,12 +6,12 @@
 {{#section "signupjs"}}
 <script>
     $('#txtDOB').datetimepicker(
-            {
-                timepicker: false,
-                format: 'd/m/Y',
-                mask: true
-            }
-        );
+        {
+            timepicker: false,
+            format: 'd/m/Y',
+            mask: true
+        }
+    );
 
     // Fetch user info from the server
     fetch('/account/user-info')
@@ -130,36 +130,36 @@
     });
 
     $('#fmUpdate').on('submit', function (e) {
-            e.preventDefault();
+        e.preventDefault();
 
-            const username = $('#txtUsername').val();
-            const dob = $('#txtDOB').val();
-            const email = $('#txtEmail').val();
+        const username = $('#txtUsername').val();
+        const dob = $('#txtDOB').val();
+        const email = $('#txtEmail').val();
 
-            if (!dob) {
-                Swal.fire({
-                    title: 'Warning',
-                    text: "Date of Birth cannot be empty. Please provide a valid date.",
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
+        if (!dob) {
+            Swal.fire({
+                title: 'Warning',
+                text: "Date of Birth cannot be empty. Please provide a valid date.",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
 
-            // Kiểm tra email hợp lệ
-            if (!checkValidEmail()) {
-                Swal.fire({
-                    title: 'Error',
-                    text: "Invalid email format. Please provide a valid email.",
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
+        // Kiểm tra email hợp lệ
+        if (!checkValidEmail()) {
+            Swal.fire({
+                title: 'Error',
+                text: "Invalid email format. Please provide a valid email.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
 
-            // Gửi form
-            $(this).off('submit').submit();
-        });
+        // Gửi form
+        $(this).off('submit').submit();
+    });
 </script>
 {{/section}}
 
@@ -173,28 +173,33 @@
             <form id="fmUpdate" action="/account/update" method="post">
                 <div class="mb-2 form-group">
                     <label class="form-label" for="txtId">ID</label>
-                    <input type="text" name="id" id="txtId" class="form-control txt-input " readonly value="{{this.user.id}}"
-                        required>
+                    <input type="text" name="id" id="txtId" class="form-control txt-input " readonly
+                        value="{{this.user.id}}" required>
                 </div>
                 <div class="mb-2 form-group">
                     <label class="form-label" for="txtUsername">Tên tài khoản</label>
-                    <input type="text" name="username" id="txtUsername" class="form-control txt-input" value="{{this.user.username}}" required>
+                    <input type="text" name="username" id="txtUsername" class="form-control txt-input"
+                        value="{{this.user.username}}" required>
                 </div>
                 <div class="mb-2 form-group">
                     <label class="form-label" for="txtEmail">Email</label>
-                    <input type="text" name="email" id="txtEmail" class="form-control txt-input" value="{{this.user.email}}" required>
+                    <input type="text" name="email" id="txtEmail" class="form-control txt-input"
+                        value="{{this.user.email}}" required>
                 </div>
                 <div class="mb-2 form-group">
                     <label class="form-label" for="txtName">Tên của bạn</label>
-                    <input type="text" name="name" id="txtName" class="form-control txt-input" value="{{this.user.name}}" required>
+                    <input type="text" name="name" id="txtName" class="form-control txt-input"
+                        value="{{this.user.name}}" required>
                 </div>
                 <div class="mb-2 form-group">
                     <label class="form-label" for="txtRole">Vai trò</label>
-                    <input type="text" name="role" id="txtRole" class="form-control txt-input" value="{{this.rolename}}" readonly>
+                    <input type="text" name="role" id="txtRole" class="form-control txt-input" value="{{this.rolename}}"
+                        readonly>
                 </div>
                 <div class="mb-2 form-group">
                     <label class="form-label" for="txtDOB">Ngày sinh</label>
-                    <input type="date" name="dob" id="txtDOB" class="form-control txt-input" value="{{this.user.dob}}" required>
+                    <input type="date" name="dob" id="txtDOB" class="form-control txt-input" value="{{this.user.dob}}"
+                        required>
                 </div>
 
                 <div class="d-flex justify-content-between w-100">

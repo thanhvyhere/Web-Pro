@@ -7,22 +7,31 @@
     {{#each topNews}}
     <div class="swiper-slide tw-relative tw-h-[700px] tw-w-full">
       <!-- Ảnh nền -->
-      <img src="{{this.ImageCover}}" alt="news" class="tw-absolute tw-inset-0 tw-w-full tw-h-full tw-object-cover tw-brightness-50" />
+      <img src="{{this.ImageCover}}" alt="news"
+        class="tw-absolute tw-inset-0 tw-w-full tw-h-full tw-object-cover tw-brightness-50" />
 
       <!-- Nội dung -->
       <div class="tw-absolute tw-z-10 tw-p-6 tw-text-white tw-left-0 tw-w-[40%] tw-top-[50%]">
         <div class="header-paper">
-          <button class="tw-bg-white tw-text-black tw-w-[160px] tw-h-[30px] tw-rounded-[10px] tw-font-black hover:tw-border-white hover:tw-bg-transparent hover:tw-text-white" disabled>{{CatID.CatName}}</button>
+          <button
+            class="tw-bg-white tw-text-black tw-w-[160px] tw-h-[30px] tw-rounded-[10px] tw-font-black hover:tw-border-white hover:tw-bg-transparent hover:tw-text-white"
+            disabled>{{CatID.CatName}}</button>
           <h6><i class="bi bi-calendar3"></i> {{formatDate this.PublishedDay}}</h6>
         </div>
         {{#if authPremium}}
-        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link"><h2 class="card-title tw-mb-2">{{Title}}</h2></a>
+        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+          <h2 class="card-title tw-mb-2">{{Title}}</h2>
+        </a>
         {{else}}
-          {{#if this.is_premium}}
-          <a href="javascript:void(0);" class="premium-link" data-premium="true"><h2 class="card-title tw-mb-2">{{Title}}</h2></a>
-          {{else}}
-          <a href="/newspaper/detail?id={{NewsID}}" class="premium-link"><h2 class="card-title tw-mb-2">{{Title}}</h2></a>
-          {{/if}}
+        {{#if this.is_premium}}
+        <a href="javascript:void(0);" class="premium-link" data-premium="true">
+          <h2 class="card-title tw-mb-2">{{Title}}</h2>
+        </a>
+        {{else}}
+        <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+          <h2 class="card-title tw-mb-2">{{Title}}</h2>
+        </a>
+        {{/if}}
         {{/if}}
         <div class="status-paper tw-mt-2 tw-text-lg tw-text-white">
           <h6><i class="bi bi-pencil-square"></i> {{this.AuthorName}}</h6>
@@ -32,7 +41,7 @@
         </div>
         <div class="tw-flex tw-gap-2 tw-mt-3">
           {{#each tags}}
-            <a class="btn btn-outline-primary tag" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
+          <a class="btn btn-outline-primary tag" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
           {{/each}}
         </div>
       </div>
@@ -41,109 +50,123 @@
   </div>
   <div class="swiper-scrollbar tw-bg-yellow-200"></div>
 </div>
-  
+
 
 <div class="title-paper-list mb-3">
-    <h1>Bài viết mới nhất</h1>
-    <div class="tw-pl-0">
-        <div class="row tw-min-h-[600px]">
-            <div class="col-sm-6 tw-mx-auto">
-            <div class="swiper mySwiperSmall tw-w-full tw-h-[600px]">
-                <div class="swiper-wrapper ">
-                {{#each (limit newNews 7)}}
-                <div class="swiper-slide tw-group  tw-relative tw-h-full tw-w-full">
-                    <div class="tw-relative tw-w-full tw-rounded-[10px] tw-min-h-[600px] " style="background-image: url('{{ImageCover}}'); background-size: cover; background-position: center;">
-                    <div class="tw-absolute tw-inset-0 tw-rounded-[10px] tw-bg-black/50 tw-opacity-0 group-hover:tw-opacity-50 tw-transition tw-duration-300 tw-z-10"></div>
-                    <div class="tw-absolute tw-z-20 tw-inset-0 tw-flex tw-flex-col tw-opacity-80 group-hover:tw-opacity-100 tw-justify-end tw-p-6 ">
-                        <div class="tw-flex tw-flex-row tw-justify-between tw-mb-4">
-                        <button class="tw-bg-white tw-text-black tw-w-[160px] tw-h-[30px] tw-rounded-[10px] tw-font-black hover:tw-border-white hover:tw-bg-transparent hover:tw-text-white" disabled>{{CatID.CatName}}</button>
-                        <h6 class="tw-text-sm tw-text-white"><i class="bi bi-calendar3"></i> {{formatDate this.PublishedDay}}</h6>
-                        </div>
-                        <a href="/newspaper/detail?id={{NewsID}}" class="tw-block tw-mb-2">
-                        <h2 class="tw-text-2xl tw-font-bold tw-text-white">{{Title}}</h2>
-                        </a>
-                        <div class="status-paper tw-text-sm tw-grid tw-grid-cols-2 md:tw-grid-cols-4 tw-gap-2 tw-mb-4 tw-text-white">
-                        <h6><i class="bi bi-pencil-square"></i> {{AuthorName}}</h6>
-                        <h6><i class="bi bi-eye-fill"></i> {{this.Views}}</h6>
-                        <h6><i class="bi bi-hearts"></i> 500</h6>
-                        <h6><i class="bi bi-chat-dots"></i> {{countComment}}</h6>
-                        </div>
-                        <div class="tw-flex tw-flex-wrap tw-gap-2">
-                        {{#each tags}}
-                        <a class="tw-text-xs tw-border tw-border-blue-500 tw-text-blue-500 tw-rounded tw-px-2 tw-py-1" href="/newspaper/byTag?id={{Tags}}">
-                            {{TagName}}
-                        </a>
-                        {{/each}}
-                        </div>
-                    </div>
-                    </div>
+  <h1>Bài viết mới nhất</h1>
+  <div class="tw-pl-0">
+    <div class="row tw-min-h-[600px]">
+      <div class="col-sm-6 tw-mx-auto">
+        <div class="swiper mySwiperSmall tw-w-full tw-h-[600px]">
+          <div class="swiper-wrapper ">
+            {{#each (limit newNews 7)}}
+            <div class="swiper-slide tw-group  tw-relative tw-h-full tw-w-full">
+              <div class="tw-relative tw-w-full tw-rounded-[10px] tw-min-h-[600px] "
+                style="background-image: url('{{ImageCover}}'); background-size: cover; background-position: center;">
+                <div
+                  class="tw-absolute tw-inset-0 tw-rounded-[10px] tw-bg-black/50 tw-opacity-0 group-hover:tw-opacity-50 tw-transition tw-duration-300 tw-z-10">
                 </div>
-                {{/each}}
-                </div>
-                <div class="swiper-pagination tw-mt-4"></div>
-            </div>
-            </div>
-
-            <div class="col-sm-6 ">
-                <div class="">
-                    {{#each (skip newNews 7)}}
-                    {{!-- Bắt đầu card --}}
-                    <a href="/newspaper/detail?id={{NewsID}}">
-                    <div class="md:tw-h-[200px] tw-max-w-full tw-group tw-bg-white hover:tw-bg-yellow-200 tw-shadow-lg tw-overflow-hidden md:tw-max-w-full tw-mb-2 ">
-                        <div class="md:tw-flex">
-                            <div class="md:tw-shrink-0">
-                                <img class="tw-h-full tw-w-full tw-object-cover md:tw-h-[200px] md:tw-w-48" src="{{ImageCover}}" alt="{{Title}}">
-                            </div>
-                            <div class="tw-p-4">
-                                <p class="tw-text-l tw-text-black">
-                                    <i class="bi bi-calendar3"></i>
-                                    {{formatDate this.PublishedDay}}
-                                </p>
-                                <div class="tw-uppercase tw-tracking-wide tw-text-sm tw-text-indigo-500 tw-font-semibold">{{CatID.CatName}}</div>
-                                <a  href="/newspaper/detail?id={{NewsID}}" class="tw-block tw-mt-1 tw-text-lg tw-leading-tight tw-font-medium tw-text-black hover:tw-underline">
-                                    {{Title}}
-                                </a>
-                                <p class="tw-mt-2 tw-text-slate-500 tw-line-clamp-2">
-                                {{Abstract}}
-                                </p>
-                                {{#each (limit tags 2)}}
-                                <a class="tw-ml-2 tw-bg-yellow-200 tw-text-black tw-px-2 tw-rounded tw-inline-block tw-mt-1"
-                                    disabled="disabled" href="/newspaper/byTag?id={{_id}}">{{tagName}}</a>
-                                {{/each}}
-                            </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden"></span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden"></span>
-                            </button>
-                        </div>
-                    </div>
+                <div
+                  class="tw-absolute tw-z-20 tw-inset-0 tw-flex tw-flex-col tw-opacity-80 group-hover:tw-opacity-100 tw-justify-end tw-p-6 ">
+                  <div class="tw-flex tw-flex-row tw-justify-between tw-mb-4">
+                    <button
+                      class="tw-bg-white tw-text-black tw-w-[160px] tw-h-[30px] tw-rounded-[10px] tw-font-black hover:tw-border-white hover:tw-bg-transparent hover:tw-text-white"
+                      disabled>{{CatID.CatName}}</button>
+                    <h6 class="tw-text-sm tw-text-white"><i class="bi bi-calendar3"></i> {{formatDate
+                      this.PublishedDay}}</h6>
+                  </div>
+                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-block tw-mb-2">
+                    <h2 class="tw-text-2xl tw-font-bold tw-text-white">{{Title}}</h2>
+                  </a>
+                  <div
+                    class="status-paper tw-text-sm tw-grid tw-grid-cols-2 md:tw-grid-cols-4 tw-gap-2 tw-mb-4 tw-text-white">
+                    <h6><i class="bi bi-pencil-square"></i> {{AuthorName}}</h6>
+                    <h6><i class="bi bi-eye-fill"></i> {{this.Views}}</h6>
+                    <h6><i class="bi bi-hearts"></i> 500</h6>
+                    <h6><i class="bi bi-chat-dots"></i> {{countComment}}</h6>
+                  </div>
+                  <div class="tw-flex tw-flex-wrap tw-gap-2">
+                    {{#each tags}}
+                    <a class="tw-text-xs tw-border tw-border-blue-500 tw-text-blue-500 tw-rounded tw-px-2 tw-py-1"
+                      href="/newspaper/byTag?id={{Tags}}">
+                      {{TagName}}
                     </a>
                     {{/each}}
+                  </div>
                 </div>
+              </div>
             </div>
+            {{/each}}
+          </div>
+          <div class="swiper-pagination tw-mt-4"></div>
         </div>
+      </div>
+
+      <div class="col-sm-6 ">
+        <div class="">
+          {{#each (skip newNews 7)}}
+          {{!-- Bắt đầu card --}}
+          <a href="/newspaper/detail?id={{NewsID}}">
+            <div
+              class="md:tw-h-[200px] tw-max-w-full tw-group tw-bg-white hover:tw-bg-yellow-200 tw-shadow-lg tw-overflow-hidden md:tw-max-w-full tw-mb-2 ">
+              <div class="md:tw-flex">
+                <div class="md:tw-shrink-0">
+                  <img class="tw-h-full tw-w-full tw-object-cover md:tw-h-[200px] md:tw-w-48" src="{{ImageCover}}"
+                    alt="{{Title}}">
+                </div>
+                <div class="tw-p-4">
+                  <p class="tw-text-l tw-text-black">
+                    <i class="bi bi-calendar3"></i>
+                    {{formatDate this.PublishedDay}}
+                  </p>
+                  <div class="tw-uppercase tw-tracking-wide tw-text-sm tw-text-indigo-500 tw-font-semibold">
+                    {{CatID.CatName}}</div>
+                  <a href="/newspaper/detail?id={{NewsID}}"
+                    class="tw-block tw-mt-1 tw-text-lg tw-leading-tight tw-font-medium tw-text-black hover:tw-underline">
+                    {{Title}}
+                  </a>
+                  <p class="tw-mt-2 tw-text-slate-500 tw-line-clamp-2">
+                    {{Abstract}}
+                  </p>
+                  {{#each (limit tags 2)}}
+                  <a class="tw-ml-2 tw-bg-yellow-200 tw-text-black tw-px-2 tw-rounded tw-inline-block tw-mt-1"
+                    disabled="disabled" href="/newspaper/byTag?id={{_id}}">{{tagName}}</a>
+                  {{/each}}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                  data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                  data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden"></span>
+                </button>
+              </div>
+            </div>
+          </a>
+          {{/each}}
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-<div id="top-chart" >
-    <h4 class="tw-pl-3 tw-w-[60%]">CHUYÊN MỤC HÀNG DẦU</h4>
-    <hr>
-    <div class="tw-container tw-mx-auto tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-px-6 tw-py-2">
-        {{#each topCat}}
-        <a href="/newspaper/byCat?catId={{_id}}" class="tw-border-[0.8px] tw-border-solid tw-border-black tw-flex 
+<div id="top-chart">
+  <h4 class="tw-pl-3 tw-w-[60%]">CHUYÊN MỤC HÀNG DẦU</h4>
+  <hr>
+  <div class="tw-container tw-mx-auto tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-px-6 tw-py-2">
+    {{#each topCat}}
+    <a href="/newspaper/byCat?catId={{_id}}" class="tw-border-[0.8px] tw-border-solid tw-border-black tw-flex 
         tw-items-center tw-bg-white tw-shadow-md tw-rounded-full tw-my-2
         tw-transition hover:tw-shadow-lg tw-text-black hover:tw-bg-black hover:tw-text-white tw-text-[25px]">
-            <div class="tw-w-[20%] tw-h-[60px] -tw-ml-[3px] -tw-my-[3px] tw-rounded-full" style="background-color: {{color}};">
-            </div>
-            <span class="tw-font-semibold tw-uppercase tw-pl-4">{{CatName}}</span>
-        </a>
-        {{/each}}
-    </div>
+      <div class="tw-w-[20%] tw-h-[60px] -tw-ml-[3px] -tw-my-[3px] tw-rounded-full"
+        style="background-color: {{color}};">
+      </div>
+      <span class="tw-font-semibold tw-uppercase tw-pl-4">{{CatName}}</span>
+    </a>
+    {{/each}}
+  </div>
 </div>
 
 <div class="title-paper-list mb-3 d-flex flex-column">
@@ -156,7 +179,7 @@
         <div class="md:tw-flex">
           <div class="md:tw-shrink-0">
             <img class="tw-w-full tw-object-cover md:tw-h-[230px] md:tw-w-48 -tw-ml-[3px] -tw-my-[3px] "
-                 src="{{ImageCover}}" alt="{{Title}}">
+              src="{{ImageCover}}" alt="{{Title}}">
           </div>
           <div class="tw-p-4">
             <p class="tw-text-sm tw-text-gray-600">
@@ -174,7 +197,7 @@
             <div class="tw-mt-2">
               {{#each (limit tags 2)}}
               <a class="tw-bg-yellow-200 tw-text-black tw-px-2 tw-rounded tw-text-xs tw-inline-block tw-mr-2"
-                 href="/newspaper/byTag?id={{_id}}">
+                href="/newspaper/byTag?id={{_id}}">
                 {{TagName}}
               </a>
               {{/each}}
@@ -190,8 +213,8 @@
 
 
 <div class="title-paper-list mb-3 d-flex flex-column">
-    <h1>Gợi ý cho bạn</h1>
-    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+  <h1>Gợi ý cho bạn</h1>
+  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
     {{#each randomNews}}
     <a href="/newspaper/detail?id={{NewsID}}">
       <div class="tw-group tw-border-[0.8px] tw-border-solid tw-border-black md:tw-h-[230px] tw-max-w-full
@@ -199,7 +222,7 @@
         <div class="md:tw-flex">
           <div class="md:tw-shrink-0">
             <img class="tw-w-full tw-object-cover md:tw-h-[230px] md:tw-w-48 -tw-ml-[3px] -tw-my-[3px] "
-                 src="{{ImageCover}}" alt="{{Title}}">
+              src="{{ImageCover}}" alt="{{Title}}">
           </div>
           <div class="tw-p-4">
             <p class="tw-text-sm tw-text-gray-600">
@@ -217,7 +240,7 @@
             <div class="tw-mt-2">
               {{#each (limit tags 2)}}
               <a class="tw-bg-yellow-200 tw-text-black tw-px-2 tw-rounded tw-text-xs tw-inline-block tw-mr-2"
-                 href="/newspaper/byTag?id={{_id}}">
+                href="/newspaper/byTag?id={{_id}}">
                 {{TagName}}
               </a>
               {{/each}}
@@ -231,142 +254,144 @@
 </div>
 {{#section "script"}}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Lấy tất cả các phần tử carousel-item
-        const items = document.querySelectorAll('#carouselExampleCaptions .carousel-item');
+  document.addEventListener("DOMContentLoaded", function () {
+    // Lấy tất cả các phần tử carousel-item
+    const items = document.querySelectorAll('#carouselExampleCaptions .carousel-item');
 
-        // Xóa lớp active khỏi tất cả các phần tử
-        items.forEach(item => {
-            item.classList.remove('active');
-        });
-
-        // Thêm lại lớp active vào phần tử đầu tiên
-        if (items.length > 0) {
-            items[0].classList.add('active');
-        }
+    // Xóa lớp active khỏi tất cả các phần tử
+    items.forEach(item => {
+      item.classList.remove('active');
     });
+
+    // Thêm lại lớp active vào phần tử đầu tiên
+    if (items.length > 0) {
+      items[0].classList.add('active');
+    }
+  });
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Lấy tất cả các phần tử carousel-item
-        const items = document.querySelectorAll('#carouselExample2Captions .carousel-item');
+  document.addEventListener("DOMContentLoaded", function () {
+    // Lấy tất cả các phần tử carousel-item
+    const items = document.querySelectorAll('#carouselExample2Captions .carousel-item');
 
-        // Xóa lớp active khỏi tất cả các phần tử
-        items.forEach(item => {
-            item.classList.remove('active');
-        });
-
-        // Thêm lại lớp active vào phần tử đầu tiên
-        if (items.length > 0) {
-            items[0].classList.add('active');
-        }
+    // Xóa lớp active khỏi tất cả các phần tử
+    items.forEach(item => {
+      item.classList.remove('active');
     });
+
+    // Thêm lại lớp active vào phần tử đầu tiên
+    if (items.length > 0) {
+      items[0].classList.add('active');
+    }
+  });
 </script>
 <script>
-        document.addEventListener("DOMContentLoaded", () => {
-                const premiumLinks = document.querySelectorAll(".premium-link");
+  document.addEventListener("DOMContentLoaded", () => {
+    const premiumLinks = document.querySelectorAll(".premium-link");
 
-                premiumLinks.forEach(link => {
-                    link.addEventListener("click", (event) => {
-                        const isPremium = link.getAttribute("data-premium") === "true";
-                        const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
-                        let text = 'Đăng nhập';
-                        let href = "/account/login";
+    premiumLinks.forEach(link => {
+      link.addEventListener("click", (event) => {
+        const isPremium = link.getAttribute("data-premium") === "true";
+        const auth = {{ auth }
+      }; // Ensure this is rendered correctly on the server-side
+      let text = 'Đăng nhập';
+      let href = "/account/login";
 
-                        if (auth) {
-                            text = 'Đăng ký Premium';
-                            href = "/account/premium";
-                        }
+      if (auth) {
+        text = 'Đăng ký Premium';
+        href = "/account/premium";
+      }
 
-                        if (isPremium) {
-                            event.preventDefault(); // Ngăn chặn chuyển hướng
+      if (isPremium) {
+        event.preventDefault(); // Ngăn chặn chuyển hướng
 
-                            swalWithCustomButtons.fire({
-                                title: "Thông báo",
-                                text: "Bạn không được cấp quyền để xem nội dung này.",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonText: text,
-                                cancelButtonText: "Hủy"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Chuyển hướng đến trang đăng nhập hoặc trang Premium
-                                    window.location.href = href;
-                                }
-                            });
-                        }
-                    });
-                });
+        swalWithCustomButtons.fire({
+          title: "Thông báo",
+          text: "Bạn không được cấp quyền để xem nội dung này.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: text,
+          cancelButtonText: "Hủy"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Chuyển hướng đến trang đăng nhập hoặc trang Premium
+            window.location.href = href;
+          }
+        });
+      }
+    });
+  });
             });
 
-    </script>
+</script>
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const premiumLinks = document.querySelectorAll(".premium-link");
+  document.addEventListener("DOMContentLoaded", () => {
+    const premiumLinks = document.querySelectorAll(".premium-link");
 
-        premiumLinks.forEach(link => {
-            link.addEventListener("click", (event) => {
-                const isPremium = link.getAttribute("data-premium") === "true";
-                const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
-                let text = 'Đăng nhập';
-                let href = "/account/login";
+    premiumLinks.forEach(link => {
+      link.addEventListener("click", (event) => {
+        const isPremium = link.getAttribute("data-premium") === "true";
+        const auth = {{ auth }
+      }; // Ensure this is rendered correctly on the server-side
+      let text = 'Đăng nhập';
+      let href = "/account/login";
 
-                if (auth) {
-                    text = 'Đăng ký Premium';
-                    href = "/account/premium";
-                }
+      if (auth) {
+        text = 'Đăng ký Premium';
+        href = "/account/premium";
+      }
 
-                if (isPremium) {
-                    event.preventDefault(); // Ngăn chặn chuyển hướng
-                    swalWithCustomButtons.fire({
-                        title: "Thông báo",
-                        text: "Bạn không được cấp quyền để xem nội dung này.",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: text,
-                        cancelButtonText: "Hủy"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Chuyển hướng đến trang đăng nhập hoặc trang Premium
-                            window.location.href = href;
-                        }
-                    });
-                }
-            });
+      if (isPremium) {
+        event.preventDefault(); // Ngăn chặn chuyển hướng
+        swalWithCustomButtons.fire({
+          title: "Thông báo",
+          text: "Bạn không được cấp quyền để xem nội dung này.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: text,
+          cancelButtonText: "Hủy"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Chuyển hướng đến trang đăng nhập hoặc trang Premium
+            window.location.href = href;
+          }
         });
+      }
+    });
+  });
     });
 </script>
- <script>
-    var swiper = new Swiper(".mySwiper", {
+<script>
+  var swiper = new Swiper(".mySwiper", {
     scrollbar: {
-        el: ".swiper-scrollbar",
-        hide: true,
+      el: ".swiper-scrollbar",
+      hide: true,
     },
     keyboard: {
-        enabled: true,
+      enabled: true,
     },
     mousewheel: true,
     loop: true,
     autoplay: {
-         delay: 2500,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
+      delay: 2500,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
     },
-    });
-  </script>
-  <script>
-    var swiper2 = new Swiper(".mySwiperSmall", {
-        loop: true,
-        mousewheel: true,
-        slidesPerView: 1,
-        pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-        renderBullet: function (index, className) {
-            return '<span class="' + className + '">' + (index + 1) + "</span>";
-        },
-        },
-    });
+  });
+</script>
+<script>
+  var swiper2 = new Swiper(".mySwiperSmall", {
+    loop: true,
+    mousewheel: true,
+    slidesPerView: 1,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+      renderBullet: function (index, className) {
+        return '<span class="' + className + '">' + (index + 1) + "</span>";
+      },
+    },
+  });
 </script>
 {{/section}}
