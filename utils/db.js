@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,14 +15,10 @@ class MongoConnection {
     if (this.connection) return this.connection;
 
     try {
-      this.connection = await mongoose.connect(
-        process.env.MONGO_URI,
-        {
-        }
-      );
-      console.log('MongoDB connected');
+      this.connection = await mongoose.connect(process.env.MONGO_URI, {});
+      console.log("MongoDB connected");
     } catch (error) {
-      console.error('MongoDB connection failed:', error);
+      console.error("MongoDB connection failed:", error);
     }
 
     return this.connection;

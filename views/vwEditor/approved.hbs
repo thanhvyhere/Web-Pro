@@ -1,48 +1,47 @@
-{{#section 'css'}} 
-      <link href="/css/tailwind.css" rel="stylesheet">
+{{#section 'css'}}
+<link href="/css/tailwind.css" rel="stylesheet">
 {{/section}}
 
 <h1>Kho báo được duyệt</h1>
-<hr class="tw-w-[100%] tw-border-[5px] tw-bg-yellow-300"></hr>
+<hr class="tw-w-[100%] tw-border-[5px] tw-bg-yellow-300">
+</hr>
 <div class="row d-grids">
-     {{#each this.news}}
-            <div class="col-sm-4 mb-3 tw-flex tw-justify-center tw-items-center">
+      {{#each this.news}}
+      <div class="col-sm-4 mb-3 tw-flex tw-justify-center tw-items-center">
             <div class="tw-w-[350px] tw-h-[480px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-px-3 tw-pt-2"
                   style="
                         box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
                         border: 1px solid black;
                   ">
                   <p>Thời gian: {{formatDate CreatedDate}}</p>
-                  <img src="{{ImageCover}}" alt="{{Title}}" 
+                  <img src="{{ImageCover}}" alt="{{Title}}"
                         class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-1">
                   <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
                         <strong>{{Title}}</strong>
                   </p>
-                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400" style="font-style: italic; text-decoration:underline">xem trước</a>
+                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400"
+                        style="font-style: italic; text-decoration:underline">xem trước</a>
                   <div class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
                         {{Abstract}}
                   </div>
-                  
+
                   <div class="tw-flex tw-flex-row tw-justify-between tw-items-center tw-w-[100%] tw-mt-auto">
                         <p style="margin: 0;">Tác giả: {{AuthorName}}</p>
-                        
-                        <div 
-                        style="
+
+                        <div style="
                               color: {{getStatusColor StatusName}};
                               padding: 8px;
                               border: 2px solid {{getStatusColor StatusName}};
                               border-radius: 20px;
                         ">
-                        {{StatusName}}
+                              {{StatusName}}
                         </div>
-                        
+
                   </div>
                   <p>Thời gian đăng: {{formatDate PublishedDay}}</p>
             </div>
-            </div>
-            {{/each}}
+      </div>
+      {{/each}}
 
-    
+
 </div>
-      
-        

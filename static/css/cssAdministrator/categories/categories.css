@@ -1,221 +1,225 @@
 /* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: #f8f9fa;
-    color: #333;
-    line-height: 1.6;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
 }
 
 /* Container Styling */
 .container {
-    max-width: 1500px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #ffffff; /* Màu nền trắng */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
+  max-width: 1500px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff; /* Màu nền trắng */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
 }
 
 /* Header */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #ff8c00; /* Màu sáng cho sự nổi bật */
-    padding-bottom: 10px;
-    background: #ffffff; /* Màu nền trắng */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Thêm shadow cho header */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ff8c00; /* Màu sáng cho sự nổi bật */
+  padding-bottom: 10px;
+  background: #ffffff; /* Màu nền trắng */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Thêm shadow cho header */
 }
 
 /* Title */
 .title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #333;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Thêm hiệu ứng shadow */
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Thêm hiệu ứng shadow */
 }
 
 /* Button hover hiệu ứng */
 .btn {
-    text-decoration: none;
-    font-size: 22px;
-    font-weight: 600;
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 8px;
-    transition: background-color 0.4s, transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: background-color 0.4s, transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn:hover {
-    background: linear-gradient(135deg, #eeff00, #00bfff);
-    transform: translateY(-2px); /* Chuyển động khi hover */
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Thêm shadow khi hover */
+  background: linear-gradient(135deg, #eeff00, #00bfff);
+  transform: translateY(-2px); /* Chuyển động khi hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Thêm shadow khi hover */
 }
 
 /* Các nút cụ thể */
 .btn-detail {
-    background: linear-gradient(135deg, #28a745, #218838);
+  background: linear-gradient(135deg, #28a745, #218838);
 }
 
 .btn-update {
-    background: linear-gradient(135deg, #ffc107, #e0a800);
+  background: linear-gradient(135deg, #ffc107, #e0a800);
 }
 
 .btn-delete {
-    background: linear-gradient(135deg, #dc3545, #c82333);
+  background: linear-gradient(135deg, #dc3545, #c82333);
 }
 
 /* Table Styling */
 .table-container {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
 /* Bảng */
 .categories-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Thêm shadow cho bảng */
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Thêm shadow cho bảng */
 }
 
 /* Tiêu đề cột */
 .categories-table th {
-    background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient cho header */
-    color: #fff;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid #fff;
-    text-align: center; /* Căn giữa tiêu đề cột */
+  background: linear-gradient(
+    135deg,
+    #007bff,
+    #0056b3
+  ); /* Gradient cho header */
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #fff;
+  text-align: center; /* Căn giữa tiêu đề cột */
 }
 
 /* Dòng chẵn */
 .categories-table tr:nth-child(even) {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 /* Dòng khi hover */
 .categories-table tr:hover {
-    background-color: #e0e0e0;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Shadow khi hover */
+  background-color: #e0e0e0;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Shadow khi hover */
 }
 
 /* Cell */
 /* Cập nhật lại cột hành động */
 .categories-table td {
-    font-size: 20px;
-    color: #555;
-    padding: 14px 20px;
-    border: 1px solid #ddd;
-    text-align: center; /* Căn giữa dữ liệu cột */
+  font-size: 20px;
+  color: #555;
+  padding: 14px 20px;
+  border: 1px solid #ddd;
+  text-align: center; /* Căn giữa dữ liệu cột */
 }
 
 /* Hiệu ứng hover cho mỗi ô trong bảng */
 .categories-table td:hover {
-    background-color: #e9ecef;
-    cursor: pointer;
+  background-color: #e9ecef;
+  cursor: pointer;
 }
 
 /* Cập nhật lại cột hành động */
 .categories-table td a {
-    margin: 5px;
-    font-size: 20px;
-    padding: 10px;
-    text-align: center;
+  margin: 5px;
+  font-size: 20px;
+  padding: 10px;
+  text-align: center;
 }
 
 .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .btn-pagination {
-    padding: 8px 16px;
-    margin: 0 4px;
-    text-decoration: none;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  padding: 8px 16px;
+  margin: 0 4px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .btn-pagination.active {
-    background-color: #007bff;
-    color: #fff;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .btn-pagination:hover {
-    background-color: #0056b3;
-    color: #fff;
+  background-color: #0056b3;
+  color: #fff;
 }
 
 .search-container {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .search-container input {
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-    width: 250px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .search-container button {
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .search-container button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
-  
+
 @media (max-width: 768px) {
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-bottom: 15px;
-    }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
 
-    .title {
-        font-size: 26px;
-        margin-bottom: 10px;
-    }
+  .title {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
 
-    .categories-table th,
-    .categories-table td {
-        font-size: 13px;
-        padding: 10px;
-    }
+  .categories-table th,
+  .categories-table td {
+    font-size: 13px;
+    padding: 10px;
+  }
 
-    .btn {
-        font-size: 13px;
-        padding: 8px 12px;
-    }
+  .btn {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
 }
 
 @media (max-width: 480px) {
-    .categories-table th,
-    .categories-table td {
-        font-size: 11px;
-        padding: 8px 10px;
-    }
+  .categories-table th,
+  .categories-table td {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
 
-    .btn {
-        font-size: 11px;
-        padding: 6px 8px;
-    }
+  .btn {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
 }
