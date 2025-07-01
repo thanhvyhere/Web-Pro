@@ -1,46 +1,56 @@
-// import db from '../utils/db.js';
+import User from '../model/User.js';
+import OtpUser from '../model/OtpUser.js'
 import { Role } from '../model/Role.js';
 export default {
     // Tìm người dùng theo tên đăng nhập
     findByUsername(username) {
-        return db('users').where('username', username).first();
+        return User.findOne({username: username});
     },
     
     // Tìm người dùng theo email
     findByEmail(email) {
-        return db('users').where('email', email).first();
+        return User.findOne({email: email});
     },
 
     // Thêm người dùng mới
     add(entity) {
-        return db('users').insert(entity);
+        const user = new User(entity);
+        return user.save();
     }, 
 
     updateUser(id, user) {
-        return db('users').where('id', id).update(user);
+        return User.findByIdAndUpdate(id, user, { new: true });
     },
 
     addOTP(entity) {
-        return db('otp_table').insert(entity);
+        const otp = new OtpUser(entity)
+        return otp.save();
     }, 
 
     findOTPByEmail(email) {
-        return db('otp_table').where('email', email).first();
+        return OtpUser.findOne({ email: email });
     },
 
-    updatePassword(email, newPassword) {
-        return db('users').where('email', email).update({ password: newPassword });
+    updatePassword(email, username, newPassword) {
+        return User.findOneAndUpdate(
+            { 
+                email: email, 
+                username: username,
+            },          
+            { $set: { password: newPassword } }, // cập nhật password
+            { new: true }                     // trả về document mới sau khi update
+        );
     },
 
     // Lấy OTP từ cơ sở dữ liệu
     findbyID(userId)
     {
-        return db('users').where('id', userId).first()
+        return User.findById(userId);
     },
 
     delOTP(otp)
     {
-        return db('otp_table').where('otp', otp).del();
+        return OtpUser.deleteOne({otp: otp})
     },
 
     roleFeature(id) {
@@ -62,16 +72,12 @@ export default {
         return await Role.findOne({ RoleName: permission }).exec();
     },
 
-    findRoleById(roleId) {
-        return db('roles').where('RoleID', roleId).first();
-    },
+    // findRoleById(roleId) {
+    //     return User.findById()
+    // },
 
-    addPremium(entity) {
-        return db('premium_accounts').insert(entity);
-    },
-
-    updatePermission(id, permission) {
-        return db('users').where('id', id).update({ 'permission': permission });
+    upPremium(id) {
+        return User.findByIdAndUpdate(id, {role: 'subscriber'});
     },
 
     findPremiumByUserId(id)
@@ -81,11 +87,11 @@ export default {
 
     delPremium(id)
     {
-        return db('premium_accounts').where('id', id).del();
+        return User.findByIdAndUpdate;
     },
 
-    updatePremium(id, day) {
-        return db('premium_accounts').where('id', id).update({'expiration_date': day});
+    updatePremiumDate(id, day) {
+        return User.findByIdAndUpdate(id, {'expiration_date': day});
     },
     findPremiumDate(id)
     {

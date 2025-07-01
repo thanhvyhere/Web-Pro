@@ -1,131 +1,131 @@
 /* Cấu trúc chính của trang Premium */
 .premium-container {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 25px;
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border: 1px solid #e0e0e0;
-    background: linear-gradient(145deg, #f8f9fa, #e0e0e0);
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #e0e0e0;
+  background: linear-gradient(145deg, #f8f9fa, #e0e0e0);
 }
 
 /* Tiêu đề */
 .premium-container h2 {
-    text-align: center;
-    color: #5e35b1;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 1.5px;
+  text-align: center;
+  color: #5e35b1;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1.5px;
 }
 
 /* Cảnh báo khi chưa đăng nhập */
 .alert {
-    margin-bottom: 20px;
-    padding: 15px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 15px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    font-weight: bold;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  font-weight: bold;
 }
 
 /* Thông tin tài khoản */
 .premium-container ul {
-    list-style-type: none;
-    padding: 0;
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    text-align: center;
+  list-style-type: none;
+  padding: 0;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .premium-container ul li {
-    padding: 12px 0;
-    background: #f4f6f9;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 12px 0;
+  background: #f4f6f9;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .premium-container ul li strong {
-    color: #007bff;
+  color: #007bff;
 }
 
 /* Đường phân cách giữa thông tin tài khoản và phần premium */
 hr {
-    margin: 20px 0;
-    border: 0;
-    border-top: 1px solid #eee;
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #eee;
 }
 
 /* Nút đăng ký Premium */
 .btn {
-    padding: 14px 30px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 14px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
-    background-color: #6a1b9a;
-    color: white;
+  background-color: #6a1b9a;
+  color: white;
 }
 
 .btn-primary:hover {
-    background-color: #8e24aa;
-    transform: scale(1.05);
+  background-color: #8e24aa;
+  transform: scale(1.05);
 }
 
 .btn-secondary {
-    background-color: #bdbdbd;
-    color: white;
+  background-color: #bdbdbd;
+  color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #616161;
-    transform: scale(1.05);
+  background-color: #616161;
+  transform: scale(1.05);
 }
 
 /* Thêm nút Cancel để quay lại trang trước */
 form {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
 }
 
 /* Hiệu ứng hover cho các nút */
 button.btn:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-    .premium-container {
-        padding: 15px;
-    }
+  .premium-container {
+    padding: 15px;
+  }
 
-    .premium-container h2 {
-        font-size: 1.8rem;
-    }
+  .premium-container h2 {
+    font-size: 1.8rem;
+  }
 
-    .premium-container ul li {
-        font-size: 1rem;
-    }
+  .premium-container ul li {
+    font-size: 1rem;
+  }
 
-    button.btn {
-        padding: 12px 25px;
-        font-size: 1.1rem;
-    }
+  button.btn {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+  }
 }

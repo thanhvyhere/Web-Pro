@@ -1,166 +1,166 @@
 /* Page Title */
 #page-title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-    border-bottom: 2px solid #ff8c00;
-    padding-bottom: 10px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid #ff8c00;
+  padding-bottom: 10px;
 }
 
 /* Form Container */
 #delete-form {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;  /* Adds border to the form */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ddd; /* Adds border to the form */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Confirmation Message */
 #confirmation-message {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 /* Tag Name */
 #tag-name {
-    font-weight: 700;
-    color: #d9534f;  /* Red color for emphasis */
+  font-weight: 700;
+  color: #d9534f; /* Red color for emphasis */
 }
 
 /* Button Styling */
 .btn {
-    padding: 12px 20px;
-    margin: 10px 5px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: background-color 0.4s, transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 12px 20px;
+  margin: 10px 5px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.4s, transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Delete Button */
 #btn-delete {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-    color: #fff;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: #fff;
 }
 
 #btn-delete:hover {
-    background: linear-gradient(135deg, #c82333, #dc3545);
+  background: linear-gradient(135deg, #c82333, #dc3545);
 }
 
 /* Cancel Button */
 #btn-cancel {
-    background: linear-gradient(135deg, #6c757d, #5a6268);
-    color: #fff;
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+  color: #fff;
 }
 
 #btn-cancel:hover {
-    background: linear-gradient(135deg, #5a6268, #6c757d);
+  background: linear-gradient(135deg, #5a6268, #6c757d);
 }
 
 /* Form Actions */
 #form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Button Hover Effect */
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive Styling for Small Devices */
 @media (max-width: 768px) {
-    /* Title */
-    #page-title {
-        font-size: 28px;
-        margin-bottom: 15px;
-    }
+  /* Title */
+  #page-title {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
 
-    /* Form Container */
-    #delete-form {
-        padding: 15px;
-    }
+  /* Form Container */
+  #delete-form {
+    padding: 15px;
+  }
 
-    /* Confirmation Message */
-    #confirmation-message {
-        font-size: 16px;
-        margin-bottom: 15px;
-    }
+  /* Confirmation Message */
+  #confirmation-message {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
 
-    /* Tag Name */
-    #tag-name {
-        font-size: 18px;
-    }
+  /* Tag Name */
+  #tag-name {
+    font-size: 18px;
+  }
 
-    /* Button Styling */
-    .btn {
-        font-size: 14px;
-        padding: 10px 15px;
-    }
+  /* Button Styling */
+  .btn {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
 
-    /* Align buttons vertically */
-    #form-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  /* Align buttons vertically */
+  #form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-    /* Add Button */
-    #btn-delete,
-    #btn-cancel {
-        margin-bottom: 10px;
-    }
+  /* Add Button */
+  #btn-delete,
+  #btn-cancel {
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 480px) {
-    /* Title */
-    #page-title {
-        font-size: 24px;
-        margin-bottom: 12px;
-    }
+  /* Title */
+  #page-title {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
 
-    /* Form Container */
-    #delete-form {
-        padding: 10px;
-    }
+  /* Form Container */
+  #delete-form {
+    padding: 10px;
+  }
 
-    /* Confirmation Message */
-    #confirmation-message {
-        font-size: 14px;
-        margin-bottom: 12px;
-    }
+  /* Confirmation Message */
+  #confirmation-message {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
 
-    /* Tag Name */
-    #tag-name {
-        font-size: 16px;
-    }
+  /* Tag Name */
+  #tag-name {
+    font-size: 16px;
+  }
 
-    /* Button Styling */
-    .btn {
-        font-size: 12px;
-        padding: 8px 12px;
-    }
+  /* Button Styling */
+  .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
 
-    /* Align buttons vertically and make them full width */
-    #form-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  /* Align buttons vertically and make them full width */
+  #form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-    /* Delete Button */
-    #btn-delete,
-    #btn-cancel {
-        margin-bottom: 8px;
-        width: 100%;
-    }
+  /* Delete Button */
+  #btn-delete,
+  #btn-cancel {
+    margin-bottom: 8px;
+    width: 100%;
+  }
 }

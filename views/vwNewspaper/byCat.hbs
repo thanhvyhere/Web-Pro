@@ -3,43 +3,43 @@
 <link rel="stylesheet" href="/static/css/cssWriter/approval.css">
 {{/section}}
 {{#section "script"}}
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-                const premiumLinks = document.querySelectorAll(".premium-link");
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const premiumLinks = document.querySelectorAll(".premium-link");
 
-                premiumLinks.forEach(link => {
-                    link.addEventListener("click", (event) => {
-                        const isPremium = link.getAttribute("data-premium") === "true";
-                        const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
-                        let text = 'Đăng nhập';
-                        let href = "/account/login";
+        premiumLinks.forEach(link => {
+            link.addEventListener("click", (event) => {
+                const isPremium = link.getAttribute("data-premium") === "true";
+                const auth = {{ auth }}; // Ensure this is rendered correctly on the server-side
+            let text = 'Đăng nhập';
+            let href = "/account/login";
 
-                        if (auth) {
-                            text = 'Đăng ký Premium';
-                            href = "/account/premium";
-                        }
+            if (auth) {
+                text = 'Đăng ký Premium';
+                href = "/account/premium";
+            }
 
-                        if (isPremium) {
-                            event.preventDefault(); // Ngăn chặn chuyển hướng
-                            Swal.fire({
-                                title: "Thông báo",
-                                text: "Bạn không được cấp quyền để xem nội dung này.",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonText: text,
-                                cancelButtonText: "Hủy"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Chuyển hướng đến trang đăng nhập hoặc trang Premium
-                                    window.location.href = href;
-                                }
-                            });
-                        }
-                    });
+            if (isPremium) {
+                event.preventDefault(); // Ngăn chặn chuyển hướng
+                Swal.fire({
+                    title: "Thông báo",
+                    text: "Bạn không được cấp quyền để xem nội dung này.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: text,
+                    cancelButtonText: "Hủy"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Chuyển hướng đến trang đăng nhập hoặc trang Premium
+                        window.location.href = href;
+                    }
                 });
+            }
+        });
+    });
             });
 
-    </script>
+</script>
 {{/section}}
 
 <div id="card-list-new">
@@ -58,48 +58,49 @@
                         <img src="{{ImageCover}}" alt="..." class="img-title-paper">
                         <div class="paper-small">
                             <div class="header-paper small mb-2">
-                                    <button class="name-category-paper" disabled="disabled">{{catName}}</button>
-                                
+                                <button class="name-category-paper" disabled="disabled">{{catName}}</button>
+
                                 <div class="PublishedDate">
                                     <i class="bi bi-calendar3"></i>
                                     {{formatDate PublishedDay}}
                                 </div>
                                 {{#if this.is_premium}}
-                                    <i class="format-premium bi bi-star-fill"></i>
-                                {{/if}} 
+                                <i class="format-premium bi bi-star-fill"></i>
+                                {{/if}}
                             </div>
-                        {{#if authPremium}}
-                    <!-- Người dùng đã đăng nhập -->
+                            {{#if authPremium}}
+                            <!-- Người dùng đã đăng nhập -->
                             <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
                                 <h5 class="card-title tw-mb-2">{{Title}}</h5>
                             </a>
-                        {{else}}
-                            {{#if this.is_premium}}
-                                <!-- Bài viết Premium nhưng chưa đăng nhập -->
-                                <a href="javascript:void(0);" class="premium-link" data-premium="true">
-                                    <h5 class="card-title tw-mb-2">{{Title}}</h5>
-                                </a>
                             {{else}}
-                                <!-- Bài viết không phải Premium -->
-                                <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
-                                    <h5 class="card-title tw-mb-2">{{Title}}</h5>
-                                </a>
+                            {{#if this.is_premium}}
+                            <!-- Bài viết Premium nhưng chưa đăng nhập -->
+                            <a href="javascript:void(0);" class="premium-link" data-premium="true">
+                                <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                            </a>
+                            {{else}}
+                            <!-- Bài viết không phải Premium -->
+                            <a href="/newspaper/detail?id={{NewsID}}" class="premium-link">
+                                <h5 class="card-title tw-mb-2">{{Title}}</h5>
+                            </a>
                             {{/if}}
-                        {{/if}}
-                        <p class="abstract-font">{{Abstract}}</p>
+                            {{/if}}
+                            <p class="abstract-font">{{Abstract}}</p>
                         </div>
-                        
+
                     </div>
                     <div class="d-flex justify-content-end">
                         {{#each tag}}
-                            <a type="button" class="btn btn-outline-primary tag" href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
+                        <a type="button" class="btn btn-outline-primary tag"
+                            href="/newspaper/byTag?id={{TagID}}">{{TagName}}</a>
                         {{/each}}
                     </div>
                 </div>
             </div>
             {{/each}}
         </div>
-        
+
         <ul class="pagination tw-flex justify-content-center card-footer">
             <li class="page-item disabled">
                 <a class="page-link">Previous</a>
@@ -122,6 +123,7 @@
     </div> <!-- Kết thúc .card-body -->
 
     <!-- Pagination -->
-   
+
     {{/if}}
-</div> <!-- Kết thúc #card-list-new -->
+</div>
+<!-- Kết thúc #card-list-new -->

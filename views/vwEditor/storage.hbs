@@ -1,105 +1,105 @@
-{{#section 'css'}} 
-      <link href="/css/tailwind.css" rel="stylesheet">
+{{#section 'css'}}
+<link href="/css/tailwind.css" rel="stylesheet">
 {{/section}}
 
 <h1>Kho báo</h1>
-<hr class="tw-w-[100%] tw-border-[5px] tw-bg-yellow-300"></hr>
+<hr class="tw-w-[100%] tw-border-[5px] tw-bg-yellow-300">
+</hr>
 <div class="row d-grids">
-     {{#each this.news}}
-            <div class="col-sm-4 mb-3 tw-flex tw-justify-center tw-items-center">
-            <div class="tw-w-[350px] tw-h-[480px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-p-3"
-                  style="
+      {{#each this.news}}
+      <div class="col-sm-4 mb-3 tw-flex tw-justify-center tw-items-center">
+            <div class="tw-w-[350px] tw-h-[480px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-p-3" style="
                         box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
                         border: 1px solid black;
                   ">
                   <p>Thời gian: {{formatDate CreatedDate}}</p>
-                  <img src="{{ImageCover}}" alt="{{Title}}" 
+                  <img src="{{ImageCover}}" alt="{{Title}}"
                         class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-0.5">
                   <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
                         <strong>{{Title}}</strong>
                   </p>
-                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400" style="font-style: italic; text-decoration:underline">xem trước</a>
+                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400"
+                        style="font-style: italic; text-decoration:underline">xem trước</a>
                   <div class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
                         {{{Content}}}
                   </div>
-                  
+
                   <div class="tw-flex tw-flex-row tw-justify-between tw-items-center tw-w-[100%] tw-mt-auto">
                         <p style="margin: 0;">Tác giả: {{AuthorName}}</p>
                         <div class="tw-flex tw-flex-row tw-justify-center tw-items-center tw-gap-2">
-                       {{#if (or (eq StatusName "Đang chờ") (eq StatusName "Đã chỉnh sửa"))}}
-                        <a href="#" class="tw-text-green-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '1')">
-                              <i class="bi bi-check-circle"></i>
-                        </a>
-                        <a href="#" class="tw-text-red-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '4')">
-                              <i class="bi bi-x-circle"></i>
-                        </a>
-                     
-                        {{/if}}
-                        <div 
-                        style="
+                              {{#if (or (eq StatusName "Đang chờ") (eq StatusName "Đã chỉnh sửa"))}}
+                              <a href="#" class="tw-text-green-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '1')">
+                                    <i class="bi bi-check-circle"></i>
+                              </a>
+                              <a href="#" class="tw-text-red-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '4')">
+                                    <i class="bi bi-x-circle"></i>
+                              </a>
+
+                              {{/if}}
+                              <div style="
                               color: {{getStatusColor StatusName}};
                               padding: 8px;
                               border: 2px solid {{getStatusColor StatusName}};
                               border-radius: 20px;
                         ">
-                        {{StatusName}}
-                        </div>
+                                    {{StatusName}}
+                              </div>
                         </div>
                   </div>
             </div>
-            </div>
+      </div>
       {{/each}}
-      
+
 </div>
- <ul class="pagination">
-        <li class="page-item disabled">
-        <a class="page-link">Trước</a>
-        </li>
-        {{#each this.pageNumbers}}
-        {{#if active}}
-        <li class="page-item active">
+<ul class="pagination">
+      <li class="page-item disabled">
+            <a class="page-link">Trước</a>
+      </li>
+      {{#each this.pageNumbers}}
+      {{#if active}}
+      <li class="page-item active">
             <a class="page-link" href="?&page={{value}}">{{value}}</a>
-        </li>
-        {{else}}
-        <li class="page-item">
+      </li>
+      {{else}}
+      <li class="page-item">
             <a class="page-link" href="?&page={{value}}">{{value}}</a>
-        </li>
-        {{/if}}
-        {{/each}}
-        </li>
-        <li class="page-item">
-        <a class="page-link" href="#">Sau</a>
-        </li>
-    </ul>
+      </li>
+      {{/if}}
+      {{/each}}
+      </li>
+      <li class="page-item">
+            <a class="page-link" href="#">Sau</a>
+      </li>
+</ul>
 
 {{#section 'script'}}
 <script>
       function updateStatus(newsId, newStatus) {
-    // Kiểm tra body trước khi gửi
-    const bodyData = { id: newsId, status: newStatus };
-    console.log('Dữ liệu gửi đi:', JSON.stringify(bodyData)); // Console body
-      fetch('/editor/update-status', {
-            method: 'POST',
-            headers: {
-                  'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id: newsId, status: newStatus }),
-      })
-      .then((response) => {
-            console.log('HTTP status:', response.status); // Log trạng thái HTTP
-            return response.json(); // Hoặc sử dụng .json() nếu phản hồi là JSON
-      })
-      .then((data) => {
-            console.log('Phản hồi server:', data);  // Log toàn bộ dữ liệu trả về từ server
-            if (data.success) {
-                  alert('Cập nhật trạng thái thành công!');
-                  location.reload();
-            } else {
-                  console.error('Lỗi:', data.message); // Log chi tiết thông báo lỗi từ server
-                  alert('Không thành công: ' + data.message);
-            }
+            // Kiểm tra body trước khi gửi
+            const bodyData = { id: newsId, status: newStatus };
+            console.log('Dữ liệu gửi đi:', JSON.stringify(bodyData)); // Console body
+            fetch('/editor/update-status', {
+                  method: 'POST',
+                  headers: {
+                        'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ id: newsId, status: newStatus }),
             })
-      .catch((error) => console.error('Error:', error));
+                  .then((response) => {
+                        console.log('HTTP status:', response.status); // Log trạng thái HTTP
+                        return response.json(); // Hoặc sử dụng .json() nếu phản hồi là JSON
+                  })
+                  .then((data) => {
+                        console.log('Phản hồi server:', data);  // Log toàn bộ dữ liệu trả về từ server
+                        if (data.success) {
+                              alert('Cập nhật trạng thái thành công!');
+                              location.reload();
+                        } else {
+                              console.error('Lỗi:', data.message); // Log chi tiết thông báo lỗi từ server
+                              alert('Không thành công: ' + data.message);
+                        }
+                  })
+                  .catch((error) => console.error('Error:', error));
       }
 </script>
 {{/section}}

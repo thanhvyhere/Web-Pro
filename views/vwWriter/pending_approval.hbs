@@ -3,26 +3,25 @@
 <link rel="stylesheet" href="/static/css/cssWriter/approval.css">
 {{/section}}
 {{#section "script"}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Kiểm tra xem có thông báo thành công từ backend không
-            const urlParams = new URLSearchParams(window.location.search);
-            const successMessage = urlParams.get('success'); // Lấy thông báo thành công từ query string
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Kiểm tra xem có thông báo thành công từ backend không
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMessage = urlParams.get('success'); // Lấy thông báo thành công từ query string
 
-            if (successMessage) {
-                // Hiển thị thông báo SweetAlert
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Successful!',
-                    text: successMessage,
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
+        if (successMessage) {
+            // Hiển thị thông báo SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Successful!',
+                text: successMessage,
+                confirmButtonText: 'OK'
+            });
+        }
+    });
 
-    </script>
+</script>
 {{/section}}
-{{sec}}
 <div id="card-list-new">
     <div class="header-create tw-mt-5">
         <h4>CHƯA ĐƯỢC DUYỆT</h4>
@@ -56,4 +55,5 @@
             </div>
         </div>
         {{/each}}
-        
+    </div>
+</div>

@@ -1,10 +1,11 @@
-body{
-    background-color: black;
+body {
+  background-color: black;
 }
 p {
   position: fixed;
   top: 48%;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   text-align: center;
   z-index: 999;
@@ -97,7 +98,8 @@ img {
   z-index: 4;
 }
 
-.pricing-hero__rock, .pricing-hero__drag {
+.pricing-hero__rock,
+.pricing-hero__drag {
   max-width: 141%;
   opacity: 0;
   right: 1px;
@@ -197,5 +199,5 @@ img {
 }
 
 .explosion-img {
-	will-change: transform;
+  will-change: transform;
 }
