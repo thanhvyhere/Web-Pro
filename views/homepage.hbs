@@ -111,6 +111,16 @@
                                     disabled="disabled" href="/newspaper/byTag?id={{_id}}">{{tagName}}</a>
                                 {{/each}}
                             </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
                         </div>
                     </div>
                     </a>
@@ -135,6 +145,7 @@
         {{/each}}
     </div>
 </div>
+
 <div class="title-paper-list mb-3 d-flex flex-column">
   <h1>Được xem nhiều nhất</h1>
   <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">

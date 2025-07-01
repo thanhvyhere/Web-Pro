@@ -206,6 +206,10 @@ a:hover{
     background-color: #271b06;
 }
 
+.container-fluid{
+    padding-left: 0px !important;
+}
+
 h1 {
     font-weight: 900;
     margin-top: 20px;
