@@ -10,7 +10,7 @@ export default {
   },
 
   findById(id) {
-    return db("news").where("NewsID", id).first();
+    return News.findById(id).lean();
   },
 
   add(entity) {
@@ -94,7 +94,7 @@ export default {
     });
   },
   findCatByCatId(catId) {
-    return db("categories").where("CatID", catId).first();
+    return Category.findById(catId).lean();
   },
 
   getAllTags() {
@@ -139,13 +139,18 @@ export default {
     return news?.Tags || [];
   },
 
-  getAllCommentById(id) {
-    return db("comment")
-      .join("users", "comment.UserID", "=", "users.id") // Hợp bảng comment với users qua UserID
-      .select("comment.*", "users.username") // Chọn tất cả từ comment và thêm username từ users
-      .where("comment.NewsID", id) // Điều kiện lọc theo NewsID
-      .orderBy("comment.CreatedDate", "desc"); // Sắp xếp theo ngày (CreatedDate) giảm dần
-  },
+  async getAllCommentById(id) {
+  try {
+    const comments = await Comment.find({ NewsID: id })
+      .populate("UserID", "username") // Lấy thông tin username từ User
+      .sort({ CreatedDate: -1 }); // Sắp xếp theo ngày giảm dần
+
+    return comments;
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    throw error;
+  }
+},
 
   addComment(entity) {
     return db("comment").insert(entity);

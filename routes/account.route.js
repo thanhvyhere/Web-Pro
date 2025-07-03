@@ -16,21 +16,19 @@ dotenv.config();
 
 router.get("/login", function (req, res) {
   res.render("vwAccount/login", {
-    layout: "account-layout",
+    layout: false,
   });
 });
 
 router.post("/login", async function (req, res) {
   const user = await accountService.findByUsername(req.body.username).lean();
   if (!user) {
-    return res.render("vwAccount/login", {
-      layout: "account-layout",
+    return res.render("homepage", {
       showErrors: true,
     });
   }
   if (!bcrypt.compareSync(req.body.raw_password, user.password)) {
-    return res.render("vwAccount/login", {
-      layout: "account-layout",
+    return res.render("homepage", {
       showErrors: true,
     });
   }

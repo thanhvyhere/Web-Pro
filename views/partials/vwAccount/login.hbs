@@ -1,0 +1,79 @@
+<div id="loginModel" class="popupModel tw-z-[200] tw-fixed tw-inset-0 tw-bg-black/50 tw-items-center tw-flex tw-justify-center tw-hidden">
+  <div class="tw-bg-gray-100 tw-rounded-2xl tw-shadow-lg tw-max-w-5xl tw-w-full tw-max-h-[600px]">
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2  tw-items-center">
+      
+      <!-- Hình minh họa bên trái -->
+      <div class="tw-hidden md:tw-block tw-h-full">
+        <img src="https://i.pinimg.com/736x/95/ce/b2/95ceb2317f6e5ad8be0e1c71ea0cd266.jpg"
+             alt="Login Illustration"
+             class="tw-w-full tw-h-[600px] tw-object-cover tw-opacity-70 tw-rounded-l-2xl" />
+      </div>
+
+      <!-- Form bên phải -->
+<div class="tw-bg-white tw-rounded-r-2xl tw-border tw-border-gray-200 tw-shadow-sm tw-h-[600px] tw-overflow-y-auto tw-flex tw-flex-col tw-justify-center tw-px-6">
+  <div class="tw-flex tw-justify-end tw-p-2">
+    <button onclick="closeModal()" class="tw-text-gray-500 hover:tw-text-black tw-text-xl tw-cursor-pointer">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <h1 class="tw-text-slate-900 tw-text-center tw-text-xl md:tw-text-2xl tw-font-semibold">Sign in to your account</h1>
+
+  <!-- OAuth buttons -->
+  <div class="tw-flex tw-flex-col sm:tw-flex-row tw-justify-between tw-gap-3 tw-mt-4">
+    <!-- Google -->
+    <a href="/account/login/googleAuth" class="tw-flex tw-items-center tw-justify-center tw-gap-2 tw-w-full tw-py-2.5 tw-px-4 tw-text-sm tw-font-medium tw-text-gray-900 tw-bg-white tw-border tw-border-gray-300 tw-rounded-lg hover:tw-bg-gray-100 hover:tw-text-blue-700 tw-transition">
+      <img src="https://cdn-icons-png.flaticon.com/128/2702/2702602.png" class="tw-w-5 tw-h-5" alt="Google icon">
+      Login with Google
+    </a>
+    <!-- GitHub -->
+    <a href="/account/login/githubAuth" class="tw-flex tw-items-center tw-justify-center tw-gap-2 tw-w-full tw-py-2.5 tw-px-4 tw-text-sm tw-font-medium tw-text-gray-900 tw-bg-white tw-border tw-border-gray-300 tw-rounded-lg hover:tw-bg-gray-100 hover:tw-text-blue-700 tw-transition">
+      <img src="https://cdn-icons-png.flaticon.com/128/2111/2111432.png" class="tw-w-5 tw-h-5" alt="GitHub icon">
+      Login with GitHub
+    </a>
+  </div>
+
+  <!-- Divider -->
+  <div class="tw-flex tw-items-center tw-gap-4 tw-my-4">
+    <hr class="tw-flex-grow tw-border-gray-300">
+    <span class="tw-text-sm tw-text-gray-500">or</span>
+    <hr class="tw-flex-grow tw-border-gray-300">
+  </div>
+
+  <!-- Form -->
+  <form id="fmSignup" action="/account/login" method="post" class="tw-space-y-4 tw-flex-grow">
+    <!-- Username -->
+    <div>
+      <label for="txtUsername" class="tw-text-slate-900 tw-text-sm tw-font-medium tw-mb-1 tw-block">Username</label>
+      <input id="txtUsername" name="username" type="text" required class="tw-w-full tw-text-slate-900 tw-text-sm tw-border tw-border-slate-300 tw-px-4 tw-py-3 tw-rounded-md tw-outline-blue-600" placeholder="Enter user name" />
+    </div>
+
+    <!-- Password -->
+    <div>
+      <label for="txtPassword" class="tw-text-slate-900 tw-text-sm tw-font-medium tw-mb-1 tw-block">Password</label>
+      <input id="txtPassword" name="raw_password" type="password" required class="tw-w-full tw-text-slate-900 tw-text-sm tw-border tw-border-slate-300 tw-px-4 tw-py-3 tw-rounded-md tw-outline-blue-600" placeholder="Enter password" />
+    </div>
+
+    <!-- Remember + Forgot -->
+    <div class="tw-flex tw-items-center tw-justify-between tw-text-sm">
+      <label class="tw-flex tw-items-center">
+        <input id="remember-me" name="remember-me" type="checkbox" class="tw-h-4 tw-w-4 tw-text-blue-600 tw-border-slate-300 tw-rounded" />
+        <span class="tw-ml-2 tw-text-slate-900">Remember me</span>
+      </label>
+      <a href="javascript:void(0);" class="tw-text-blue-600 hover:tw-underline tw-font-semibold">Forgot password?</a>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="tw-w-full tw-py-2 tw-px-4 tw-text-sm tw-font-medium tw-tracking-wide tw-rounded-md tw-text-white tw-bg-blue-600 hover:tw-bg-blue-700">
+      Sign in
+    </button>
+
+    <!-- Register -->
+    <p class="tw-text-slate-900 tw-text-sm tw-text-center">Don't have an account?
+      <a href="/account/register" class="tw-text-blue-600 hover:tw-underline tw-ml-1 tw-font-semibold">Register here</a>
+    </p>
+  </form>
+</div>
+
+    </div>
+  </div>
+</div>

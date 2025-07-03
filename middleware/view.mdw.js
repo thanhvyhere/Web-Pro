@@ -1,8 +1,11 @@
 import { engine } from "express-handlebars";
 import hbs_sections from "express-handlebars-sections";
 import numeral from "numeral";
+import path, { dirname } from 'path';
 import moment from "moment";
+import { fileURLToPath } from 'url';
 export default function (app) {
+  const __dirname = dirname(fileURLToPath(import.meta.url)); 
   app.engine(
     "hbs",
     engine({
@@ -126,4 +129,7 @@ export default function (app) {
   );
   app.set("view engine", "hbs");
   app.set("views", "./views");
+
+  
+
 }

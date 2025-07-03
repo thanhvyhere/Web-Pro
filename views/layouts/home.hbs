@@ -42,7 +42,7 @@
                     <img id="img-account" src="/static/imgs/avatar.jpg" alt="" class="img-fluid rounded-circle">
                 </a>
                 {{else}}
-                <a href="/account/login" type="button" class="tw-text-black tw-font-semibold">
+                <a onclick="handleClick()" type="button" class="tw-text-black tw-font-semibold">
                     <i class="bi bi-person" style="font-size: 1rem; color: black; font-weight:bold"> SIGN IN </i>
 
                 </a>
@@ -161,21 +161,98 @@
         </div>
 
     </footer>
+    
     <button id="scrollToTopBtn" class="tw-hidden tw-fixed tw-right-5 tw-bottom-5 tw-w-[75px] tw-h-[75px]
          tw-z-50 tw-bg-white tw-text-black tw-px-4 tw-py-2 
          tw-rounded-full tw-shadow-lg hover:tw-bg-yellow-200 tw-transition-opacity tw-duration-300">
         <i class="bi bi-arrow-bar-up tw-text-3xl"></i>
     </button>
+    <div class="tw-bg-white tw-rounded-xl tw-p-6 tw-w-full tw-max-w-md tw-relative">
+        
+    {{> vwAccount/login }}
+    </div>
+{{#if showErrors}}
+<div id="error-modal" class="tw-relative tw-z-10" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
+  <div class="tw-fixed tw-inset-0 tw-bg-gray-500/75 tw-transition-opacity" aria-hidden="true"></div>
+
+  <div class="tw-fixed tw-inset-0 tw-z-10 tw-w-screen tw-overflow-y-auto">
+    <div class="tw-flex tw-min-h-full tw-items-end tw-justify-center tw-p-4 tw-text-center sm:tw-items-center sm:tw-p-0">
+      <div class="tw-relative tw-transform tw-overflow-hidden tw-rounded-lg tw-bg-white tw-text-left tw-shadow-xl tw-transition-all sm:tw-my-8 sm:tw-w-full sm:tw-max-w-lg">
+        <div class="tw-bg-white tw-px-4 tw-pt-5 tw-pb-4 sm:tw-p-6 sm:tw-pb-4">
+          <div class="sm:tw-flex sm:tw-items-start">
+            <div class="tw-mx-auto tw-flex tw-size-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-full tw-bg-red-100 sm:tw-mx-0 sm:tw-size-10">
+              <svg class="tw-size-6 tw-text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 4h.01m-.01-7a1 1 0 1 1 2 0v3a1 1 0 1 1-2 0v-3z" />
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none" />
+              </svg>
+            </div>
+            <div class="tw-mt-3 tw-text-center sm:tw-mt-0 sm:tw-ml-4 sm:tw-text-left">
+              <h3 class="tw-text-base tw-font-semibold tw-text-gray-900" id="dialog-title">Login Error</h3>
+              <div class="tw-mt-2">
+                <p class="tw-text-sm tw-text-gray-500">
+                  Incorrect username or password. Please try again.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tw-bg-gray-50 tw-px-4 tw-py-3 sm:tw-flex sm:tw-flex-row-reverse sm:tw-px-6">
+          <button type="button" onclick="closeErrorModal()" class="tw-inline-flex tw-w-full tw-justify-center tw-rounded-md tw-bg-blue-600 tw-px-3 tw-py-2 tw-text-sm tw-font-semibold tw-text-white tw-shadow-sm hover:tw-bg-blue-500 sm:tw-ml-3 sm:tw-w-auto">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
+    <script>
+      function handleClick() {
+            event.preventDefault();
+            const modal = document.getElementById('loginModel') ;
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+      }
+      function handleLogoutClick() {
+        event.preventDefault();
+          if (authUser) {
+            const modal =  document.getElementById('logoutModal');
+            const main = document.getElementById('mainContent');
+            modal.classList.remove('tw-hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            main.setAttribute('aria-hidden', 'true');
+          }
+      }
+
+      function closeModal(gohome = false) {
+        console.log("gohome:", gohome);
+        const modal = document.querySelector('.popupModel');
+        const main = document.getElementById('mainContent');
+        modal.classList.add('tw-hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        main.setAttribute('aria-hidden', 'false');
+        
+        if (gohome) {
+          window.location.href = '/';
+        } else {
+          window.location.reload();
+        }
+          
+      }
+      
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
         integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
-        integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        function closeErrorModal() {
+            const modal = document.getElementById("error-modal");
+            if (modal) {
+            modal.style.display = "none";
+            }
+        }
+        </script>
     {{{_sections.script}}}
    <script>
     document.addEventListener("DOMContentLoaded", () => {
