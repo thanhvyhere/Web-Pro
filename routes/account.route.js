@@ -65,11 +65,7 @@ router.post("/login", async function (req, res) {
   res.redirect(retUrl);
 });
 
-router.get('/register', function (req, res) {
-  res.render("vwAccount/register", {
-    layout: "account-layout",
-  });
-});
+
 
 router.post('/register', async function (req, res) {
   const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
@@ -106,13 +102,14 @@ router.post('/register', async function (req, res) {
         .catch((err) => console.error("Failed to send email:", err));
     }, 500);
     req.session.tempUser = tempUser;
-
-    res.render("vwAccount/register", {
+    
+    return res.render("homepage", {
       layout: "account-layout",
       email: req.body.email,
       username: req.body.username,
       showVerifyPopup: true,
     });
+
   } catch (err) {
     console.error("Failed to send verification email:", err);
     return res
@@ -130,16 +127,14 @@ router.post("/verify-email", async function (req, res) {
     const otpRecord = await accountService.findOTPByEmail(email).lean();
     console.log(otpRecord);
     if (!otpRecord) {
-      return res.render("vwAccount/register", {
-        layout: "account-layout",
+      return res.render("homepage", {
         email,
         username,
         errorMessage: "OTP expired. Please register again.",
       });
     }
     if (parseInt(otp) !== otpRecord.otp) {
-      return res.render("vwAccount/register", {
-        layout: "account-layout",
+      return res.render("homepage", {
         email,
         username,
         errorMessage: "Incorrect OTP. Please try again.",
@@ -147,15 +142,16 @@ router.post("/verify-email", async function (req, res) {
     }
     const tempUser = req.session.tempUser;
     if (!tempUser) {
-      return res.redirect("/user/register");
+      return res.render('homepage',{
+        errorMessage: "Fail..",
+      });
     }
 
     await accountService.add(tempUser);
     await accountService.delOTP(otp);
     req.session.tempUser = null;
 
-    res.render("vwAccount/login", {
-      layout: "account-layout",
+    res.render("homepage", {
       successMessage: "Email verified. Account created successfully!",
     });
   } catch (err) {
@@ -241,59 +237,9 @@ router.get("/is-available", async function (req, res) {
   }
   res.json(false);
 });
-// router.get('/verify-email', function (req, res) {
-//     const email = req.query.email || '';
-//     const username = req.query.username || '';
-//     res.render('vwAccount/verifyEmail', {
-//         layout: 'account-layout',
-//         email,
-//         username
-//     });
-// });
 
-router.post("/verify-email", async function (req, res) {
-  const email = req.body.email;
-  const username = req.body.username;
-  const otp = req.body.otp;
 
-  try {
-    const otpRecord = await accountService.findOTPByEmail(email).lean();
-    console.log(otpRecord);
-    if (!otpRecord) {
-      return res.render("vwAccount/register", {
-        layout: "account-layout",
-        email,
-        username,
-        errorMessage: "OTP expired. Please register again.",
-      });
-    }
-    if (parseInt(otp) !== otpRecord.otp) {
-      return res.render("vwAccount/register", {
-        layout: "account-layout",
-        email,
-        username,
-        errorMessage: "Incorrect OTP. Please try again.",
-      });
-    }
-    const tempUser = req.session.tempUser;
-    if (!tempUser) {
-      return res.redirect("/user/register");
-    }
 
-    await accountService.add(tempUser);
-    await accountService.delOTP(otp);
-    req.session.tempUser = null;
-
-    res.render("vwAccount/login", {
-      layout: "account-layout",
-      successMessage: "Email verified. Account created successfully!",
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error. Please try again later.");
-  }
-});
-// Trang OTP (GET)
 router.get("/otp", function (req, res) {
   const email = req.query.email; // Nhận email từ URL query
   res.render("vwAccount/otp", {

@@ -40,17 +40,17 @@
   </div>
 
   <!-- Form -->
-  <form id="fmSignup" action="/account/login" method="post" class="tw-space-y-4 tw-flex-grow">
+  <form id="fmLogin" action="/account/login" method="post" class="tw-space-y-4 tw-flex-grow">
     <!-- Username -->
     <div>
-      <label for="txtUsername" class="tw-text-slate-900 tw-text-sm tw-font-medium tw-mb-1 tw-block">Username</label>
-      <input id="txtUsername" name="username" type="text" required class="tw-w-full tw-text-slate-900 tw-text-sm tw-border tw-border-slate-300 tw-px-4 tw-py-3 tw-rounded-md tw-outline-blue-600" placeholder="Enter user name" />
+      <label for="txtLoginUsername" class="tw-text-slate-900 tw-text-sm tw-font-medium tw-mb-1 tw-block">Username</label>
+      <input id="txtLoginUsername" name="username" type="text" required class="tw-w-full tw-text-slate-900 tw-text-sm tw-border tw-border-slate-300 tw-px-4 tw-py-3 tw-rounded-md tw-outline-blue-600" placeholder="Enter user name" />
     </div>
 
     <!-- Password -->
     <div>
-      <label for="txtPassword" class="tw-text-slate-900 tw-text-sm tw-font-medium tw-mb-1 tw-block">Password</label>
-      <input id="txtPassword" name="raw_password" type="password" required class="tw-w-full tw-text-slate-900 tw-text-sm tw-border tw-border-slate-300 tw-px-4 tw-py-3 tw-rounded-md tw-outline-blue-600" placeholder="Enter password" />
+      <label for="txtLoginPassword" class="tw-text-slate-900 tw-text-sm tw-font-medium tw-mb-1 tw-block">Password</label>
+      <input id="txtLoginPassword" name="raw_password" type="password" required class="tw-w-full tw-text-slate-900 tw-text-sm tw-border tw-border-slate-300 tw-px-4 tw-py-3 tw-rounded-md tw-outline-blue-600" placeholder="Enter password" />
     </div>
 
     <!-- Remember + Forgot -->
@@ -69,7 +69,7 @@
 
     <!-- Register -->
     <p class="tw-text-slate-900 tw-text-sm tw-text-center">Don't have an account?
-      <a href="/account/register" class="tw-text-blue-600 hover:tw-underline tw-ml-1 tw-font-semibold">Register here</a>
+      <a onclick="handleRegisterClick(event)" type="button" class="tw-text-blue-600 hover:tw-underline tw-ml-1 tw-font-semibold">Register here</a>
     </p>
   </form>
 </div>

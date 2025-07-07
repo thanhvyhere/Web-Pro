@@ -42,7 +42,7 @@
                     <img id="img-account" src="/static/imgs/avatar.jpg" alt="" class="img-fluid rounded-circle">
                 </a>
                 {{else}}
-                <a onclick="handleClick()" type="button" class="tw-text-black tw-font-semibold">
+                <a onclick="handleLoginClick(event)" type="button" class="tw-text-black tw-font-semibold">
                     <i class="bi bi-person" style="font-size: 1rem; color: black; font-weight:bold"> SIGN IN </i>
 
                 </a>
@@ -167,10 +167,11 @@
          tw-rounded-full tw-shadow-lg hover:tw-bg-yellow-200 tw-transition-opacity tw-duration-300">
         <i class="bi bi-arrow-bar-up tw-text-3xl"></i>
     </button>
-    <div class="tw-bg-white tw-rounded-xl tw-p-6 tw-w-full tw-max-w-md tw-relative">
+   
         
     {{> vwAccount/login }}
-    </div>
+    {{> vwAccount/register }}
+    
 {{#if showErrors}}
 <div id="error-modal" class="tw-relative tw-z-10" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
   <div class="tw-fixed tw-inset-0 tw-bg-gray-500/75 tw-transition-opacity" aria-hidden="true"></div>
@@ -205,12 +206,30 @@
 </div>
 {{/if}}
     <script>
-      function handleClick() {
-            event.preventDefault();
-            const modal = document.getElementById('loginModel') ;
-            modal.classList.remove('tw-hidden');
-            modal.setAttribute('aria-hidden', 'false');
-      }
+      function toggleModal(showId, hideId) {
+        const showModal = document.getElementById(showId);
+        const hideModal = document.getElementById(hideId);
+
+        // Ẩn modal không cần hiển thị
+        hideModal.classList.add('tw-hidden');
+        hideModal.setAttribute('aria-hidden', 'true');
+
+        // Hiện modal cần hiển thị
+        showModal.classList.remove('tw-hidden');
+        showModal.setAttribute('aria-hidden', 'false');
+        }
+
+        // Gắn với sự kiện click
+        function handleLoginClick(event) {
+        event.preventDefault();
+        toggleModal('loginModel', 'registerModel');
+        }
+
+        function handleRegisterClick(event) {
+        event.preventDefault();
+        toggleModal('registerModel', 'loginModel');
+        }
+
       function handleLogoutClick() {
         event.preventDefault();
           if (authUser) {
@@ -404,6 +423,208 @@
             lastScrollY = currentScrollY;
         });
     </script>
+
+    <script>
+        document.getElementById('txtPhone').addEventListener('input', function (e) {
+            let input = e.target.value.replace(/\D/g, '');
+            if (input.length > 3 && input.length <= 6) {
+            input = input.slice(0, 3) + '-' + input.slice(3);
+            } else if (input.length > 6) {
+            input = input.slice(0, 3) + '-' + input.slice(3, 6) + '-' + input.slice(6, 10);
+            }
+            e.target.value = input;
+        });
+
+        function validatePasswordField() {
+            const password = document.querySelector('#txtPassword').value;
+            const errorField = document.querySelector('#passwordError');
+            const minLength = 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecialChar = /[!@#\$%\^\&*\)\(+=._-]/.test(password);
+            if (password.length < minLength) {
+                    errorField.textContent = 'Password must be at least 8 characters long.';
+                    errorField.classList.remove('tw-hidden');
+            } else if (!hasUpper || !hasLower || !hasNumber || !hasSpecialChar) {
+                errorField.textContent = 'Password must include uppercase, lowercase, number, and special character.';
+                errorField.classList.remove('tw-hidden');
+            } else {
+                errorField.textContent = '';
+                errorField.classList.add('tw-hidden');
+            }
+        }
+
+        function validateConfirmPasswordField() {
+            const password = document.querySelector('#txtPassword').value;
+            const confirmPassword = document.querySelector('#txtCPassword').value;
+            const confirmError = document.querySelector('#confirmPasswordError');
+
+             if (confirmPassword !== password) {
+                confirmError.textContent = 'Passwords do not match.';
+                confirmError.classList.remove('tw-hidden');
+            } else {
+                confirmError.textContent = '';
+                confirmError.classList.add('tw-hidden');
+            }
+        }
+
+        document.querySelector('#txtPassword').addEventListener('input', validatePasswordField);
+        document.querySelector('#txtPassword').addEventListener('blur', validatePasswordField);
+        document.querySelector('#txtCPassword').addEventListener('input', validateConfirmPasswordField);
+        document.querySelector('#txtCPassword').addEventListener('blur', validateConfirmPasswordField);
+
+        function checkValidEmail() {
+            const email = document.querySelector('#txtEmail').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.length === 0 || !emailRegex.test(email)) {
+            document.querySelector('#txtEmail').select();
+            return false;
+            }
+            return true;
+        }
+
+        function checkValidPassword() {
+            const password = document.querySelector('#txtPassword').value;
+            const minLength = 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecialChar = /[!@#\$%\^\&*\)\(+=._-]/.test(password);
+
+            if (password.length < minLength || !hasUpper || !hasLower || !hasNumber || !hasSpecialChar) {
+            Swal.fire({
+                title: 'Warning',
+                text: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            document.querySelector('#txtPassword').select();
+            return false;
+            }
+            return true;
+        }
+
+  $('#fmSignup').on('submit', function (e) {
+    e.preventDefault();
+    const username = $('#txtUsername').val();
+    const password = $('#txtPassword').val();
+    const confirmPassword = $('#txtCPassword').val();
+
+    if (!checkValidPassword()) return;
+
+    if (password !== confirmPassword) {
+      Swal.fire({
+        title: 'Error',
+        text: "Passwords do not match. Please re-enter.",
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    if (username.length === 0) {
+      Swal.fire({
+        title: 'Warning',
+        text: "Username cannot be empty.",
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    if (!checkValidEmail()) {
+      Swal.fire({
+        title: 'Error',
+        text: "Invalid email format.",
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    $.getJSON(`/account/is-available?username=${username}`, function (data) {
+      if (data === false) {
+        Swal.fire({
+          title: 'Warning',
+          text: "Username not available. Please choose another.",
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
+      } else {
+        Swal.fire({
+          title: 'Success!',
+          text: "Check your EMAIL for the OTP code.",
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            goToStep2();
+            $('#fmSignup').off('submit').submit();
+          }
+        });
+      }
+    }).fail(() => {
+      Swal.fire({
+        title: 'Error',
+        text: "Unable to verify username. Try again later.",
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    });
+  });
+
+
+
+  $('#frmVerify').on('submit', function (e) {
+    e.preventDefault();
+    const otp = document.getElementById('otpInput').value;
+    if (!otp || otp.length < 4) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Please enter a valid OTP.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    } else {
+      e.currentTarget.submit();
+      handleLoginClick(event);
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const showVerifyPopup = {{#if showVerifyPopup}}true{{else}}false{{/if}};
+    if (showVerifyPopup) {
+      openOtpModal();
+    }
+  });
+
+</script>
+<script>
+    function goToStep2() {
+    document.getElementById("step1").classList.add("tw-hidden");
+    document.getElementById("step2").classList.remove("tw-hidden");
+
+    document.getElementById("step1Indicator").classList.remove("tw-bg-blue-600", "tw-text-white");
+    document.getElementById("step1Indicator").classList.add("tw-bg-gray-300", "tw-text-black");
+
+    document.getElementById("step2Indicator").classList.remove("tw-bg-gray-300", "tw-text-black");
+    document.getElementById("step2Indicator").classList.add("tw-bg-blue-600", "tw-text-white");
+    }
+
+    function goToStep1() {
+    document.getElementById("step2").classList.add("tw-hidden");
+    document.getElementById("step1").classList.remove("tw-hidden");
+
+    document.getElementById("step2Indicator").classList.remove("tw-bg-blue-600", "tw-text-white");
+    document.getElementById("step2Indicator").classList.add("tw-bg-gray-300", "tw-text-black");
+
+    document.getElementById("step1Indicator").classList.remove("tw-bg-gray-300", "tw-text-black");
+    document.getElementById("step1Indicator").classList.add("tw-bg-blue-600", "tw-text-white");
+    }
+</script>
+
 </body>
 
 </html>
