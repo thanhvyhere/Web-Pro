@@ -58,13 +58,12 @@ router.post("/login", async function (req, res) {
     userid: user._id,
     email: user.email,
     name: user.name,
-    permission: user.permission,
-    role: role,
+    rolename: user.role,
     expiration_date: expirationDate,
   };
 
   const retUrl = req.session.retUrl || "/";
-  res.redirect(retUrl);
+  res.redirect(`/${user.role}`);
 });
 
 router.get('/register', function (req, res) {
@@ -393,13 +392,12 @@ router.get(
       username: user.username,
       userid: user._id,
       name: user.name,
-      permission: user.permission,
       email: user.email,
       rolename: user.role,
       expiration_date: expirationDate,
     };
 
-    res.redirect("/subscriber");
+    res.redirect(`/${user.role}`);
   }
 );
 
@@ -422,8 +420,9 @@ router.get(
       name: user.name,
       email: user.email,
       rolename: user.role,
+      expiration_date: user.expiration_date,
     };
-    res.redirect("/subscriber");
+    res.redirect(`/${user.role}`);
   }
 );
 

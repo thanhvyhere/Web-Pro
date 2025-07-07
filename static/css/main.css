@@ -224,22 +224,19 @@ hr {
 #nav-bar {
   border: 1px solid rgb(213, 213, 213);
 }
-#nav-left {
+/* #nav-left {
   min-width: 40vh;
   background-color: white;
   border-right: 5px solid rgb(213, 213, 213);
   text-align: center;
-  z-index: 1000;
-}
+} */
 #nav-left a {
-  min-width: 30vh;
+  min-width: 35vh;
   text-align: left;
   font-size: 20px;
   margin-top: 10%;
-  padding-left: 50px;
   color: #000000;
   margin-left: 5%;
-  margin-right: 5%;
   border-radius: 5px;
 }
 
@@ -249,9 +246,6 @@ hr {
   /* color: #F0B617; */
   color: black;
   font-weight: bold;
-}
-#nav-left a .active-link {
-  background-color: rgb(213, 213, 213) !important;
 }
 .body-homepage {
   margin: 2%;

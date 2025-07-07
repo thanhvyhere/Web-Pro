@@ -12,7 +12,7 @@ export default function (app) {
     }
     res.locals.auth = req.session.auth;
     res.locals.authUser = req.session.authUser || null; // Đảm bảo authUser luôn có giá trị
-    if (req.session.authUser && req.session.authUser.permission > 1) {
+    if (req.session.authUser && req.session.authUser.rolename != "guest") {
       req.session.authPremium = true;
       res.locals.authPremium = true;
     } else {
@@ -134,37 +134,14 @@ export default function (app) {
     next();
   });
   app.use(async function (req, res, next) {
-    let roleNum = req.session.authUser ? req.session.authUser.permission : 1;
-    let rolePort;
-    switch (roleNum) {
-      case 2: // Subscriber
-        rolePort = "subscriber";
-        break;
-      case 3: // Writer
-        rolePort = "writer";
-        break;
-      case 4: // Editor
-        rolePort = "editor";
-        break;
-      case 5: // Admin
-        rolePort = "administrator";
-        break;
+    let role = req.session.authUser ? req.session.authUser.rolename : "guest";
+    try {
+      const roleFeature = await accountService.roleFeature(role);
+      res.locals.lcFeatureRoles = roleFeature;
+    } catch (error) {
+      console.error(`Lỗi khi lấy dữ liệu cho port:`, error);
     }
-    if (
-      rolePort === "editor" ||
-      rolePort === "administrator" ||
-      rolePort === "writer" ||
-      rolePort === "subscriber"
-    ) {
-      try {
-        const permission = await accountService.findByRoleName(rolePort);
-        const roleFeature = await accountService.roleFeature(permission.RoleID);
-        res.locals.lcFeatureRoles = roleFeature;
-        res.locals.roleName = rolePort;
-      } catch (error) {
-        console.error(`Lỗi khi lấy dữ liệu cho port: ${rolePort}`, error);
-      }
-    }
+    
     next();
   });
 }
