@@ -6,10 +6,10 @@ const featureSchema = new Schema(
     _id: Number,
     FeatureName: { type: String, required: true },
     PathName: { type: String, required: true },
-    RoleID: {
-      type: Number,
-      ref: "Role",
+    Role: {
+      type: String,
       required: true,
+      enum: [ "subscriber", "writer", "editor", "administrator"],
     },
     Icon: { type: String, default: null },
   },

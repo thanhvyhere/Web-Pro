@@ -17,4 +17,4 @@ const roleSchema = new Schema(
 
 const Role = model("Role", roleSchema);
 
-export { Role };
+export default Role;

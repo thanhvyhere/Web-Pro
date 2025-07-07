@@ -1,6 +1,7 @@
 import User from '../model/User.js';
 import OtpUser from '../model/OtpUser.js'
-import { Role } from '../model/Role.js';
+import Role from '../model/Role.js';
+import Feature from '../model/Feature.js';
 export default {
     // Tìm người dùng theo tên đăng nhập
     findByUsername(username) {
@@ -53,18 +54,18 @@ export default {
         return OtpUser.deleteOne({otp: otp})
     },
 
-    roleFeature(id) {
-        return db('features')
-            .join('roles', 'features.RoleID', 'roles.RoleID') // Thực hiện JOIN
-            .select(
-                'features.FeatureID',
-                'features.FeatureName',
-                'features.PathName',
-                'features.RoleID',
-                'features.Icon',
-                'roles.RoleName' // Lấy RoleName từ bảng roles
-            )
-            .where('features.RoleID', id); // Lọc theo RoleID
+    async roleFeature( roleName) {
+        const features = await Feature.find({ Role: roleName })
+            .select("_id FeatureName PathName Role Icon") // Role là string
+            .lean();
+
+        return features.map(f => ({
+            FeatureID: f._id,
+            FeatureName: f.FeatureName,
+            PathName: f.PathName,
+            RoleName: f.Role,
+            Icon: f.Icon,
+        }));
     },
 
     async findbyrolename(permission)
