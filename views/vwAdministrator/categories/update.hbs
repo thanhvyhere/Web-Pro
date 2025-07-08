@@ -1,34 +1,50 @@
-{{#section "css"}}
-  <link rel="stylesheet" href="/static/css/cssAdministrator/categories/update.css">
-{{/section}}
-
-<div id="category-update-container">
-  <header id="category-update-header">
-    <h1 id="category-update-title">Update Category</h1>
-    <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
-  </header>
-
-  <div id="category-update-form-container">
-    <form action="/administrator/manage_categories/update/{{category.CatID}}" method="POST" id="category-update-form">
-      <div class="form-group">
-        <label for="CatName" id="label-catname">Category Name</label>
-        <input type="text" id="CatName" name="CatName" value="{{category.CatName}}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="parent_id" id="label-parent">Parent Category</label>
-        <select id="parent_id" name="parent_id">
-          <option value="null" {{#if (eq category.parent_id null)}}selected{{/if}}>None</option>
-          {{#each categories}}
-          <option value="{{this.CatID}}" {{#if (eq category.parent_id this.CatID)}}selected{{/if}}>{{this.CatName}}</option>
-          {{/each}}
-        </select>
-      </div>
-
-      <div id="category-update-buttons">
-        <button type="submit" id="update-category-btn" class="btn btn-update">Update Category</button>
-        <a href="/administrator/manage_categories" id="cancel-update-btn" class="btn btn-cancel">Cancel</a>
-      </div>
-    </form>
+<div class="tw-container tw-max-w-2xl tw-mx-auto tw-px-6 tw-py-10 tw-bg-white tw-rounded-xl tw-shadow-lg">
+  <!-- Header -->
+  <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
+    <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Update Category</h1>
+    <a href="/administrator/manage_categories"
+       class="tw-text-blue-600 hover:tw-underline tw-text-sm">
+      Back to Categories
+    </a>
   </div>
+
+  <!-- Form -->
+  <form action="/administrator/manage_categories/update/{{category._id}}" method="POST" class="tw-space-y-6">
+    <!-- Category Name -->
+    <div>
+      <label for="CatName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 mb-1">
+        Category Name
+      </label>
+      <input type="text" id="CatName" name="CatName" value="{{category.CatName}}"
+             class="tw-w-full tw-border tw-border-gray-300 tw-rounded-md tw-py-2 tw-px-3 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400" required>
+    </div>
+
+    <!-- Parent Category -->
+    <div>
+      <label for="parent_id" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 mb-1">
+        Parent Category
+      </label>
+      <select id="parent_id" name="parent_id"
+              class="tw-w-full tw-border tw-border-gray-300 tw-rounded-md tw-py-2 tw-px-3 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400">
+        <option value="null" {{#if (eq category.parent_id null)}}selected{{/if}}>None</option>
+        {{#each categories}}
+        <option value="{{this._id}}" {{#if (eq ../category.parent_id this._id)}}selected{{/if}}>
+          {{this.CatName}}
+        </option>
+        {{/each}}
+      </select>
+    </div>
+
+    <!-- Buttons -->
+    <div class="tw-flex tw-justify-end tw-gap-4">
+      <button type="submit"
+              class="tw-bg-orange-500 tw-text-white tw-px-5 tw-py-2 tw-rounded-md hover:tw-bg-orange-600">
+        Update Category
+      </button>
+      <a href="/administrator/manage_categories"
+         class="tw-bg-gray-300 tw-text-gray-800 tw-px-5 tw-py-2 tw-rounded-md hover:tw-bg-gray-400">
+        Cancel
+      </a>
+    </div>
+  </form>
 </div>

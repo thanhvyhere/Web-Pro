@@ -1,58 +1,98 @@
-{{#section "css"}}
-  <link rel="stylesheet" href="/static/css/cssAdministrator/users/users.css">
-{{/section}}
+<div class="tw-container tw-mx-auto tw-px-6 tw-py-8">
+  <!-- Header -->
+  <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
+    <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Manage Users</h1>
+    <a href="/administrator/manage_users/add"
+       class="tw-bg-orange-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-orange-600">
+      + Add New User
+    </a>
+  </div>
+  <!-- Table -->
+  <div class="tw-overflow-x-auto tw-rounded-lg tw-shadow">
+    <table class="tw-min-w-full tw-bg-white tw-border tw-border-gray-200">
+      <thead class="tw-bg-orange-100">
+        <tr class="tw-text-left tw-text-sm tw-text-gray-700">
+          <th class="tw-px-4 tw-py-3">ID</th>
+          <th class="tw-px-4 tw-py-3">Username</th>
+          <th class="tw-px-4 tw-py-3">DOB</th>
+          <th class="tw-px-4 tw-py-3">Email</th>
+          <th class="tw-px-4 tw-py-3">Permission</th>
+          <th class="tw-px-4 tw-py-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+        <tr class="tw-border-t hover:tw-bg-gray-50">
+          <td class="tw-px-4 tw-py-3">{{this._id}}</td>
+          <td class="tw-px-4 tw-py-3">{{this.username}}</td>
+          {{#if this.dob}}
+          <td class="tw-px-4 tw-py-3">{{formatDay this.dob}}</td>
+          {{else}}
+            <td class="tw-px-4 tw-py-3">-</td>
+        {{/if}}
+            {{#if this.email}}
+          <td class="tw-px-4 tw-py-3">{{this.email}}</td>
+          {{else}}
+            <td class="tw-px-4 tw-py-3">-</td>
+          {{/if}}
+          <td class="tw-px-4 tw-py-3">{{this.role}}</td>
+          <td class="tw-px-4 tw-py-2">
+            {{#if (eq this.username ../authUser.username)}}
+            <span class="tw-text-gray-500 tw-px-3 tw-py-1 tw-rounded-md tw-text-sm">You</span>
+            {{else}}
+            <div class="tw-flex tw-gap-2">
+                
+                <!-- View Button -->
+                <form action="/administrator/manage_users/detail/{{this._id}}" method="GET">
+                <button type="submit"
+                        class="tw-bg-green-500 tw-text-white tw-px-3 tw-py-1 tw-rounded-md tw-text-sm hover:tw-bg-green-600 tw-transition">
+                    View
+                </button>
+                </form>
 
-<div class="container"> <!-- Added container class for consistent layout -->
-    <header class="header">
-        <h1 class="title">Manage Users</h1>
-        <a href="/administrator/manage_users/add" class="btn btn-update">Add New User</a> <!-- Button to add new user -->
-    </header>
+                <!-- Edit Button -->
+                <form action="/administrator/manage_users/update/{{this._id}}" method="GET">
+                <button type="submit"
+                        class="tw-bg-yellow-500 tw-text-white tw-px-3 tw-py-1 tw-rounded-md tw-text-sm hover:tw-bg-yellow-600 tw-transition">
+                    Edit
+                </button>
+                </form>
 
-    <main>
-        <div class="table-container">
-            <table class="users-table">
-                <thead>
-                    <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Permission</th>
-                    <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each users}}
-                    <tr>
-                    <td>{{this.id}}</td>
-                    <td>{{this.username}}</td>
-                    <td>{{this.name}}</td>
-                    <td>{{this.email}}</td>
-                    <td>{{this.permission}}</td>
-                    <td>
-                        <a href="/administrator/manage_users/detail/{{this.id}}" class="btn btn-view">View</a>
-                        <a href="/administrator/manage_users/update/{{this.id}}" class="btn btn-update">Edit</a>
-                        <a href="/administrator/manage_users/delete/{{this.id}}" class="btn btn-delete">Delete</a>
-                    </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
+                <!-- Delete Button -->
+                <form action="/administrator/manage_users/delete/{{this._id}}" method="GET">
+                <button type="submit"
+                        class="tw-bg-red-500 tw-text-white tw-px-3 tw-py-1 tw-rounded-md tw-text-sm hover:tw-bg-red-600 tw-transition">
+                    Delete
+                </button>
+                </form>
+               
+            </div>
+             {{/if}}
+            </td>
 
-        <div class="pagination">
-            {{#if (gt currentPage 1)}}
-            <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
-            {{/if}}
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
-            {{#each (range 1 totalPages)}}
-            <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
-            {{this}}
-            </a>
-            {{/each}}
-            {{#if (lt currentPage totalPages)}}
-            <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
-            {{/if}}
-        </div>
-    </main>
+  <!-- Pagination -->
+  <div class="tw-flex tw-justify-center tw-mt-6 tw-space-x-2">
+    {{#if (gt currentPage 1)}}
+    <a href="?page={{sub currentPage 1}}"
+       class="tw-px-3 tw-py-1 tw-bg-gray-200 tw-rounded hover:tw-bg-gray-300">Previous</a>
+    {{/if}}
+
+    {{#each (range 1 totalPages)}}
+    <a href="?page={{this}}"
+       class="tw-px-3 tw-py-1 tw-rounded {{#if (eq this ../currentPage)}}tw-bg-orange-500 tw-text-white{{else}}tw-bg-gray-100 hover:tw-bg-gray-200{{/if}}">
+      {{this}}
+    </a>
+    {{/each}}
+
+    {{#if (lt currentPage totalPages)}}
+    <a href="?page={{add currentPage 1}}"
+       class="tw-px-3 tw-py-1 tw-bg-gray-200 tw-rounded hover:tw-bg-gray-300">Next</a>
+    {{/if}}
+  </div>
 </div>

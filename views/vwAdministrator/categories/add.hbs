@@ -1,34 +1,48 @@
-{{#section "css"}}
-    <link href="/static/css/cssAdministrator/categories/add.css" rel="stylesheet">
-{{/section}}
+<div class="tw-container tw-mx-auto tw-max-w-xl tw-p-6 tw-bg-white tw-rounded-lg tw-shadow-lg tw-mt-16">
 
-<div id="add-category-container">
-  <header id="add-category-header">
-    <h1 id="add-category-title">Add New Category</h1>
-    <a href="/administrator/manage_categories" id="back-to-categories-btn" class="btn btn-back">Back to Categories</a>
-  </header>
-
-  <div id="add-category-form-container" class="form-container">
-    <form id="add-category-form" action="/administrator/manage_categories/add" method="POST">
-      <div id="category-name-container" class="form-group">
-        <label for="category-name" id="category-name-label">Category Name</label>
-        <input type="text" id="category-name" name="CatName" required placeholder="Enter category name" class="form-control">
-      </div>
-
-      <div id="parent-category-container" class="form-group">
-        <label for="parent-category" id="parent-category-label">Parent Category</label>
-        <select id="parent-category" name="parent_id" class="form-control">
-          <option value="">Select Parent Category (Optional)</option>
-          {{#each categories}}
-            <option value="{{this.CatID}}">{{this.CatName}}</option>
-          {{/each}}
-        </select>
-      </div>
-
-      <div id="form-actions-container" class="form-actions">
-        <button type="submit" id="submit-category-btn" class="btn btn-submit">Add Category</button>
-        <a href="/administrator/manage_categories" id="cancel-btn" class="btn btn-cancel">Cancel</a>
-      </div>
-    </form>
+  <!-- Header -->
+  <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
+    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-800">Add New Category</h1>
+    <a href="/administrator/manage_categories"
+      class="tw-bg-gray-300 hover:tw-bg-gray-400 tw-text-gray-800 tw-font-medium tw-py-2 tw-px-4 tw-rounded-md">
+      Back to Categories
+    </a>
   </div>
+
+  <!-- Form -->
+  <form action="/administrator/manage_categories/add" method="POST" class="tw-space-y-6">
+
+    <!-- Category Name -->
+    <div>
+      <label for="category-name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 mb-1">Category Name</label>
+      <input type="text" name="CatName" id="category-name" required
+        placeholder="Enter category name"
+        class="tw-w-full tw-py-2 tw-px-3 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400" />
+    </div>
+
+    <!-- Parent Category -->
+    <div>
+      <label for="parent-category" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 mb-1">Parent Category</label>
+      <select name="parent_id" id="parent-category"
+        class="tw-w-full tw-py-2 tw-px-3 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400">
+        <option value="">Select Parent Category (Optional)</option>
+        {{#each categories}}
+        <option value="{{this._id}}">{{this.CatName}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <!-- Actions -->
+    <div class="tw-flex tw-justify-end tw-gap-4">
+      <button type="submit"
+        class="tw-bg-orange-500 hover:tw-bg-orange-600 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded-md tw-shadow">
+        Add Category
+      </button>
+      <a href="/administrator/manage_categories"
+        class="tw-bg-gray-300 hover:tw-bg-gray-400 tw-text-gray-800 tw-font-medium tw-py-2 tw-px-4 tw-rounded-md">
+        Cancel
+      </a>
+    </div>
+    
+  </form>
 </div>

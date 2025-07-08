@@ -11,7 +11,7 @@ export default function (req, res, next) {
 
 export async function checkPremium(req, res, next) {
   try {
-    if (req.session.authUser) {
+    if (req.session.authUser && req.session.authUser.rolename == "subscriber") {
       const userId = req.session.authUser.userid || "0";
 
       // Tìm thông tin Premium của người dùng
