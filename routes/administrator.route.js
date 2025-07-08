@@ -1,6 +1,5 @@
 import express from "express";
 import administratorService from "../services/administrator.service.js";
-import newsService from "../services/news.service.js";
 
 const router = express.Router();
 
@@ -211,7 +210,6 @@ router.get("/manage_categories/delete/:id", function (req, res) {
   administratorService
     .findCategoryById(categoryId) // Fetch category by ID
     .then(function (category) {
-      // Render the delete confirmation page and pass the category data to the view
       res.render("vwAdministrator/categories/delete", { category: category });
     })
     .catch(function (err) {
@@ -258,7 +256,7 @@ router.get("/manage_users", (req, res) => {
 // Route: Render Add User Page
 router.get("/manage_users/add", async (req, res) => {
   try {
-    const roles = await administratorService.getRoles(); // Ensure roles are fetched
+    const roles = await administratorService.getAllRoles();
     res.render("vwAdministrator/users/add", { roles });
   } catch (err) {
     console.error(err);
@@ -268,7 +266,7 @@ router.get("/manage_users/add", async (req, res) => {
 
 // Route: Add new user
 router.post("/manage_users/add", async (req, res) => {
-  const { username, password, confirmPassword, name, email, dob, permission } =
+  const { username, password, confirmPassword, name, email, dob, role} =
     req.body;
 
   // Kiểm tra mật khẩu và xác nhận mật khẩu có trùng khớp không
@@ -283,7 +281,7 @@ router.post("/manage_users/add", async (req, res) => {
       name,
       email,
       dob,
-      permission,
+      role,
     });
     res.redirect("/administrator/manage_users");
   } catch (err) {
@@ -297,7 +295,7 @@ router.get("/manage_users/update/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await administratorService.findByIdUsers(userId);
-    const roles = await administratorService.getRoles(); // Ensure roles are fetched
+    const roles = await administratorService.getAllRoles();
     res.render("vwAdministrator/users/update", { user, roles });
   } catch (err) {
     console.error(err);

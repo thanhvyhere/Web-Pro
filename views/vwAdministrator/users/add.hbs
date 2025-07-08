@@ -1,54 +1,67 @@
-{{#section "css"}}
-  <link rel="stylesheet" href="/static/css/cssAdministrator/users/add.css">
-{{/section}}
+<div class="tw-max-w-3xl tw-mx-auto tw-p-8 tw-bg-white tw-rounded-lg tw-shadow-md tw-border tw-border-gray-200">
+  <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
+    <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Add New User</h1>
+    <a href="/administrator/manage_users" class="tw-text-sm tw-text-blue-600 hover:tw-underline">
+      Back to User Management
+    </a>
+  </div>
 
-<div class="container">
-    <header class="header">
-        <h1 class="title">Add New User</h1>
-        <a href="/administrator/manage_users" class="btn btn-back">Back to User Management</a>
-    </header>
+  <form action="/administrator/manage_users/add" method="POST" class="tw-space-y-5">
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
+      <div>
+        <label for="username" class="tw-block tw-font-medium tw-text-gray-700">Username</label>
+        <input type="text" id="username" name="username" required
+               class="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400" />
+      </div>
 
-    <main>
-        <form action="/administrator/manage_users/add" method="POST">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+      <div>
+        <label for="name" class="tw-block tw-font-medium tw-text-gray-700">Full Name</label>
+        <input type="text" id="name" name="name" required
+               class="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400" />
+      </div>
 
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
-            </div>
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+      <div>
+        <label for="password" class="tw-block tw-font-medium tw-text-gray-700">Password</label>
+        <input type="password" id="password" name="password" required
+               class="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400" />
+      </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+      <div>
+        <label for="confirmPassword" class="tw-block tw-font-medium tw-text-gray-700">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required
+               class="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400" />
+      </div>
 
-            <div class="form-group">
-                <label for="dob">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required>
-            </div>
+      <div>
+        <label for="email" class="tw-block tw-font-medium tw-text-gray-700">Email</label>
+        <input type="email" id="email" name="email" required
+               class="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400" />
+      </div>
 
-            <div class="form-group">
-                <label for="permission">Role</label>
-                <select id="permission" name="permission" required>
-                    {{#each roles}}
-                        <option value="{{this.RoleID}}">{{this.RoleName}}</option>
-                    {{/each}}
-                </select>
-            </div>
+      <div>
+        <label for="dob" class="tw-block tw-font-medium tw-text-gray-700">Date of Birth</label>
+        <input type="date" id="dob" name="dob" required
+               class="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400" />
+      </div>
 
-            <button type="submit" class="btn btn-add">Add User</button>
-            <a href="/administrator/manage_users" class="btn btn-cancel">Cancel</a>
-        </form>
-    </main>
+      <div class="md:tw-col-span-2">
+        <label for="role" class="tw-block tw-font-medium tw-text-gray-700">Role</label>
+        <select id="role" name="role" required
+                class="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400">
+          {{#each roles}}
+            <option value="{{this._id}}">{{this.role}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+
+    <div class="tw-flex tw-items-center tw-gap-4 tw-mt-6">
+      <button type="submit"
+              class="tw-bg-blue-600 tw-text-white tw-font-medium tw-px-5 tw-py-2 tw-rounded-md hover:tw-bg-blue-700 tw-transition">
+        Add User
+      </button>
+      <a href="/administrator/manage_users"
+         class="tw-text-gray-600 hover:tw-underline">Cancel</a>
+    </div>
+  </form>
 </div>

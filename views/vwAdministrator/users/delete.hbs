@@ -1,19 +1,27 @@
-{{#section "css"}}
-  <link rel="stylesheet" href="/static/css/cssAdministrator/users/delete.css">
-{{/section}}
+<div class="tw-max-w-xl tw-mx-auto tw-p-8 tw-bg-white tw-rounded-lg tw-shadow-md tw-border tw-border-gray-200">
+  <!-- Header -->
+  <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
+    <h1 class="tw-text-2xl tw-font-bold tw-text-red-600">Delete User</h1>
+    <a href="/administrator/manage_users" class="tw-text-sm tw-text-blue-600 hover:tw-underline">
+      Back to User Management
+    </a>
+  </div>
 
-<div class="container">
-    <header class="header">
-        <h1 class="title">Delete User</h1>
-        <a href="/administrator/manage_users" class="btn btn-back">Back to User Management</a>
-    </header>
+  <!-- Confirmation Text -->
+  <p class="tw-text-gray-700 tw-mb-6">
+    Are you sure you want to delete user <strong class="tw-text-red-600">{{user.username}}</strong>?
+    This action cannot be undone.
+  </p>
 
-    <main>
-        <p>Are you sure you want to delete user <strong>{{user.username}}</strong>?</p>
-
-        <form action="/administrator/manage_users/delete/{{user.id}}" method="POST">
-            <button type="submit" class="btn btn-delete">Delete</button>
-            <a href="/administrator/manage_users" class="btn btn-cancel">Cancel</a>
-        </form>
-    </main>
+  <!-- Form -->
+  <form action="/administrator/manage_users/delete/{{user._id}}" method="POST" class="tw-flex tw-gap-4">
+    <button type="submit"
+            class="tw-bg-red-600 tw-text-white tw-font-semibold tw-px-5 tw-py-2 tw-rounded-md hover:tw-bg-red-700 tw-transition">
+      Yes, Delete
+    </button>
+    <a href="/administrator/manage_users"
+       class="tw-text-gray-600 hover:tw-underline tw-px-4 tw-py-2">
+      Cancel
+    </a>
+  </form>
 </div>

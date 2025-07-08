@@ -1,56 +1,59 @@
-{{#section "css"}}
-  <link rel="stylesheet" href="/static/css/cssAdministrator/users/detail.css">
-{{/section}}
+<div class="tw-max-w-3xl tw-mx-auto tw-bg-white tw-shadow-md tw-rounded-xl tw-p-8 tw-border tw-border-gray-200">
+  <!-- Header -->
+  <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
+    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-800">User Details</h1>
+    <a href="/administrator/manage_users" class="tw-text-sm tw-text-blue-600 hover:tw-underline">← Back to Users</a>
+  </div>
 
-<div class="container"> <!-- Added container class for consistent layout -->
-    <header class="header">
-        <h1 class="title">User Details</h1>
-        <a href="/administrator/manage_users" class="btn btn-back">Back to Users</a> <!-- Button to go back to user list -->
-    </header>
+  <!-- User Info Table -->
+  <div class="tw-overflow-x-auto">
+    <table class="tw-w-full tw-text-left tw-text-gray-700">
+      <tbody>
+        <tr class="tw-border-b">
+          <th class="tw-py-2 tw-font-medium tw-pr-4">ID:</th>
+          <td class="tw-py-2">{{user._id}}</td>
+        </tr>
+        <tr class="tw-border-b">
+          <th class="tw-py-2 tw-font-medium tw-pr-4">Username:</th>
+          <td class="tw-py-2">{{user.username}}</td>
+        </tr>
+        <tr class="tw-border-b">
+          <th class="tw-py-2 tw-font-medium tw-pr-4">Name:</th>
+          <td class="tw-py-2">{{user.name}}</td>
+        </tr>
+        <tr class="tw-border-b">
+          <th class="tw-py-2 tw-font-medium tw-pr-4">Email:</th>
+          <td class="tw-py-2">{{user.email}}</td>
+        </tr>
+        <tr class="tw-border-b">
+          <th class="tw-py-2 tw-font-medium tw-pr-4">Role:</th>
+          <td class="tw-py-2">{{user.role}}</td>
+        </tr>
+        <tr class="tw-border-b">
+          <th class="tw-py-2 tw-font-medium tw-pr-4">Date of Birth:</th>
+          <td class="tw-py-2">{{user.dob}}</td>
+        </tr>
+        <tr class="tw-border-b">
+          <th class="tw-py-2 tw-font-medium tw-pr-4">Followers:</th>
+          <td class="tw-py-2">{{user.NoOfFollower}}</td>
+        </tr>
+        <tr>
+          <th class="tw-py-2 tw-font-medium tw-pr-4">Following:</th>
+          <td class="tw-py-2">{{user.NoOfFollowing}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <main>
-        <div class="user-details">
-            <table class="user-details-table"> <!-- Added a specific table class for styling -->
-                <tbody>
-                    <tr>
-                        <th>ID:</th>
-                        <td>{{user.id}}</td>
-                    </tr>
-                    <tr>
-                        <th>Username:</th>
-                        <td>{{user.username}}</td>
-                    </tr>
-                    <tr>
-                        <th>Name:</th>
-                        <td>{{user.name}}</td>
-                    </tr>
-                    <tr>
-                        <th>Email:</th>
-                        <td>{{user.email}}</td>
-                    </tr>
-                    <tr>
-                        <th>Permission:</th>
-                        <td>{{user.permission}}</td>
-                    </tr>
-                    <tr>
-                        <th>Date of Birth:</th>
-                        <td>{{user.dob}}</td> <!-- Hiển thị ngày sinh -->
-                    </tr>
-                    <tr>
-                        <th>Followers:</th>
-                        <td>{{user.NoOfFollower}}</td> <!-- Hiển thị số người theo dõi -->
-                    </tr>
-                    <tr>
-                        <th>Following:</th>
-                        <td>{{user.NoOfFollowing}}</td> <!-- Hiển thị số người đang theo dõi -->
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="actions">
-            <a href="/administrator/manage_users/update/{{user.id}}" class="btn btn-update">Edit</a>
-            <a href="/administrator/manage_users/delete/{{user.id}}" class="btn btn-delete">Delete</a>
-        </div>
-    </main>
+  <!-- Action Buttons -->
+  <div class="tw-mt-6 tw-flex tw-gap-4">
+    <a href="/administrator/manage_users/update/{{user._id}}"
+       class="tw-bg-orange-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-orange-600 tw-font-medium">
+      Edit
+    </a>
+    <a href="/administrator/manage_users/delete/{{user._id}}"
+       class="tw-bg-red-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-red-700 tw-font-medium">
+      Delete
+    </a>
+  </div>
 </div>

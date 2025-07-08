@@ -40,14 +40,14 @@ activate_locals_middleware(app);
 activate_view_middleware(app);
 activate_route_middleware(app);
 
-cron.schedule('* * * * *', async () => {
-    console.log('Cron job started...');
-    try {
-        const response = await axios.get('http://localhost:3000/newspaper/update-status');
-    } catch (error) {
-        console.error('Cron job error:', error.message);
-    }
-});
+// cron.schedule('* * * * *', async () => {
+//     console.log('Cron job started...');
+//     try {
+//         const response = await axios.get('http://localhost:3000/newspaper/update-status');
+//     } catch (error) {
+//         console.error('Cron job error:', error.message);
+//     }
+// });
 
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');

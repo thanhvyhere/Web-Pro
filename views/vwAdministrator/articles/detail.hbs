@@ -1,45 +1,50 @@
-{{#section "css"}}
-<link rel="stylesheet" href="/static/css/cssAdministrator/articles/detail.css">
-{{/section}}
-
-<div class="container">
-  <!-- Nút Back to Articles -->
-  <div class="btn-back-container">
-    <a href="/administrator/manage_articles" class="btn-back">
-      <i class="bi bi-arrow-left-circle-fill"></i> Back to Articles
+<div class="tw-container tw-mx-auto tw-px-4 tw-py-8">
+  <!-- Nút Back -->
+  <div class="tw-mb-6">
+    <a href="/administrator/manage_articles" class="tw-inline-flex tw-items-center tw-text-blue-600 hover:tw-underline tw-font-medium tw-text-lg">
+      <i class="bi bi-arrow-left-circle-fill tw-mr-2"></i> Back to Articles
     </a>
   </div>
 
-  <div class="article-detail">
-    <!-- Thông tin chi tiết bài viết -->
-    <h2 class="article-title">{{article.Title}}</h2>
-
-    <!-- Hiển thị biểu tượng sao lấp lánh nếu bài viết là Premium -->
-    {{#if article.Premium}}
-    <div class="premium-star">
-      ★
-    </div>
-    {{/if}}
-
-    <!-- Các thông tin hiển thị ở phần trên -->
-    <div class="article-meta">
-      <p><strong>Views:</strong> {{article.Views}}</p>
-      <p><strong>Created Date:</strong> {{article.CreatedDate}}</p>
-      <p><strong>Published On:</strong> {{article.PublishedDay}}</p>
-      <p><strong>Status:</strong> {{article.StatusName}}</p>
-      <p><strong>Author:</strong> {{article.AuthorName}}</p>
-      <p><strong>Premium Status:</strong> {{#if article.Premium}}Premium{{else}}Normal{{/if}}</p>
+  <div class="tw-bg-white tw-p-6 tw-rounded-lg tw-shadow-lg tw-border tw-border-gray-200">
+    <!-- Tiêu đề bài viết -->
+    <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
+      <h2 class="tw-text-3xl tw-font-bold tw-text-gray-800">{{article.Title}}</h2>
+      {{#if article.Premium}}
+        <span class="tw-text-yellow-500 tw-text-3xl tw-animate-pulse">★</span>
+      {{/if}}
     </div>
 
-    <!-- Tóm tắt và nội dung -->
-    <p><strong>Abstract:</strong> {{article.Abstract}}</p>
+    <!-- Metadata -->
+    <div class="tw-grid sm:tw-grid-cols-2 tw-gap-4 tw-mb-6">
+      <p><span class="tw-font-semibold">Views:</span> {{article.Views}}</p>
+      <p><span class="tw-font-semibold">Created Date:</span> {{article.CreatedDate}}</p>
+      <p><span class="tw-font-semibold">Published On:</span> {{article.PublishedDay}}</p>
+      <p><span class="tw-font-semibold">Status:</span> {{article.StatusName}}</p>
+      <p><span class="tw-font-semibold">Author:</span> {{article.AuthorName}}</p>
+      <p><span class="tw-font-semibold">Premium Status:</span>
+        {{#if article.Premium}}<span class="tw-text-yellow-600">Premium</span>{{else}}Normal{{/if}}
+      </p>
+    </div>
 
-    <!-- Render nội dung HTML từ trường Content -->
-    <div class="content-html">
-      {{{article.Content}}} <!-- Nội dung HTML của bài viết -->
+    <!-- Abstract -->
+    <div class="tw-mb-6">
+      <h3 class="tw-font-semibold tw-text-lg tw-text-gray-700 mb-2">Abstract:</h3>
+      <p class="tw-text-gray-800">{{article.Abstract}}</p>
+    </div>
+
+    <!-- Nội dung bài viết -->
+    <div class="tw-mb-6">
+      <h3 class="tw-font-semibold tw-text-lg tw-text-gray-700 mb-2">Content:</h3>
+      <div class="tw-prose max-w-none">
+        {{{article.Content}}}
+      </div>
     </div>
 
     <!-- Feedback -->
-    <p><strong>Feedback:</strong> {{article.Feedback}}</p>
+    <div>
+      <h3 class="tw-font-semibold tw-text-lg tw-text-gray-700 mb-2">Feedback:</h3>
+      <p class="tw-text-gray-800">{{article.Feedback}}</p>
+    </div>
   </div>
 </div>
