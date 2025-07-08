@@ -5,6 +5,7 @@ import auth from "../middleware/auth.mdw.js";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
+import { authWriter } from "../middleware/auth.mdw.js";
 const router = express.Router();
 
 router.get("/byCat", async function (req, res) {
@@ -132,8 +133,8 @@ router.get("/detail-raw", async function (req, res) {
   });
 });
 
-router.get("/edit", async function (req, res) {
-  const id = +req.query.id || 0; // + o trc de chuyen kieu du lieu ve so
+router.get("/edit", authWriter, async function (req, res) {
+  const id = req.query.id; 
   const entity = await newsService.findById(id);
   const tags = await newsService.getTagByNewsId(id);
   const category_con = await newsService.findCatByCatId(entity.CatID);
@@ -173,27 +174,22 @@ router.post("/patch", upload.single("ImageFile"), async function (req, res) {
   const imagePath = "./static/imgs/news/";
   const imageFile = req.file; // Lấy file upload từ multer
   const number = await newsService.countByNews();
-
+  const NewsID = req.body.newsId || 0; // Lấy ID bài viết từ form
   let finalImages = [];
   let coverImage;
 
-  // Nếu có file tải lên
   if (imageFile) {
-    const fileName = `news_${number[0].total}.jpg`; // Tạo tên file mới
+    const fileName = `news_${number[0].total}.jpg`; 
     const newFilePath = path.join(imagePath, fileName);
 
-    // Đổi tên file để lưu đúng chuẩn
     fs.renameSync(imageFile.path, newFilePath);
 
-    // Đường dẫn đầy đủ cho ảnh vừa tải
     finalImages.push(`/static/imgs/news/${fileName}`);
-    coverImage = finalImages[0]; // Ảnh bìa là ảnh đầu tiên
+    coverImage = finalImages[0]; 
   } else {
-    // Không có file tải lên, giữ nguyên ImageCover từ body
-    coverImage = req.body.ImageCover; // Giá trị cũ từ form (được gửi lên từ client)
+    coverImage = req.body.ImageCover; 
   }
   const id = req.body.newsId;
-  await newsService.delTagByNewsId(id);
   const { tags } = req.body || "";
   const date = new Date();
   const changes = {
@@ -205,37 +201,30 @@ router.post("/patch", upload.single("ImageFile"), async function (req, res) {
     Status: 2,
   };
   await newsService.patch(id, changes);
-  if (tags === "") {
-    res.redirect("/writer/pending_approval?success=Update%20successful!");
-  } else {
-    let parsedTags = tags;
-    if (typeof tags === "string") {
-      parsedTags = JSON.parse(tags);
-    }
-    for (let tag of parsedTags) {
-      let tagValue = tag.value;
+  let tagIDs = [];
 
-      // Kiểm tra nếu tag đã tồn tại trong cơ sở dữ liệu
-      let existingTag = await newsService.findTagByTagName(tagValue);
-      if (!existingTag) {
-        let newTag = {
-          TagName: tagValue,
-        };
-        // Lưu tag mới vào database
-        await newsService.addNewTag(newTag);
-        existingTag = await newsService.findTagByTagName(tagValue);
-      }
+if (typeof tags === "string" && tags.trim() !== "") {
+  let parsedTags = JSON.parse(tags);
 
-      // Tạo mối quan hệ giữa tag và bài viết
-      const tagNewsEntity = {
-        TagID: existingTag.TagID,
-        NewsID: id,
+  for (let tag of parsedTags) {
+    let tagValue = tag.value;
+
+    let existingTag = await newsService.findTagByTagName(tagValue);
+    if (!existingTag) {
+      let newTag = {
+        _id: await newsService.getNextTagID(),
+        TagName: tagValue,
       };
-
-      await newsService.addTagIdAndNewsId(tagNewsEntity);
+      await newsService.addNewTag(newTag);
+      existingTag = await newsService.findTagByTagName(tagValue);
     }
-    res.redirect("/writer/pending_approval?success=Update%20successful!");
+
+    tagIDs.push(Number(existingTag._id));
   }
+
+  await newsService.updateTagsOfNews(NewsID, tagIDs);
+}
+res.redirect("/writer/pending_approval?success=Update%20successful!");
 });
 
 router.get("/api/tags", async (req, res) => {
