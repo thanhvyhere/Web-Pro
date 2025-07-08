@@ -78,7 +78,7 @@ router.post('/register', async function (req, res) {
   };
 
   const otp = Math.floor(1000 + Math.random() * 9000);
-  const expireAt = new Date(Date.now() + 1 * 60 * 1000);
+  const expireAt = new Date(Date.now() + 2 * 60 * 1000);
 
   await accountService.addOTP({
     otp: otp,
@@ -103,47 +103,54 @@ router.post('/register', async function (req, res) {
     }, 500);
     req.session.tempUser = tempUser;
     
-    return res.render("homepage", {
-      layout: "account-layout",
+    return res.json({
+      success: true,
       email: req.body.email,
       username: req.body.username,
-      showVerifyPopup: true,
+      successMessage: "Your code was sent to your email"
     });
 
   } catch (err) {
     console.error("Failed to send verification email:", err);
     return res
       .status(500)
-      .json({ showVerifyPopup: false, error: "Failed to send OTP email." });
+      .json({ showVerifyPopup: false, errorMessage: "Failed to send OTP email." });
   }
 });
 router.post("/verify-email", async function (req, res) {
-  const email = req.body.email;
-  const username = req.body.username;
-  const otp = req.body.otp;
+  const { email, username, otp } = req.body;
   console.log(email);
 
   try {
     const otpRecord = await accountService.findOTPByEmail(email).lean();
-    console.log(otpRecord);
+    console.log("otp: ",otpRecord);
+
     if (!otpRecord) {
-      return res.render("homepage", {
+      return res.status(400).json({
+        status: "error",
+        type: "expired",
+        message: "OTP expired. Please register again.",
         email,
         username,
-        errorMessage: "OTP expired. Please register again.",
       });
     }
+
     if (parseInt(otp) !== otpRecord.otp) {
-      return res.render("homepage", {
+      return res.status(400).json({
+        status: "error",
+        type: "incorrect",
+        message: "Incorrect OTP. Please try again.",
         email,
         username,
-        errorMessage: "Incorrect OTP. Please try again.",
       });
     }
+
     const tempUser = req.session.tempUser;
     if (!tempUser) {
-      return res.render('homepage',{
-        errorMessage: "Fail..",
+      return res.status(400).json({
+        status: "error",
+        type: "session",
+        message: "Session expired. Please register again.",
       });
     }
 
@@ -151,12 +158,53 @@ router.post("/verify-email", async function (req, res) {
     await accountService.delOTP(otp);
     req.session.tempUser = null;
 
-    res.render("homepage", {
-      successMessage: "Email verified. Account created successfully!",
+    return res.status(200).json({
+      status: "success",
+      message: "Email verified. Account created successfully!",
     });
+
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server error. Please try again later.");
+    res.status(500).json({
+      status: "error",
+      type: "server",
+      message: "Server error. Please try again later.",
+    });
+  }
+});
+
+router.post('/resend-otp', async function (req, res) {
+  const { email, username } = req.session.tempUser;
+
+  try {
+    const newOtp = Math.floor(1000 + Math.random() * 9000); // Tạo OTP
+    const expireAt = new Date(Date.now() + 2 * 60 * 1000); // Hết hạn sau 2 phút
+    console.log(email);
+    // Lưu hoặc cập nhật OTP
+    await accountService.saveOrUpdateOTP(email, newOtp, expireAt);
+
+    const subject = "[VERIFY EMAIL] - NEWSLAND REGISTRATION";
+    const html = `
+      <h3>Email Verification</h3>
+      <p>Thank you for registering at Newsland.</p>
+      <p>Your verification code is:</p>
+      <h2>${newOtp}</h2>
+      <p>This code is valid for 2 minutes.</p>
+    `;
+
+    // Gửi email xác thực
+    await sendEmailRegister(email, subject, html);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'A new OTP has been sent to your email.',
+    });
+  } catch (err) {
+    console.error('Error resending OTP:', err);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to resend OTP. Please try again later.',
+    });
   }
 });
 

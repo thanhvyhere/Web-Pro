@@ -26,6 +26,19 @@ export default {
         const otp = new OtpUser(entity)
         return otp.save();
     }, 
+    async saveOrUpdateOTP(email, newOtp, newExpireDate) {
+        return await OtpUser.findOneAndUpdate(
+            { email: email },
+            {
+            otp: newOtp,
+            expire_time: newExpireDate,
+            },
+            {
+            upsert: true,
+            new: true,  
+            }
+        );
+    },
 
     findOTPByEmail(email) {
         return OtpUser.findOne({ email: email });

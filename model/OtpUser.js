@@ -5,8 +5,7 @@ const { Schema, model } = mongoose;
 
 const otpSchema = new Schema(
   {
-    id: { type: String, default: () => randomUUID() },
-    email: String,
+    email: { type: String, required: true, unique: true },
     otp: Number,
     expire_time: {
       type: Date,
