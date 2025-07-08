@@ -31,17 +31,14 @@ export async function checkPremium(req, res, next) {
           req.session.authPremium = true;
         }
       } else {
-        // Nếu không có Premium, đảm bảo session phản ánh điều này
         req.session.authPremium = false;
       }
     }
 
-    // Tiếp tục xử lý middleware tiếp theo
     next();
   } catch (err) {
     console.error("Error in checkPremium middleware:", err);
 
-    // Trả về lỗi nếu xảy ra vấn đề trong quá trình kiểm tra
     res.status(500).json({
       message: "An error occurred while checking premium status.",
       error: err.message,
@@ -55,9 +52,9 @@ export function authAdmin(req, res, next) {
     return res.redirect("/account/login");
   }
 
-  if (req.session.authUser.permission < 5) {
-    // Render trang homepage và gửi thông báo lỗi qua locals
-    return res.render("homepage", { message: "Không đủ quyền để truy cập." });
+  if (req.session.authUser.rolename != "administrator") {
+    return res.render("error", { message: "Không đủ quyền để truy cập.",
+      layout: "empty", status: "lỗi" ,});
   }
 
   next();
@@ -70,11 +67,11 @@ export function authWriter(req, res, next) {
   }
 
   if (
-    req.session.authUser.permission !== 3 ||
-    req.session.authUser.permission !== 5
-  ) {
-    // Render trang homepage và gửi thông báo lỗi qua locals
-    return res.render("homepage", { message: "Không đủ quyền để truy cập." });
+    req.session.authUser.rolename !== "writer" &&
+    req.session.authUser.rolename !== "reader") {
+    console.log(req.session.authUser.rolename);
+    return res.render("error", { message: "Không đủ quyền để truy cập.",
+      layout: "empty", status: "lỗi" ,});
   }
 
   next();
@@ -86,9 +83,10 @@ export function authEditor(req, res, next) {
     return res.redirect("/account/login");
   }
 
-  if (req.session.authUser.permission < 4) {
-    // Render trang homepage và gửi thông báo lỗi qua locals
-    return res.render("homepage", { message: "Không đủ quyền để truy cập." });
+  if (req.session.authUser.rolename !== "editor" || 
+      req.session.authUser.rolename !== "administrator") {
+    return res.render("error", { message: "Không đủ quyền để truy cập.",
+      layout: "empty", status: "lỗi" ,});
   }
 
   next();

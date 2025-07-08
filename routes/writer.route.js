@@ -7,25 +7,20 @@ import path from "path";
 
 const router = express.Router();
 
-// Utility function to fetch news with categories
-
-// Reusable route handler for paginated news statuses
 async function renderNewsByStatus(req, res, status, viewName) {
-  const authorName = req.session.authUser.name;
+  const authorName = req.session.authUser.username;
   const allNews = await newsService.getNewsByAuthorStatus(authorName, status);
   const updatedList = await Promise.all(
     allNews.map(async (news) => {
       const category = await newsService.findCatByCatId(news.CatID); // Sử dụng 'news' thay vì 'new'
       return {
-        ...news, // Giữ nguyên tất cả các thuộc tính của allNews
-        catName: category ? category.CatName : "Chưa có danh mục", // Thêm catName vào đối tượng
+        ...news, 
+        catName: category ? category.CatName : "Chưa có danh mục", 
       };
     })
   );
 
-  // Pagination calculation
 
-  // Render the view
   res.render(viewName, {
     newsList: updatedList,
   });
@@ -42,113 +37,65 @@ router.get("/create_article", async (req, res) => {
 });
 const upload = multer({ dest: "./static/imgs/news/" });
 router.post("/create_article", upload.single("ImageFile"), async (req, res) => {
-  const imagePath = "./static/imgs/news/";
-  const imageFile = req.file; // Lấy file upload từ multer
-  const imageUrl = req.body.ImageUrl ? req.body.ImageUrl.trim() : ""; // Lấy URL từ form
-  const number = await newsService.countByNews();
-  console.log(number);
-  // Kiểm tra nếu cả file và URL đều được gửi
-  if (imageFile && imageUrl) {
-    return res.status(400).send("Only one input (file or URL) is allowed");
-  }
-
-  // Mảng chứa các ảnh cuối cùng
-  let finalImages = [];
-
-  // Nếu file được tải lên
-  if (imageFile) {
-    const fileName = `news_${number[0].total}.jpg`;
-    const newFilePath = path.join(imagePath, fileName);
-
-    // Đổi tên file để lưu đúng chuẩn
-    fs.renameSync(imageFile.path, newFilePath);
-
-    // Thêm đường dẫn vào mảng
-    finalImages.push(`/static/imgs/news/${fileName}`);
-  }
-  // Nếu URL được cung cấp
-  else if (imageUrl) {
-    if (imageUrl.startsWith("http")) {
-      finalImages.push(imageUrl);
-    } else {
-      return res.status(400).send("Invalid URL");
-    }
-  } else {
-    return res.status(400).send("No image provided");
-  }
-
-  console.log("Final Images:", finalImages);
-
-  // Lấy ảnh đầu tiên làm ảnh bìa
-  const coverImage = finalImages[0];
-
-  const {
-    title,
-    author,
-    abstract,
-    content,
-    is_premium,
-    category_child_id,
-    CatID,
-  } = req.body;
-  const entity = {
-    Title: title,
-    AuthorName: req.session.authUser.name,
-    Abstract: abstract,
-    CatID: category_child_id,
-    Content: content,
-    Premium: 0,
-    CreatedDate: new Date(),
-    Status: 2,
-    ImageCover: coverImage,
-  };
-
   try {
-    await newsService.add(entity);
-    const [result] = await newsService.getIdNewEntity();
-    const newsID = result[0].id;
-    const { tags } = req.body || "0";
+    const imageFile = req.file;
+    const imageUrl = req.body.ImageUrl?.trim();
+    const userName = req.session.authUser.username;
+    const totalNews = await newsService.countByNews();
 
-    let parsedTags = tags;
-    if (typeof tags === "string") {
-      parsedTags = JSON.parse(tags);
+    // Validate image input
+    if (imageFile && imageUrl) {
+      return res.status(400).send("Only one input (file or URL) is allowed");
     }
-    for (let tag of parsedTags) {
-      let tagValue = tag.value;
 
-      // Kiểm tra nếu tag đã tồn tại trong cơ sở dữ liệu
-      let existingTag = await newsService.findTagByTagName(tagValue);
-      if (!existingTag) {
-        let newTag = {
-          TagName: tagValue,
-        };
-        // Lưu tag mới vào database
-        await newsService.addNewTag(newTag);
-        existingTag = await newsService.findTagByTagName(tagValue);
+    let coverImage = "";
+
+    if (imageFile) {
+      const imagePath = "./static/imgs/news/";
+      const fileName = `news_${totalNews}.jpg`;
+      const newFilePath = path.join(imagePath, fileName);
+      fs.renameSync(imageFile.path, newFilePath);
+      coverImage = `/static/imgs/news/${fileName}`;
+    } else if (imageUrl) {
+      if (!imageUrl.startsWith("http")) {
+        return res.status(400).send("Invalid URL");
       }
-
-      // Tạo mối quan hệ giữa tag và bài viết
-      const tagNewsEntity = {
-        TagID: existingTag.TagID,
-        NewsID: newsID,
-      };
-
-      await newsService.addTagIdAndNewsId(tagNewsEntity);
+      coverImage = imageUrl;
+    } else {
+      return res.status(400).send("No image provided");
     }
 
-    // Chuyển hướng với thông báo thành công
+    // Extract form data
+    const {
+      title,
+      abstract,
+      content,
+      category_child_id,
+      tags
+    } = req.body;
+
+    const article = {
+      Title: title,
+      AuthorName: userName,
+      Abstract: abstract,
+      CatID: Number(category_child_id),
+      Content: content,
+      Premium: false,
+      CreatedDate: new Date(),
+      Status: 2,
+      ImageCover: coverImage
+    };
+
+    await newsService.createArticleWithTags(article, tags);
+
     res.redirect("/writer/pending_approval?success=Upload%20successful!");
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to save tags" });
+    res.status(500).json({ error: "Failed to create article" });
   }
 });
-
-// Get category children
 router.get("/categories/children/:CatID", async (req, res) => {
-  const categoryChildren = await newsService.getCategoriesChild(
-    req.params.CatID
-  );
+  const categoryChildren = await newsService.getCategoriesChild(req.params.CatID);
   res.json(categoryChildren);
 });
 

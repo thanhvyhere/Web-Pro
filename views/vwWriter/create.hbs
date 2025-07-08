@@ -36,7 +36,7 @@
           // Thêm các category con vào dropdown
           if (data.length > 0) {
             data.forEach(function (child) {
-              childSelect.append('<option value="' + child.CatID + '">' + child.CatName + '</option>');
+              childSelect.append('<option value="' + child._id + '">' + child.CatName + '</option>');
             });
             childSelect.prop('disabled', false); // Kích hoạt dropdown
           } else {
@@ -56,21 +56,18 @@
     const input = document.querySelector('#txtTag');
 
     try {
-      // Gọi API để lấy danh sách tags
       const response = await fetch('/newspaper/api/tags');
       if (!response.ok) throw new Error('Failed to fetch tags');
       const tags = await response.json(); // Danh sách tags từ API
       const tagifyTags = tags.map(tag => ({ value: tag.TagName }));
       console.log(tagifyTags);
-      // Kiểm tra xem dữ liệu tags có hợp lệ không
-      console.log('Tags fetched:', tags); // Kiểm tra dữ liệu tags
+      console.log('Tags fetched:', tags); 
 
       const tagify = new Tagify(input, {
-        whitelist: tagifyTags, // Sử dụng danh sách tags từ API
-        maxTags: 5,
+        whitelist: tagifyTags, 
         placeholder: 'Add tags',
         dropdown: {
-          maxItems: 10, // Hiển thị tối đa 10 tag
+          maxItems: 10, 
           enabled: 0, // Hiển thị dropdown ngay khi focus
           closeOnSelect: true // Giữ dropdown mở sau khi chọn
         }
@@ -161,6 +158,23 @@
   });
 
 </script>
+<script>
+  const imageUrlInput = document.getElementById("imageUrl");
+  const previewContainer = document.getElementById("previewContainer");
+  const imagePreview = document.getElementById("imagePreview");
+
+  imageUrlInput.addEventListener("input", () => {
+    const url = imageUrlInput.value.trim();
+
+    if (url && url.startsWith("http")) {
+      imagePreview.src = url;
+      previewContainer.style.display = "block";
+    } else {
+      previewContainer.style.display = "none";
+      imagePreview.src = "";
+    }
+  });
+</script>
 {{/section}}
 
 <form class="formCreate" action="/writer/create_article" method="post" enctype="multipart/form-data">
@@ -182,7 +196,7 @@
       <select name="CatID" id="txtCat" class="form-control txt-input" required>
         <option value="" disabled selected>Select a category</option>
         {{#each categories}}
-        <option value="{{CatID}}">{{CatName}}</option>
+        <option value="{{_id}}">{{CatName}}</option>
         {{/each}}
       </select>
     </div>
@@ -222,11 +236,17 @@
     <span class="input-group-text" id="basic-addon3">URL ảnh</span>
     <input type="url" id="imageUrl" name="ImageUrl" aria-describedby="basic-addon3 basic-addon4" class="form-control"
       placeholder="https://example.com/image.jpg">
+    <span class="input-group-text" id="basic-addon4">Ví dụ: https://example.com/image.jpg</span>
+  </div>
+  <div id="previewContainer" style="margin-top: 1rem; display: none;">
+    <p style="margin-bottom: 0.5rem;">Xem trước:</p>
+    <img id="imagePreview" src="" alt="Image Preview"
+      style="max-width: 100%; max-height: 300px; border: 1px solid #ccc; border-radius: 4px;" />
   </div>
 
   <div class="form-group mb-3">
     <label for="txtContent">Content</label>
-    <textarea id="txtContent" name="content" required>Hello World</textarea>
+    <textarea id="txtContent" name="content" required>Hãy cung cấp bài viết của bạn ở đây</textarea>
   </div>
   <div class="d-flex flex-row btn-footer">
     <button type="submit" class="btn btn-warning">TẠO BÀI MỚI</button>

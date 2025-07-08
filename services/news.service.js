@@ -10,12 +10,51 @@ export default {
   },
 
   findById(id) {
-    return db("news").where("NewsID", id).first();
+    return News.findById(id).lean();
+  },
+  add(entity) {
+    return News.create(entity);
+  },
+  
+  async getNextTagID() {
+    const last = await Tag.findOne().sort({ _id: -1 }).lean();
+    return last ? last._id + 1 : 1;
+  },
+  async createArticleWithTags(articleData, tagsInput) {
+    const article = await News.create(articleData);
+    const newsID = article._id;
+
+    let parsedTags = tagsInput;
+    if (typeof tagsInput === "string") {
+      parsedTags = JSON.parse(tagsInput);
+    }
+
+    const tagIDs = [];
+
+    for (const tag of parsedTags) {
+      const tagValue = tag.value;
+      let existingTag = await Tag.findOne({ TagName: tagValue });
+
+      if (!existingTag) {
+        const nextID = await this.getNextTagID();
+        existingTag = await Tag.create({ _id: nextID, TagName: tagValue });
+      }
+
+      tagIDs.push(existingTag._id);
+    }
+
+    await News.findByIdAndUpdate(newsID, { $set: { Tags: tagIDs } });
+  },
+  findTagByTagName(name) {
+    return Tag.findOne({ TagName: name });
   },
 
-  add(entity) {
-    // entity: {co truong CatName de add vao bang}
-    return db("news").insert(entity);
+  addNewTag(tag) {
+    return Tag.create(tag);
+  },
+
+  updateNewsTags(newsID, tagIDs) {
+    return News.findByIdAndUpdate(newsID, { $set: { Tags: tagIDs } });
   },
 
   del(id) {
@@ -23,7 +62,7 @@ export default {
   },
 
   patch(id, entity) {
-    return db("news").where("NewsID", id).update(entity);
+    return News.findByIdAndUpdate(id, entity, { new: true });
   },
 
   findByCatId(catId) {
@@ -44,10 +83,10 @@ export default {
       .first();
   },
   getAllCategories() {
-    return db("categories").where("parent_id", null);
+     return Category.find({}).lean();;
   },
   getCategoriesChild(catId) {
-    return db("categories").where("parent_id", catId);
+    return Category.find({ parent_id: Number(catId) }).lean();
   },
 
   getAllCategoriesLimit() {
@@ -88,47 +127,36 @@ export default {
     return rootCategories;
   },
   getNewsByAuthorStatus(authorName, status) {
-    return db("news").where({
+    return News.find({
       AuthorName: authorName,
-      Status: status,
-    });
+      Status: Number(status),
+    }).lean();
   },
   findCatByCatId(catId) {
-    return db("categories").where("CatID", catId).first();
+    return Category.findById(Number(catId)).lean();
   },
 
   getAllTags() {
-    return db("tag").select("TagName");
+     return Tag.find({}, "TagName").lean();
   },
 
-  findTagByTagName(tagname) {
-    return db("tag").where("TagName", tagname).first();
-  },
-
-  addNewTag(newTag) {
-    return db("tag").insert(newTag);
-  },
-  addTagIdAndNewsId(entity) {
-    return db("news_tags").insert(entity);
-  },
-  delTagByNewsId(newId) {
-    return db("news_tags").where("NewsID", newId).del();
-  },
   getIdNewEntity() {
     return db.raw("SELECT LAST_INSERT_ID() as NewsID");
   },
   countByNews() {
-    return db("news").count("* as total").first();
+    return News.countDocuments().then(total => ({ total }));
   },
 
-  addNewTag(newTag) {
-    return db("tag").insert(newTag);
+  async updateTagsOfNews(newsId, tagIDs) {
+    return await News.findByIdAndUpdate(newsId, {
+      $set: { Tags: tagIDs }
+    });
   },
-  addTagIdAndNewsId(entity) {
-    return db("news_tags").insert(entity);
-  },
-  delTagByNewsId(newId) {
-    return db("news_tags").where("NewsID", newId).del();
+
+  async clearTagsOfNews(newsId) {
+    return await News.findByIdAndUpdate(newsId, {
+      $set: { Tags: [] }
+    });
   },
   getIdNewEntity() {
     return db.raw("SELECT LAST_INSERT_ID() as id");
