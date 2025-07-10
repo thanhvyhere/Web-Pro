@@ -33,16 +33,15 @@
         <p>{{formatDate PublishedDay}}</p>
       </td>
       <td class="tw-w-[20%]">
-
-        <p>Danh mục cha: </p>
-        <p>{{ParentCatName}}</p>
+        <p>Danh mục cha:</p>
+        <p>{{ParentCategoryName}}</p>
         <p>Danh mục con:</p>
-        <p>{{ChildCatName}}</p>
+        <p>{{CategoryName}}</p>
         </select>
       </td>
-      <td>{{Tags}}
+      <td>{{TagNames}}
       </td>
-      <td> <a href="/editor/modify?id={{NewsID}}"
+      <td> <a href="/editor/modify?id={{_id}}"
           class="tw-rounded-[20px] tw-bg-blue-500 tw-border-1 tw-text-white tw-p-[8px] tw-w-full
           hover:tw-bg-blue-300 hover:tw-text-black hover:tw-border-1 hover:tw-border-orange-500 transition-colors duration-300 tw-mb-2 tw-text-center tw-block">Chỉnh
           sửa</a><br>

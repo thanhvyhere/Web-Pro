@@ -83,7 +83,7 @@ export function authEditor(req, res, next) {
     return res.redirect("/account/login");
   }
 
-  if (req.session.authUser.rolename !== "editor" || 
+  if (req.session.authUser.rolename !== "editor" &&
       req.session.authUser.rolename !== "administrator") {
     return res.render("error", { message: "Không đủ quyền để truy cập.",
       layout: "empty", status: "lỗi" ,});

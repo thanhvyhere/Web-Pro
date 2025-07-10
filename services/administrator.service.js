@@ -6,6 +6,9 @@ import User from '../model/User.js';
 import { News } from '../model/News.js';
 import {Status} from '../model/Status.js';
 import Role from '../model/Role.js';
+import {getNextTagId} from "../middleware/function.mdw.js";
+import { getNextCategoryId } from "../middleware/function.mdw.js";
+
 export default {
   async findAll() {
   return await Category.find().lean();
@@ -25,10 +28,6 @@ export default {
   });
 
   await newCategory.save();
-  },
-  async getNextCategoryId() {
-  const last = await Category.findOne().sort({ _id: -1 }).lean();
-    return last ? last._id + 1 : 1;
   },
   // Cập nhật chuyên mục
   async update(id, category) {
@@ -106,10 +105,6 @@ export default {
     });
 
   await newTag.save();
-  },
-  async getNextTagId() {
-  const last = await Tag.findOne().sort({ _id: -1 }).lean();
-    return last ? last._id + 1 : 1;
   },
   async updateTag(tagId, updatedTag) {
     const id = Number(tagId); // đảm bảo kiểu là số

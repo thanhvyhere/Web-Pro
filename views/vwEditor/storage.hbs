@@ -1,7 +1,3 @@
-{{#section 'css'}}
-<link href="/css/tailwind.css" rel="stylesheet">
-{{/section}}
-
 <h1>Kho báo</h1>
 <hr class="tw-w-[100%] tw-border-[5px] tw-bg-yellow-300">
 </hr>
@@ -18,7 +14,7 @@
                   <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
                         <strong>{{Title}}</strong>
                   </p>
-                  <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400"
+                  <a href="/newspaper/detail?id={{_id}}" class="tw-text-gray-400"
                         style="font-style: italic; text-decoration:underline">xem trước</a>
                   <div class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
                         {{{Content}}}
@@ -28,10 +24,10 @@
                         <p style="margin: 0;">Tác giả: {{AuthorName}}</p>
                         <div class="tw-flex tw-flex-row tw-justify-center tw-items-center tw-gap-2">
                               {{#if (or (eq StatusName "Đang chờ") (eq StatusName "Đã chỉnh sửa"))}}
-                              <a href="#" class="tw-text-green-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '1')">
+                              <a href="#" class="tw-text-green-500 tw-mx-1" onclick="updateStatus('{{_id}}', '1')">
                                     <i class="bi bi-check-circle"></i>
                               </a>
-                              <a href="#" class="tw-text-red-500 tw-mx-1" onclick="updateStatus('{{NewsID}}', '4')">
+                              <a href="#" class="tw-text-red-500 tw-mx-1" onclick="updateStatus('{{_id}}', '4')">
                                     <i class="bi bi-x-circle"></i>
                               </a>
 
@@ -74,16 +70,16 @@
 
 {{#section 'script'}}
 <script>
-      function updateStatus(newsId, newStatus) {
+      function updateStatus(_id, newStatus) {
             // Kiểm tra body trước khi gửi
-            const bodyData = { id: newsId, status: newStatus };
+            const bodyData = { id: _id, status: newStatus };
             console.log('Dữ liệu gửi đi:', JSON.stringify(bodyData)); // Console body
             fetch('/editor/update-status', {
                   method: 'POST',
                   headers: {
                         'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ id: newsId, status: newStatus }),
+                  body: JSON.stringify({ id: _id, status: newStatus }),
             })
                   .then((response) => {
                         console.log('HTTP status:', response.status); // Log trạng thái HTTP

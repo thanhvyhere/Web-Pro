@@ -1,142 +1,266 @@
 // import db from '../utils/db.js'
-
+import {News} from '../model/News.js';
+import { Category } from '../model/Category.js';
+import { Tag } from '../model/Tag.js';
+import { Status } from '../model/Status.js';
+import { getNextTagId } from "../middleware/function.mdw.js";
 export default
 {
-    findAll()
-    {
-        return db('news')
-        .join('status', 'news.Status', '=', 'status.StatusID')
-        .orderByRaw(`
-            FIELD(status.StatusName, 'Đang chờ', 'Đã chỉnh sửa', 'Đã duyệt', 'Đã nhận xét', 'Đã từ chối', 'Đã đăng', 'Đã xóa')
-        `)
-        .select('news.*', 'status.StatusName');
+    async findAll() {
+        const statusOrder = [
+           "Đang chờ",
+            "Đã chỉnh sửa",
+            "Đã duyệt",
+            "Đã nhận xét",
+            "Đã từ chối",
+            "Đã đăng",
+            "Đã xóa",
+            ];
+
+        return News.aggregate([
+        {
+            $lookup: {
+            from: "Status",
+            localField: "Status",
+            foreignField: "_id",
+            as: "statusInfo"
+            }
+        },
+        { $unwind: "$statusInfo" },
+        {
+            $addFields: {
+            StatusName: "$statusInfo.StatusName",
+            orderIndex: { $indexOfArray: [statusOrder, "$statusInfo.StatusName"] }
+            }
+        },
+        { $sort: { orderIndex: 1 } },
+        {
+            $project: {
+            statusInfo: 0,
+            orderIndex: 0
+            }
+        }
+        ]);
     },
-    findReviewed()
+
+    findReviewed() {
+  return News.aggregate([
     {
-        return db('news')
-        .join('status', 'news.Status', '=', 'status.StatusID')
-        .where('status.StatusName', 'Đã nhận xét')
-        .select('news.*', 'status.StatusName');
+      $lookup: {
+        from: "Status",
+        localField: "Status",
+        foreignField: "_id",
+        as: "statusInfo"
+      }
     },
-    findRejected()
+    { $unwind: "$statusInfo" },
+    { $match: { "statusInfo.StatusName": "Đã nhận xét" } },
     {
-        return db('news')
-        .join('status', 'news.Status', '=', 'status.StatusID')
-        .where('status.StatusName', 'Đã từ chối')
-        .select('news.*', 'status.StatusName');
+      $addFields: {
+        StatusName: "$statusInfo.StatusName"
+      }
     },
-    findApproved()
     {
-        return db('news')
-        .join('categories as child', 'news.CatID', '=', 'child.CatID') // Join danh mục con
-        .leftJoin('categories as parent', 'child.parent_id', '=', 'parent.CatID') // Join danh mục cha
-        .join('status', 'news.Status', '=', 'status.StatusID') // Join trạng thái
-        .leftJoin('news_tags', 'news.NewsID', '=', 'news_tags.NewsID') // Join bảng news_tags
-        .leftJoin('tag', 'news_tags.TagID', '=', 'tag.TagID') // Join bảng tag
-        .where('status.StatusName', 'Đã duyệt') // Chỉ lấy bài báo có trạng thái 'Đã duyệt'
-        .select(
-            'news.*', // Lấy tất cả các cột từ bảng news
-            'child.CatName as ChildCatName', // Tên danh mục con
-            'parent.CatName as ParentCatName', // Tên danh mục cha
-            'child.CatID as ChildCatID', // ID danh mục con
-            'parent.CatID as ParentCatID', // ID danh mục cha
-            'status.StatusName as StatusName', // Tên trạng thái
-            db.raw('COALESCE(GROUP_CONCAT(tag.TagName SEPARATOR ", "), "không có") as Tags') // Gộp tất cả các thẻ vào chuỗi
-        )
-        .groupBy(
-            'news.NewsID', // Nhóm theo NewsID để tránh duplicate rows
-            'child.CatName',
-            'parent.CatName',
-            'child.CatID',
-            'parent.CatID',
-            'status.StatusName' // Thêm các cột không aggregate vào groupBy
-        )
-        .then(results => {
-            // Thêm cột "No" để đánh số thứ tự cho từng dòng kết quả
-            return results.map((item, index) => {
-                item.No = index + 1; // Đánh số thứ tự bắt đầu từ 1
-                return item;
+      $project: {
+        statusInfo: 0
+      }
+    }
+  ]);
+    },
+
+
+    findRejected() {
+  return News.aggregate([
+    {
+      $lookup: {
+        from: "Status",
+        localField: "Status",
+        foreignField: "_id",
+        as: "statusInfo"
+      }
+    },
+    { $unwind: "$statusInfo" },
+    { $match: { "statusInfo.StatusName": "Đã từ chối" } },
+    {
+      $addFields: {
+        StatusName: "$statusInfo.StatusName"
+      }
+    },
+    {
+      $project: {
+        statusInfo: 0
+      }
+    }
+  ]);
+    },
+    findApproved() {
+  return News.aggregate([
+  // Join bảng Status
+  {
+    $lookup: {
+      from: "Status",
+      localField: "Status",
+      foreignField: "_id",
+      as: "statusInfo"
+    }
+  },
+  { $unwind: "$statusInfo" },
+  { $match: { "statusInfo.StatusName": "Đã duyệt" } },
+
+  // Join bảng Category
+  {
+    $lookup: {
+      from: "Category",
+      localField: "CatID",
+      foreignField: "_id",
+      as: "categoryInfo"
+    }
+  },
+  { $unwind: "$categoryInfo" },
+  {
+    $lookup: {
+      from: "Tag",
+      localField: "Tags",
+      foreignField: "_id",
+      as: "tagInfo"
+    }
+  },
+  {
+    $lookup: {
+      from: "Category",
+      localField: "categoryInfo.parent_id",
+      foreignField: "_id",
+      as: "parentCatInfo"
+    }
+  },
+  { $unwind: { path: "$parentCatInfo", preserveNullAndEmptyArrays: true } },
+  {
+    $addFields: {
+      StatusName: "$statusInfo.StatusName",
+      CategoryName: "$categoryInfo.CatName",
+      ParentCategoryName: "$parentCatInfo.CatName",
+      TagNames: {
+        $map: {
+          input: "$tagInfo",
+          as: "tag",
+          in: "$$tag.TagName"
+        }
+      }
+    }
+  },
+
+  // Ẩn các trường trung gian
+  {
+    $project: {
+      statusInfo: 0,
+      categoryInfo: 0,
+      tagInfo: 0,
+      parentCatInfo: 0
+    }
+  }
+  ]);
+    },
+
+    async findParentCat() {
+        return Category.find({ parent_id: null }).lean();
+    },
+
+    async findChildCat(parentID) {
+        return Category.find({ parent_id: parentID }).lean();
+    },
+
+    async update(id, entity) {
+        return News.findByIdAndUpdate(id, entity);
+    },
+
+    async findANews(id) {
+        const news = await News.findById(id)
+        .populate({ path: "CatID", model: Category })
+        .populate({ path: "Status", model: Status });
+        return news;
+    },
+
+    async findNewsByID(id) {
+        return News.findById(id).populate({ path: "Status", model: Status }).lean();
+    },
+
+    async findTags(newsID) {
+        const news = await News.findById(newsID);
+        if (!news || !news.Tags) return [];
+        const tags = await Tag.find({ _id: { $in: news.Tags } });
+        return tags.map((t) => t.TagName);
+    },
+
+    async deleteTag(newsID) {
+        return News.findByIdAndUpdate(newsID, { $set: { Tags: [] } });
+    },
+
+    async findExistingTag(tagName) {
+        return Tag.findOne({ TagName: tagName }).lean();
+    },
+
+    async insertTagGetID(entity) {
+        const newTag = new Tag({
+              _id: await getNextTagId(),
+              ...entity,
             });
-        });
+        
+        await newTag.save();
+        return newTag;
+    },
 
+    async findTagID(tagName) {
+        return Tag.findOne({ TagName: tagName }).lean();
     },
-    findParentCat()
-    {
-        return db('categories').where('parent_id',null);
-    },
-    findChildCat(parentID)
-    {
-        return db('categories').where('parent_id', parentID);
-    },
-    update(entity, id) {
-        return db('news').where('NewsID', id).update(entity);
-    },
-    findANews(id) {
-        return db('news')
-        .join('categories as child', 'news.CatID', '=', 'child.CatID')
-        .leftJoin('categories as parent', 'child.parent_id', '=', 'parent.CatID')
-        .join('status', 'news.Status', '=', 'status.StatusID')
-        .where('status.StatusName', 'Đã duyệt')
-        .where('news.NewsID', id)
-        .select(
-            'news.*',
-            'child.CatName as ChildCatName',
-            'parent.CatName as ParentCatName',
-            'status.StatusName as StatusName'
-        )
-        .then(results => {
-            return results;
-        });
-    },
-    
-    findNewsByID(id)
-    {
-        return db('news')
-        .join('status', 'news.Status', '=', 'status.StatusID')
-        .where('NewsID', id)
-        .select('news.*', 'status.StatusName');
-    },
-    findTags(id)
-    {
-        return db('news_tags')
-        .join('tag', 'news_tags.TagID', '=', 'tag.TagID')  // Kết nối bảng news_tags với bảng tag
-        .where('news_tags.NewsID', id)  // Lọc theo NewsID
-        .select('tag.TagName')  // Chọn TagName từ bảng tag
-        .then(results => {
-            // Trả về danh sách các TagName
-            return results.map(row => row.TagName);
-        });
-    },
-    deleteTag(newsID)
-    {
-        return db('news_tags').where('NewsID', newsID).del();
 
+    async addTagNews(newsID, tagIDs) {
+        return News.findByIdAndUpdate(newsID, { $set: { Tags: tagIDs } });
     },
-    findExistingTag(tagName)
+    async findPageById(limit, offset) {
+        const statusOrder = [
+            "Đang chờ",
+            "Đã chỉnh sửa",
+            "Đã duyệt",
+            "Đã nhận xét",
+            "Đã từ chối",
+            "Đã đăng",
+            "Đã xóa",
+        ];
+
+        const pipeline = [
+            {
+            $lookup: {
+                from: "Status", // tên collection
+                localField: "Status", // trường trong News
+                foreignField: "_id", // trường trong Status
+                as: "statusInfo",
+            },
+            },
+            { $unwind: "$statusInfo" },
+            {
+            $addFields: {
+                StatusName: "$statusInfo.StatusNameName",
+                orderIndex: {
+                $indexOfArray: [statusOrder, "$statusInfo.StatusNameName"],
+                },
+            },
+            },
+            { $sort: { orderIndex: 1 } },
+            { $skip: offset },
+            { $limit: limit },
+            {
+            $project: {
+                statusInfo: 0, // ẩn trường thừa
+                orderIndex: 0,
+            },
+            },
+        ];
+
+        return await News.aggregate(pipeline);
+        },
+    async countByNews()
     {
-        return db('tag').where('TagName', tagName).first();
-    },
-    insertTagGetID(entity)
-    {
-        return db('tag').insert(entity);
-    },
-    findTagID(tagName)
-    {
-        return db('tag').where('TagName',tagName).first();
-    },
-    addTagNews(entity)
-    {
-        return db('news_tags').insert(entity);
-    },
-    findPageById(limit, offset){
-        return db('news').join('status', 'news.Status', '=', 'status.StatusID')
-        .orderByRaw(`
-            FIELD(status.StatusName, 'Đang chờ', 'Đã chỉnh sửa', 'Đã duyệt', 'Đã nhận xét', 'Đã từ chối', 'Đã đăng', 'Đã xóa')
-        `)
-        .select('news.*', 'status.StatusName').limit(limit).offset(offset);
-    },
-    countByNews()
-    {
-        return db('news').count('* as total').first();
+        const total = await News.countDocuments();
+        return total;
     }
 }
