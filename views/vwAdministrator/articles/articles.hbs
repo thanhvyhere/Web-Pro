@@ -1,61 +1,69 @@
-{{#section "css"}}
-<link rel="stylesheet" href="/static/css/cssAdministrator/articles/articles.css">
-{{/section}}
+<div class="tw-container tw-mx-auto tw-px-4 tw-py-6">
+  <!-- Tiêu đề -->
+  <div class="tw-mb-6">
+    <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800 tw-shadow-[2px_2px_4px_rgba(0,0,0,0.2)]">
+      Manage Articles
+    </h1>
+  </div>
 
-<div class="container">
-  <header>
-    <h1 class="title">Manage Articles</h1>
-  </header>
-
-  <table class="articles-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Premium</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each articles}}
-      <tr>
-        <td>{{this.NewsID}}</td>
-        <td>{{this.Title}}</td>
-        <td>{{this.AuthorName}}</td>
-        <td>
-          {{#if this.Premium}}
-          <span class="premium-status">
-            <i class="bi bi-star-fill"></i>
-          </span>
-          {{else}}
-          <span class="premium-status">-</span>
-          {{/if}}
-        </td>
-        <td>
-          <a href="/newspaper/detail-raw?id={{this.NewsID}}" class="btn btn-view">View</a>
-          <a href="/administrator/manage_articles/update/{{this.NewsID}}" class="btn btn-edit">Update Premium</a>
-        </td>
-
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+  <!-- Bảng danh sách -->
+  <div class="tw-overflow-x-auto">
+    <table class="tw-min-w-full tw-table-auto tw-bg-white tw-shadow tw-rounded-lg tw-border tw-border-solid tw-border-gray-200">
+      <thead class="tw-bg-orange-100">
+        <tr class="tw-text-left tw-text-gray-700 tw-text-sm">
+          <th class="tw-px-4 tw-py-2">Published Day</th>
+          <th class="tw-px-4 tw-py-2">Title</th>
+          <th class="tw-px-4 tw-py-2">Author</th>
+          <th class="tw-px-4 tw-py-2">Premium</th>
+          <th class="tw-px-4 tw-py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each articles}}
+        <tr class="tw-border-t hover:tw-bg-gray-50">
+          <td class="tw-px-4 tw-py-2">{{formatDate this.PublishedDay}}</td>
+          <td class="tw-px-4 tw-py-2 tw-font-medium">{{this.Title}}</td>
+          <td class="tw-px-4 tw-py-2">{{this.AuthorName}}</td>
+          <td class="tw-px-4 tw-py-2 tw-text-center">
+            {{#if this.Premium}}
+              <i class="bi bi-star-fill tw-text-yellow-500"></i>
+            {{else}}
+              <span>-</span>
+            {{/if}}
+          </td>
+          <td class="tw-px-4 tw-py-2">
+            <div class="tw-flex tw-gap-2">
+              <a href="/newspaper/detail-raw?id={{this.NewsID}}"
+                class="tw-inline-flex tw-items-center tw-gap-1 tw-px-3 tw-py-1 tw-text-sm tw-font-medium tw-text-white tw-bg-blue-600 tw-rounded hover:tw-bg-blue-700">
+                <i class="bi bi-eye"></i> View
+              </a>
+              <a href="/administrator/manage_articles/update/{{this.NewsID}}"
+                class="tw-inline-flex tw-items-center tw-gap-1 tw-px-3 tw-py-1 tw-text-sm tw-font-medium tw-text-white tw-bg-yellow-500 tw-rounded hover:tw-bg-yellow-600">
+                <i class="bi bi-pencil-square"></i> Edit
+              </a>
+            </div>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
   <!-- Pagination -->
-  <div class="pagination">
+  <div class="tw-flex tw-justify-center tw-items-center tw-mt-8 tw-space-x-2">
     {{#if (gt currentPage 1)}}
-    <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+      <a href="?page={{sub currentPage 1}}" class="tw-px-3 tw-py-1 tw-border tw-rounded tw-text-gray-700 hover:tw-bg-gray-100">Previous</a>
     {{/if}}
 
     {{#each (range 1 totalPages)}}
-    <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
-      {{this}}
-    </a>
+      <a href="?page={{this}}"
+        class="tw-px-3 tw-py-1 tw-border tw-rounded {{#if (eq this ../currentPage)}}tw-bg-orange-400 tw-text-white{{else}}tw-text-gray-700 hover:tw-bg-gray-100{{/if}}">
+        {{this}}
+      </a>
     {{/each}}
 
     {{#if (lt currentPage totalPages)}}
-    <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+      <a href="?page={{add currentPage 1}}" class="tw-px-3 tw-py-1 tw-border tw-rounded tw-text-gray-700 hover:tw-bg-gray-100">Next</a>
     {{/if}}
   </div>
 </div>

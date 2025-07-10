@@ -1,24 +1,31 @@
-{{#section "css"}}
-<link rel="stylesheet" href="/static/css/cssAdministrator/articles/update.css">
-{{/section}}
+<div class="tw-container tw-mx-auto tw-max-w-2xl tw-p-6  tw-border tw-border-black tw-border-solid tw-bg-white tw-rounded-xl tw-shadow-lg tw-mt-10">
+  <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800 tw-mb-6 tw-text-center tw-shadow-sm">
+    Update Article Premium Status
+  </h1>
 
-<div class="container">
-  <header>
-    <h1 class="title">Update Article Premium Status</h1>
-  </header>
-
-  <form action="/administrator/manage_articles/update/{{article.NewsID}}" method="POST">
-    <div class="form-group">
-      <label for="premiumStatus">Premium Status</label>
-      <select name="premiumStatus" id="premiumStatus" class="form-control">
+  <form action="/administrator/manage_articles/update/{{article._id}}" method="POST" class="tw-space-y-6">
+    <!-- Select Premium Status -->
+    <div>
+      <label for="premiumStatus" class="tw-block tw-text-lg tw-font-medium tw-text-gray-700 mb-2">
+        Premium Status
+      </label>
+      <select name="premiumStatus" id="premiumStatus"
+        class="tw-w-full tw-p-3 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-bg-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400">
         <option value="true" {{#if article.Premium}}selected{{/if}}>Premium</option>
         <option value="false" {{#unless article.Premium}}selected{{/unless}}>Normal</option>
       </select>
     </div>
 
-    <div class="form-actions">
-      <button type="submit" class="btn btn-submit">Update</button>
-      <a href="/administrator/manage_articles" class="btn btn-cancel">Cancel</a>
+    <!-- Buttons -->
+    <div class="tw-flex tw-justify-end tw-gap-4">
+      <button type="submit"
+        class="tw-bg-orange-500 hover:tw-bg-orange-600 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded-md tw-shadow">
+        Update
+      </button>
+      <a href="/administrator/manage_articles"
+        class="tw-bg-gray-300 hover:tw-bg-gray-400 tw-text-gray-800 tw-font-medium tw-py-2 tw-px-4 tw-rounded-md tw-shadow">
+        Cancel
+      </a>
     </div>
   </form>
 </div>

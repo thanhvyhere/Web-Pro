@@ -17,6 +17,9 @@ export default function (app) {
         formatDate: function (date) {
           return moment(date).format("YYYY-MM-DD HH:mm:ss"); // Định dạng ngày theo YYYY-MM-DD
         },
+        formatDay: function (date) {
+          return moment(date).format("YYYY-MM-DD"); // Định dạng ngày theo YYYY-MM-DD
+        },
 
         skipFirst(array) {
           if (Array.isArray(array)) {

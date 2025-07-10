@@ -7,36 +7,35 @@
         Chỉnh sửa
     </div>
     <div class="card-body">
-        {{#each newsList}}
         <div class="row">
             <div class="col-sm-6">
                 <!-- Nội dung cột 1 -->
                 <div class="mb-3 tw-flex tw-justify-center tw-items-center">
                     <div class="tw-w-[350px] tw-h-[450px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-p-3"
                         style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 1); border: 1px solid black;">
-                        <p>Thời gian: {{formatDate CreateDate}}</p>
-                        <img src="{{ImageCover}}" alt="{{Title}}"
+                        <p>Thời gian: {{formatDate newsList.CreateDate}}</p>
+                        <img src="{{newsList.ImageCover}}" alt="{{newsList.Title}}"
                             class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-2">
                         <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
-                            <strong>{{Title}}</strong>
+                            <strong>{{newsList.Title}}</strong>
                         </p>
-                        <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400"
+                        <a href="/newspaper/detail?id={{newsList._id}}" class="tw-text-gray-400"
                             style="font-style: italic; text-decoration:underline">xem trước</a>
 
                         <div
                             class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
-                            {{{Content}}}
+                            {{{newsList.Content}}}
                         </div>
 
                         <div class="tw-flex tw-flex-row tw-justify-between tw-items-center tw-w-[100%] tw-mt-auto">
-                            <p style="margin: 0;">Tác giả: <br>{{AuthorName}}</p>
+                            <p style="margin: 0;">Tác giả: <br>{{newsList.AuthorName}}</p>
 
 
-                            <div style="color: {{getStatusColor StatusName}};
+                            <div style="color: {{getStatusColor newsList.Status.StatusName}};
                                         padding: 5px;
-                                        border: 2px solid {{getStatusColor StatusName}};
+                                        border: 2px solid {{getStatusColor newsList.Status.StatusName}};
                                         border-radius: 20px;">
-                                {{StatusName}}
+                                {{newsList.Status.StatusName}}
                             </div>
 
                         </div>
@@ -46,17 +45,17 @@
             <div class="col-sm-6">
                 <!-- Nội dung cột 2 -->
                 <form action="" method="post">
-                    <input type="hidden" name="NewsID" value="{{NewsID}}">
+                    <input type="hidden" name="NewsID" value="{{newsList._id}}">
                     <label for="txtPublishedDay">Ngày đăng</label>
                     <input type="text" name="PublishedDay" id="txtPublishedDay" class="form-control"
                         value="{{formatDate PublishedDay}}" aria-describedby="helpId">
                     <div>
-                        {{#if parentCatList}}
+                        {{#if newsList.parentCatList}}
                         <label for="ParentCat">Danh mục cha</label><br>
                         <select id="ParentCat" class="tw-rounded-[20px] tw-border tw-w-full tw-p-2">
-                            <option value="{{ParentCatID}}">{{ParentCatName}}</option>
-                            {{#each parentCatList}}
-                            <option value="{{CatID}}">{{CatName}}</option>
+                            <option value="{{_id}}">{{newsList.ParentCatName}}</option>
+                            {{#each newsList.parentCatList}}
+                            <option value="{{_id}}">{{CatName}}</option>
                             {{/each}}
                         </select><br>
                         {{else}}
@@ -64,7 +63,7 @@
                         {{/if}}
                         <label for="ChildCat" class="tw-mt-2">Danh mục con</label><br>
                         <select name="CatID" id="ChildCat" class="tw-rounded-[20px] tw-border tw-w-full tw-p-2">
-                            <option value="{{ChildCatID}}">{{ChildCatName}}</option>
+                            <option value="{{newsList.ChildCatID}}">{{newsList.ChildCatName}}</option>
                         </select>
                         <div class="tw-mt-3">
                             <label for="txtTags" class="tw-mt-">Nhãn trang báo</label> &nbsp;
@@ -87,7 +86,6 @@
                 </form>
             </div>
         </div>
-        {{/each}}
     </div>
 </div>
 {{#section "script"}}
@@ -142,7 +140,7 @@
                     // Cập nhật lại các options trong ChildCat với dữ liệu mới
                     data.forEach(childCategory => {
                         const option = document.createElement('option');
-                        option.value = childCategory.CatID;
+                        option.value = childCategory._id;
                         option.textContent = childCategory.CatName;
                         childCatSelect.appendChild(option);
                     });

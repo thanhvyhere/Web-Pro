@@ -43,7 +43,7 @@ export default function (app) {
   });
 
   app.use("/account", accountRouter);
-  app.use("/writer", writerRouter);
+  app.use("/writer",authWriter, writerRouter);
   app.use("/newspaper", newspaperRouter);
   // Khởi động server
   // app.use('/artist', artistRouter);
@@ -51,7 +51,7 @@ export default function (app) {
 
   app.use("/role", editorRouter);
 
-  app.use("/editor", editorRouter);
+  app.use("/editor",authEditor, editorRouter);
   app.use("/subscriber", checkPremium, subcriberRouter);
   app.use("/administrator", authAdmin, administratorRouter);
   app.use("/error", (req, res) => {

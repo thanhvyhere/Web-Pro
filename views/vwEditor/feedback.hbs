@@ -3,36 +3,35 @@
         Nhận xét
     </div>
     <div class="card-body">
-        {{#each newsList}}
         <div class="row">
             <div class="col-sm-6">
                 <!-- Nội dung cột 1 -->
                 <div class="mb-3 tw-flex tw-justify-center tw-items-center">
                     <div class="tw-w-[350px] tw-h-[450px] tw-bg-white tw-rounded-[30px] tw-flex tw-flex-col tw-p-3"
                         style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 1); border: 1px solid black;">
-                        <p>Thời gian: {{formatDate CreateDate}}</p>
-                        <img src="{{ImageCover}}" alt="{{Title}}"
+                        <p>Thời gian: {{formatDate news.CreateDate}}</p>
+                        <img src="{{news.ImageCover}}" alt="{{news.Title}}"
                             class="tw-w-[90%] tw-h-[180px] tw-object-cover tw-self-center tw-mb-2">
                         <p class="tw-max-w-[100%] tw-line-clamp-2 tw-text-ellipsis tw-mb-0">
-                            <strong>{{Title}}</strong>
+                            <strong>{{news.Title}}</strong>
                         </p>
-                        <a href="/newspaper/detail?id={{NewsID}}" class="tw-text-gray-400"
+                        <a href="/newspaper/detail?id={{news._id}}" class="tw-text-gray-400"
                             style="font-style: italic; text-decoration:underline">xem trước</a>
 
                         <div
                             class="tw-text-[#948D8D] tw-max-w-[100%] tw-text-ellipsis tw-line-clamp-3 tw-overflow-hidden">
-                            {{{Content}}}
+                            {{{news.Content}}}
                         </div>
 
                         <div class="tw-flex tw-flex-row tw-justify-between tw-items-center tw-w-[100%] tw-mt-auto">
-                            <p style="margin: 0;">Tác giả: <br>{{AuthorName}}</p>
+                            <p style="margin: 0;">Tác giả: <br>{{news.AuthorName}}</p>
 
 
-                            <div style="color: {{getStatusColor StatusName}};
+                            <div style="color: {{getStatusColor news.Status.StatusName}};
                                         padding: 5px;
-                                        border: 2px solid {{getStatusColor StatusName}};
+                                        border: 2px solid {{getStatusColor news.Status.StatusName}};
                                         border-radius: 20px;">
-                                {{StatusName}}
+                                {{news.Status.StatusName}}
                             </div>
 
                         </div>
@@ -42,7 +41,7 @@
             <div class="col-sm-6">
                 <!-- Nội dung cột 2 -->
                 <form action="" method="post">
-                    <input type="hidden" name="NewsID" value="{{NewsID}}">
+                    <input type="hidden" name="NewsID" value="{{news._id}}">
                     <label for="txtFeedback" class="tw-text-xl"><strong>Hãy điền góp ý cho tác giả</strong></label> <br>
                     <textarea name="Feedback" id="txtFeedback" class="tw-h-[50vh] tw-w-full">{{Feedback}}</textarea>
                     <input type="hidden" name="Status" value="6">
@@ -51,6 +50,5 @@
                 </form>
             </div>
         </div>
-        {{/each}}
     </div>
 </div>

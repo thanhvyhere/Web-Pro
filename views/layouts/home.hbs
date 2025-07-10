@@ -115,10 +115,10 @@
             <div class="tw-flex tw-flex-row tw-mb-10 tw-mt-[60%] tw-px-5">
                 <img src="/imgs/NEWSLANDlogo.png" alt="" class="img-fluid rounded-circle tw-h-[50px] tw-w-[50px]">
                 <div class="tw-mx-5 ">
-                    <span class=" tw-hidden sm:tw-block tw-font-bold tw-font-[18px]">
+                    <span class=" tw-hidden sm:tw-block tw-font-bold tw-text-[18px]">
                         {{authUser.username}}
                     </span>
-                    <span class="tw-hidden sm:tw-block tw-font-bold tw-font-[18px] tw-text-[#F0B617]">
+                    <span class="tw-hidden sm:tw-block tw-font-bold tw-text-[18px] tw-text-[#F0B617]">
                         {{{getRoleIcon rolename}}}&nbsp;
                         {{authUser.rolename}}
                     </span>
@@ -126,7 +126,7 @@
             </div>
             <nav class="nav flex-column tw-px-2">
                 {{#with (getFirstItem lcFeatureRoles) as |firstRole|}}
-                <a class="tw-py-2 tw-flex tw-items-center tw-gap-3 tw-min-w-[35vh] tw-text-left tw-text-[20px] tw-mt-[10%] tw-text-black tw-ml-[5%] tw-rounded
+                <a class="tw-py-2 tw-flex tw-items-center tw-gap-3 tw-min-w-[35vh] tw-text-left tw-text-[18px] tw-mt-[10%] tw-text-black tw-ml-[5%] tw-rounded
                         hover:tw-bg-[#d5d5d5] hover:tw-font-bold active-link"
                     href="/{{firstRole.RoleName}}/{{firstRole.PathName}}">
                     <span class="tw-inline-block">{{{firstRole.Icon}}} </span>
@@ -135,7 +135,7 @@
                 {{/with}}
             
                 {{#each (skipFirst lcFeatureRoles)}}
-                <a class="tw-py-2 tw-flex tw-items-center tw-gap-3 tw-min-w-[35vh] tw-text-left tw-text-[20px] tw-mt-[10%] tw-text-black tw-ml-[5%] tw-rounded
+                <a class="tw-py-2 tw-flex tw-items-center tw-gap-3 tw-min-w-[35vh] tw-text-left tw-text-[18px] tw-mt-[10%] tw-text-black tw-ml-[5%] tw-rounded
                         hover:tw-bg-[#d5d5d5] hover:tw-font-bold" href="/{{RoleName}}/{{PathName}}">
                     <span class="tw-inline-block">{{{Icon}}}</span>
                     <span class="tw-hidden sm:tw-block">{{FeatureName}}</span>
@@ -144,12 +144,12 @@
             </nav>
         </div>
         {{/if}}
-        <main id="main-content" class=" tw-mt-[5%] sm:tw-mt-[12%] tw-mx-4 tw-transition-all tw-duration-300">
+        <main id="main-content" class=" tw-w-full tw-mt-[5%] sm:tw-mt-[15%] lg:tw-mt-[12%] tw-mx-4 tw-transition-all tw-duration-300">
             {{{body}}}
         </main>
     </div>
     
-    <footer>
+    <footer class="tw-relative tw-z-50">
         <hr>
         <div>
             <div id="footer-contact" class="d-flex flex-row justify-content-between align-items-center">

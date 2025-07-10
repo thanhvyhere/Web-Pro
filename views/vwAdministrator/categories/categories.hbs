@@ -42,57 +42,64 @@
 </script>
 {{/section}}
 
-<div class="container">
-  <header class="header">
-    <h1 class="title">Category List</h1>
-    <div class="search-container">
-      <form id="search-category" method="GET" action="/administrator/manage_categories">
-        <input 
-          type="text" 
-          name="search" 
-          id="search-category-name" 
-          class="search-box" 
-          placeholder="Search by Category Name" 
-          value="{{query.search}}">
-        <button type="submit" class="btn btn-secondary">Search</button>
-      </form>
-    </div>
+<div class="tw-w-full tw-my-5 tw-p-5 tw-bg-white tw-rounded-xl tw-shadow-md tw-border tw-border-gray-300">
+  <!-- Header -->
+  <div class="tw-flex tw-flex-col sm:tw-flex-row tw-justify-between tw-items-center tw-gap-4 tw-mb-6 tw-border-b-2 tw-border-orange-500 tw-pb-3">
+    <h1 class="tw-text-[28px] tw-font-bold tw-text-gray-800 tw-shadow-sm">Category List</h1>
 
-    <div id="category-actions">
-      <a href="/administrator/manage_categories/add" class="btn btn-primary">Add Category</a>
-    </div>
-  </header>
+    <!-- Search -->
+    <form id="search-category" method="GET" action="/administrator/manage_categories" class="tw-flex tw-gap-2">
+      <input 
+        type="text" 
+        name="search" 
+        id="search-category-name" 
+        class="tw-border tw-w-full tw-border-gray-300 tw-rounded-lg tw-px-4 tw-py-2 tw-text-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400"
+        placeholder="Search by Category Name"
+        value="{{query.search}}" />
+      <button type="submit" class="tw-bg-gray-800 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg hover:tw-bg-gray-700 tw-text-sm">
+        Search
+      </button>
+    </form>
 
-  <div class="table-container">
-    <table class="categories-table">
+    <!-- Add Button -->
+    <div>
+      <a href="/administrator/manage_categories/add" class="tw-bg-orange-500 hover:tw-bg-orange-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm">
+        Add Category
+      </a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="tw-overflow-x-auto">
+    <table class="tw-w-full tw-text-left tw-border-collapse">
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Category Name</th>
-          <th>Parent Category</th>
-          <th>Actions</th> <!-- New Actions column -->
+        <tr class="tw-bg-orange-100 tw-text-gray-800 tw-text-sm">
+          <th class="tw-px-4 tw-py-2 tw-border tw-border-gray-300">ID</th>
+          <th class="tw-px-4 tw-py-2 tw-border tw-border-gray-300">Category Name</th>
+          <th class="tw-px-4 tw-py-2 tw-border tw-border-gray-300">Parent Category</th>
+          <th class="tw-px-4 tw-py-2 tw-border tw-border-gray-300">Actions</th>
         </tr>
       </thead>
       <tbody>
         {{#each categories}}
-        <tr id="category-row-{{this.CatID}}">
-          <td>{{this.CatID}}</td>
-          <td>{{this.CatName}}</td>
-          <td>
+        <tr class="tw-border tw-border-solid tw-border-gray-200 hover:tw-bg-gray-50">
+          <td class="tw-px-4 tw-py-2">{{this.CatID}}</td>
+          <td class="tw-px-4 tw-py-2">{{this.CatName}}</td>
+          <td class="tw-px-4 tw-py-2">
             {{#if this.parent_name}}
               {{this.parent_name}}
             {{else}}
               -
             {{/if}}
           </td>
-          <td>
-            <a href="/administrator/manage_categories/update/{{this.CatID}}" class="btn btn-warning btn-sm">Edit</a>
-            <a href="/administrator/manage_categories/delete/{{this.CatID}}" class="btn btn-danger btn-sm">Delete</a>
-          </td> <!-- Action buttons for each row -->
+          <td class="tw-px-4 tw-py-2">
+            <a href="/administrator/manage_categories/update/{{this.CatID}}" class="tw-bg-yellow-400 tw-text-white tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-500 tw-text-sm">Edit</a>
+            <a href="/administrator/manage_categories/delete/{{this.CatID}}" class="tw-bg-red-500 tw-text-white tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-600 tw-text-sm ml-2">Delete</a>
+          </td>
         </tr>
         {{else}}
         <tr>
-          <td colspan="4">No categories found</td>
+          <td colspan="4" class="tw-px-4 tw-py-4 tw-text-center tw-text-gray-500">No categories found</td>
         </tr>
         {{/each}}
       </tbody>
@@ -100,18 +107,27 @@
   </div>
 </div>
 
-<div class="pagination">
+
+<div class="tw-flex tw-justify-center tw-items-center tw-mt-6 tw-flex-wrap tw-gap-2">
   {{#if (gt currentPage 1)}}
-  <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+    <a href="?page={{sub currentPage 1}}"
+      class="tw-px-4 tw-py-2 tw-text-sm tw-rounded-md tw-border tw-border-gray-300 tw-text-gray-700 hover:tw-bg-gray-200">
+      Previous
+    </a>
   {{/if}}
 
   {{#each (range 1 totalPages)}}
-  <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
-    {{this}}
-  </a>
+    <a href="?page={{this}}"
+      class="tw-px-4 tw-py-2 tw-text-sm tw-rounded-md tw-border tw-border-gray-300 
+        {{#if (eq this ../currentPage)}}tw-bg-yellow-600 tw-text-white{{else}}tw-text-gray-700 hover:tw-bg-gray-100{{/if}}">
+      {{this}}
+    </a>
   {{/each}}
 
   {{#if (lt currentPage totalPages)}}
-  <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+    <a href="?page={{add currentPage 1}}"
+      class="tw-px-4 tw-py-2 tw-text-sm tw-rounded-md tw-border tw-border-gray-300 tw-text-gray-700 hover:tw-bg-gray-200">
+      Next
+    </a>
   {{/if}}
 </div>

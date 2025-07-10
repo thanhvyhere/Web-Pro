@@ -5,7 +5,7 @@ const { Schema, model } = mongoose;
 const statusSchema = new Schema(
   {
     _id: Number,
-    status: { type: String, required: true },
+    StatusName: { type: String, required: true },
   },
   { _id: false, collection: "Status" }
 );

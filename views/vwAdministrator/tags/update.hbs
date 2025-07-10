@@ -1,16 +1,39 @@
-{{!-- vwAdministrator/tags/update.hbs --}}
-{{#section "css"}}
-    <link href="/static/css/cssAdministrator/tags/update.css" rel="stylesheet">
-{{/section}}
+<div class="tw-container tw-mx-auto tw-max-w-xl tw-px-4 tw-py-6">
+  <!-- Tiêu đề -->
+  <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800 tw-mb-6 tw-shadow-sm">
+    Update Tag
+  </h1>
 
-<h1 id="page-title">Update Tag</h1>
+  <!-- Form cập nhật -->
+  <form action="/administrator/manage_tags/update/{{tag._id}}" method="POST" class="tw-bg-white tw-rounded-lg tw-shadow-md tw-p-6 tw-space-y-5 tw-border tw-border-gray-200">
+    <div>
+      <label for="tag-name-input" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 mb-1">
+        Tag Name
+      </label>
+      <input
+        type="text"
+        id="tag-name-input"
+        name="TagName"
+        value="{{tag.TagName}}"
+        required
+        class="tw-w-full tw-border tw-border-gray-300 tw-rounded-md tw-px-3 tw-py-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400"
+      />
+    </div>
 
-<form id="update-form" action="/administrator/manage_tags/update/{{tag.TagID}}" method="post">
-  <div id="form-group" class="form-group">
-    <label for="TagName" id="label-tag-name">Tag Name</label>
-    <input type="text" id="tag-name-input" name="TagName" class="form-control" value="{{tag.TagName}}" required>
-  </div>
-  
-  <button id="btn-update" type="submit" class="btn btn-primary">Update Tag</button>
-  <a id="btn-cancel" href="/administrator/manage_tags" class="btn btn-secondary">Cancel</a>
-</form>
+    <div class="tw-flex tw-gap-4">
+      <button
+        type="submit"
+        class="tw-bg-orange-500 tw-text-white tw-px-5 tw-py-2 tw-rounded hover:tw-bg-orange-600"
+      >
+        Update Tag
+      </button>
+
+      <a
+        href="/administrator/manage_tags"
+        class="tw-bg-gray-300 tw-text-gray-800 tw-px-5 tw-py-2 tw-rounded hover:tw-bg-gray-400"
+      >
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>

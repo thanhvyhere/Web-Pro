@@ -1,18 +1,31 @@
-{{!-- vwAdministrator/tags/add.hbs --}}
-{{#section "css"}}
-    <link href="/static/css/cssAdministrator/tags/add.css" rel="stylesheet">
-{{/section}}
+<div class="tw-max-w-md tw-mx-auto tw-px-6 tw-py-10 tw-bg-white tw-rounded-xl tw-shadow-lg">
+  <!-- Tiêu đề -->
+  <h1 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-6">
+    Add New Tag
+  </h1>
 
-<h1 id="page-title">Add New Tag</h1>
+  <!-- Form thêm tag -->
+  <form action="/administrator/manage_tags/add" method="POST" class="tw-space-y-6">
+    <!-- Tên tag -->
+    <div>
+      <label for="TagName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 mb-1">
+        Tag Name
+      </label>
+      <input type="text" id="TagName" name="TagName"
+             class="tw-w-full tw-border tw-border-gray-300 tw-rounded-md tw-py-2 tw-px-3 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-400"
+             placeholder="Enter tag name" required>
+    </div>
 
-<form action="/administrator/manage_tags/add" method="post" id="form-container">
-  <div id="form-group">
-    <label for="TagName" id="form-label">Tag Name</label>
-    <input type="text" id="TagName" name="TagName" class="form-control" required>
-  </div>
-  
-  <div id="form-actions">
-    <button type="submit" id="btn-add" class="btn btn-primary">Add Tag</button>
-    <a href="/administrator/manage_tags" id="btn-cancel" class="btn btn-secondary">Cancel</a>
-  </div>
-</form>
+    <!-- Button hành động -->
+    <div class="tw-flex tw-justify-end tw-gap-4">
+      <button type="submit"
+              class="tw-bg-orange-500 tw-text-white tw-px-5 tw-py-2 tw-rounded-md hover:tw-bg-orange-600">
+        Add Tag
+      </button>
+      <a href="/administrator/manage_tags"
+         class="tw-bg-gray-300 tw-text-gray-800 tw-px-5 tw-py-2 tw-rounded-md hover:tw-bg-gray-400">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>

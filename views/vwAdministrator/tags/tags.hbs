@@ -1,7 +1,3 @@
-{{#section "css"}}
-  <link rel="stylesheet" href="/static/css/cssAdministrator/tags/tags.css">
-{{/section}}
-
 {{#section "script"}}
 <!-- Đặt mã JavaScript vào thẻ <script> dưới đây -->
   <script>
@@ -21,73 +17,100 @@
   });
   </script>
 {{/section}}
+<div class="tw-container tw-mx-auto tw-px-4 tw-py-6">
+  <!-- Tiêu đề và hành động -->
+  <div class="tw-flex tw-justify-between tw-items-center tw-mb-6 tw-border-b-2 tw-border-orange-400 tw-pb-4">
+    <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800 tw-shadow-sm">Manage Tags</h1>
 
-<div id="tags-container" class="container">
-  <header id="tags-header" class="header">
-    <h1 id="tags-title" class="title">Manage Tags</h1>
-    <div class="search-container">
-      <form id="search-tag" method="GET" action="/administrator/manage_tags">
-        <input 
-          type="text" 
-          name="search" 
-          id="search-tag-name" 
-          class="search-box" 
-          placeholder="Search by Tag Name" 
-          value="{{query.search}}">
-        <button type="submit" class="btn btn-secondary">Search</button>
+    <div class="tw-flex tw-gap-4">
+      <form id="search-tag" method="GET" action="/administrator/manage_tags" class="tw-flex tw-gap-2">
+        <input
+          type="text"
+          name="search"
+          id="search-tag-name"
+          class="tw-border tw-border-gray-300 tw-rounded-md tw-px-3 tw-py-1 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-orange-300"
+          placeholder="Search by Tag Name"
+          value="{{query.search}}"
+        />
+        <button type="submit" class="tw-bg-gray-600 tw-text-white tw-px-4 tw-py-1 tw-rounded hover:tw-bg-gray-700">
+          Search
+        </button>
       </form>
-    </div>
-    <div id="tags-actions">
-      <a href="/administrator/manage_tags/add" id="tags-add-btn" class="btn btn-primary">Add New Tag</a>
-    </div>
-  </header>
 
-  <div class="table-container">
-    <table class="tag-table">
-      <thead>
+      <a
+        href="/administrator/manage_tags/add"
+        class="tw-bg-orange-500 tw-text-white tw-px-4 tw-py-2 tw-rounded hover:tw-bg-orange-600"
+      >
+        Add New Tag
+      </a>
+    </div>
+  </div>
+
+  <!-- Bảng hiển thị tags -->
+  <div class="tw-overflow-x-auto">
+    <table class="tw-w-full tw-bg-white tw-rounded-lg tw-shadow-sm tw-border tw-border-solid tw-border-gray-200 tw-text-sm">
+      <thead class="tw-bg-orange-100">
         <tr>
-          <th>ID</th>
-          <th>Tag Name</th>
-          <th>Actions</th> <!-- Thêm cột Actions -->
+          <th class="tw-text-left tw-px-4 tw-py-2">ID</th>
+          <th class="tw-text-left tw-px-4 tw-py-2">Tag Name</th>
+          <th class="tw-text-left tw-px-4 tw-py-2">Actions</th>
         </tr>
       </thead>
       <tbody>
         {{#each tags}}
-        <tr id="tags-row-{{this.TagID}}">
-          <td>{{this.TagID}}</td>
-          <td>{{this.TagName}}</td>
-          <td>
-            <a href="/administrator/manage_tags/update/{{this.TagID}}" class="btn btn-warning btn-sm">Edit</a>
+        <tr class="tw-border-t tw-border-solid hover:tw-bg-gray-50">
+          <td class="tw-px-4 tw-py-2">{{this._id}}</td>
+          <td class="tw-px-4 tw-py-2">{{this.TagName}}</td>
+          <td class="tw-px-4 tw-py-2">
+            <div class="tw-flex tw-gap-2">
+              <a
+                href="/administrator/manage_tags/update/{{this._id}}"
+                class="tw-bg-yellow-400 tw-text-white tw-text-xs tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-500"
+              >
+                Edit
+              </a>
 
-            <!-- Form xóa tag, sử dụng phương thức POST -->
-            <form action="/administrator/manage_tags/delete/{{this.TagID}}" method="POST" style="display:inline;">
-              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this tag?')">Delete</button>
-            </form>
+              <form
+                action="/administrator/manage_tags/delete/{{this._id}}"
+                method="POST"
+                onsubmit="return confirm('Are you sure you want to delete this tag?')"
+              >
+                <button
+                  type="submit"
+                  class="tw-bg-red-500 tw-text-white tw-text-xs tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-600"
+                >
+                  Delete
+                </button>
+              </form>
+            </div>
           </td>
         </tr>
         {{else}}
         <tr>
-          <td colspan="3">No tags found</td>
+          <td colspan="3" class="tw-text-center tw-p-4">No tags found</td>
         </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
 
-  {{!-- Pagination --}}
-  <div class="pagination">
+  <!-- Pagination -->
+  <div class="tw-flex tw-justify-center tw-gap-2 tw-mt-6">
     {{#if (gt currentPage 1)}}
-    <a href="?page={{sub currentPage 1}}" class="btn btn-pagination">Previous</a>
+    <a href="?page={{sub currentPage 1}}" class="tw-px-3 tw-py-1 tw-rounded tw-bg-gray-300 hover:tw-bg-gray-400">Previous</a>
     {{/if}}
 
     {{#each (range 1 totalPages)}}
-    <a href="?page={{this}}" class="btn btn-pagination {{#if (eq this ../currentPage)}}active{{/if}}">
+    <a
+      href="?page={{this}}"
+      class="tw-px-3 tw-py-1 tw-rounded {{#if (eq this ../currentPage)}}tw-bg-orange-500 tw-text-white{{else}}tw-bg-gray-200 hover:tw-bg-gray-300{{/if}}"
+    >
       {{this}}
     </a>
     {{/each}}
 
     {{#if (lt currentPage totalPages)}}
-    <a href="?page={{add currentPage 1}}" class="btn btn-pagination">Next</a>
+    <a href="?page={{add currentPage 1}}" class="tw-px-3 tw-py-1 tw-rounded tw-bg-gray-300 hover:tw-bg-gray-400">Next</a>
     {{/if}}
   </div>
 </div>

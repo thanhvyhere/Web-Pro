@@ -9,11 +9,6 @@ router.get("/", async function (req, res) {
 
 // repository
 router.get("/repository", async function (req, res) {
-  if (req.session.authUser) {
-    console.log(req.session.authUser.userid);
-  } else {
-    return res.redirect("/account/login");
-  }
   const limit = 6;
   const current_page = req.query.page || 1;
   const offset = (current_page - 1) * limit;
@@ -35,52 +30,30 @@ router.get("/repository", async function (req, res) {
 });
 // reviewed
 router.get("/reviewed", async function (req, res) {
-  if (req.session.authUser) {
-    console.log(req.session.authUser.userid);
-  } else {
-    return res.redirect("/account/login");
-  }
   const list = await editorService.findReviewed();
   res.render("vwEditor/reviewed", { news: list });
 });
 // editor_rejected
 router.get("/editor_rejected", async function (req, res) {
-  if (req.session.authUser) {
-    console.log(req.session.authUser.userid);
-  } else {
-    return res.redirect("/account/login");
-  }
   const list = await editorService.findRejected();
 
   res.render("vwEditor/rejected", { news: list });
 });
 // editor_approved
 router.get("/editor_approved", async function (req, res) {
-  if (req.session.authUser) {
-    console.log(req.session.authUser.userid);
-  } else {
-    return res.redirect("/account/login");
-  }
+  
   const list = await editorService.findApproved();
 
   res.render("vwEditor/approved", { news: list });
 });
 // schedule
 router.get("/schedule", async function (req, res) {
-  if (req.session.authUser) {
-    console.log(req.session.authUser.userid);
-  } else {
-    return res.redirect("/account/login");
-  }
+  
   try {
     const list = await editorService.findApproved();
-    const parentcatList = await editorService.findParentCat();
-    const updatedList = list.map((item) => ({
-      ...item,
-      parentCatList: parentcatList, // Gắn parentCatList vào từng phần tử
-    }));
+    console.log("Updated List:", list); // Kiểm tra dữ liệu đã cập nhật
     res.render("vwEditor/schedule", {
-      news: updatedList,
+      news: list,
       empty: list.length === 0,
     });
   } catch (error) {
@@ -95,7 +68,6 @@ router.get("/getChildCategories/:parentCatId", async (req, res) => {
   try {
     const childCat = await editorService.findChildCat(parentCatId);
     if (!childCat || childCat.length === 0) {
-      // Nếu không có dữ liệu, trả về một thông báo hợp lệ
       return res.status(200).json([]);
     }
     res.status(200).json(childCat);
@@ -105,15 +77,11 @@ router.get("/getChildCategories/:parentCatId", async (req, res) => {
   }
 });
 router.get("/feedback", async function (req, res) {
-  if (req.session.authUser) {
-    console.log(req.session.authUser.userid);
-  } else {
-    return res.redirect("/account/login");
-  }
-  const id = +req.query.id || 0;
+  
+  const id = req.query.id;
   const news = await editorService.findNewsByID(id);
 
-  res.render("vwEditor/feedback", { newsList: news });
+  res.render("vwEditor/feedback", { news: news});
 });
 router.post("/feedback", async function (req, res) {
   const id = req.body.NewsID;
@@ -122,33 +90,26 @@ router.post("/feedback", async function (req, res) {
     Status: req.body.Status,
   };
 
-  await editorService.update(changes, id);
+  await editorService.update(id, changes);
   res.redirect("/editor/reviewed");
 });
 router.get("/modify", async function (req, res) {
-  if (req.session.authUser) {
-    console.log(req.session.authUser.userid);
-  } else {
-    return res.redirect("/account/login");
-  }
-  const id = +req.query.id || 0;
+  
+  const id = req.query.id;
   const news = await editorService.findANews(id);
   const parentcatList = await editorService.findParentCat();
   const tags = await editorService.findTags(id);
-  const updatedList = news.map((item) => ({
-    ...item,
-    parentCatList: parentcatList, // Gắn parentCatList vào từng phần tử
+  const updatedNews = {
+    ...news.toObject?.() ?? news,
+    parentCatList: parentcatList,
     tags: tags,
-  }));
-
-  res.render("vwEditor/editAfterProved", { newsList: updatedList });
+  };
+  res.render("vwEditor/editAfterProved", { newsList: updatedNews });
 });
 router.post("/modify", async (req, res) => {
   try {
-    const publishedDay = moment(
-      req.body.PublishedDay,
-      "DD/MM/YYYY H:mm"
-    ).format("YYYY-MM-DD HH:mm");
+    console.log("Received body:", req.body); // Kiểm tra xem dữ liệu có đến server không
+    const publishedDay = new Date(req.body.PublishedDay);
     const id = req.body.NewsID;
     const tags = req.body.tags || [];
 
@@ -158,31 +119,36 @@ router.post("/modify", async (req, res) => {
       PublishedDay: publishedDay,
       CatID: req.body.CatID,
     };
-    console.log(changes);
-    await editorService.update(changes, id);
-
-    // Bước 3: Thêm các nhãn mới vào bảng news_tags
+    await editorService.update(id,changes);
+    
+    try {
     for (const tagName of tags) {
-      // Kiểm tra xem TagName đã tồn tại trong bảng tag chưa
       const tag = await editorService.findExistingTag(tagName);
-
+      console.log("Checking tag:", tagName, "Found:", !!tag);
       if (!tag) {
         const newTag = {
           TagName: tagName,
         };
-        // Nếu chưa có, thêm TagName vào bảng tag và lấy TagID
-        const ret = await editorService.insertTagGetID(newTag);
+        try {
+          const ret = await editorService.insertTagGetID(newTag);
+          console.log("Inserted new tag:", ret);
+        } catch (error) {
+          console.error("Error inserting new tag:", error);
+        }
       }
       const getTagID = await editorService.findTagID(tagName);
-
-      // Thêm vào bảng news_tags với NewsID và TagID
+      console.log("Tag ID for", tagName, "is:", getTagID?._id);
       const newsTags = {
-        TagID: getTagID.TagID,
+        TagID: getTagID._id,
         NewsID: id,
       };
-      await editorService.addTagNews(newsTags);
+      console.log("Adding tag:", newsTags);
+      await editorService.addTagNews(newsTags.NewsID, [newsTags.TagID]);
     }
-
+    } catch (error) {
+      console.error("Error adding tags:", error);
+      return res.status(500).send("Có lỗi xảy ra khi thêm nhãn");
+    }
     // Chuyển hướng sau khi xử lý
     res.redirect("/editor/schedule");
   } catch (error) {
@@ -195,15 +161,12 @@ router.post("/update-status", async function (req, res) {
   const status = {
     Status: req.body.status,
   };
-  console.log("Received body:", req.body); // Kiểm tra xem dữ liệu có đến server không
   if (!req.body) {
     return res.json({ success: false, message: "Dữ liệu không hợp lệ" });
   }
 
   try {
-    console.log("Updating with ID:", id, "and Status:", status);
-    // Cập nhật trạng thái trong database
-    await editorService.update(status, id);
+    await editorService.update(id, status);
     res.json({ success: true });
   } catch (err) {
     console.error(err);
